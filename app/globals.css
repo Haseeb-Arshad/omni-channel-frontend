@@ -1,0 +1,413 @@
+:root {
+  /* Modern, vibrant color palette */
+  --background: 210 40% 98%; /* Soft, light blue-gray */
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 222 89% 55%; /* Vibrant blue */
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215 16% 46%;
+  --accent: 262 83% 58%; /* Rich purple for accent */
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 222 89% 55%;
+  
+  /* Enhanced UI variables */
+  --radius: 0.75rem; /* Slightly larger radius for softer look */
+  --font-sans: 'var(--font-geist-sans)';
+  --font-mono: 'var(--font-geist-mono)';
+  
+  /* Shadow variables */
+  --shadow-sm: 0px 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
+  --shadow-xl: 0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
+  
+  /* Animation variables */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark {
+  --background: 222 47% 11%; /* Rich dark blue */
+  --foreground: 213 31% 91%;
+  --card: 223 47% 14%; /* Slightly lighter than background for depth */
+  --card-foreground: 213 31% 91%;
+  --popover: 223 47% 14%;
+  --popover-foreground: 213 31% 91%;
+  --primary: 224 76% 65%; /* Bright, slightly desaturated blue */
+  --primary-foreground: 213 31% 91%;
+  --secondary: 222 47% 18%;
+  --secondary-foreground: 213 31% 91%;
+  --muted: 223 47% 20%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 262 75% 65%; /* Vibrant purple */
+  --accent-foreground: 213 31% 91%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 213 31% 91%;
+  --border: 216 34% 17%;
+  --input: 216 34% 17%;
+  --ring: 224 76% 65%;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Apply subtle gradient backgrounds */
+  body {
+    background-image: 
+      radial-gradient(at 100% 0%, hsla(var(--primary) / 0.05) 0px, transparent 50%), 
+      radial-gradient(at 0% 100%, hsla(var(--accent) / 0.07) 0px, transparent 50%);
+  }
+  
+  .dark body {
+    background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--primary) / 0.15), hsl(var(--background)), hsl(var(--accent) / 0.1));
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+  }
+  
+  /* Form elements styling */
+  input, textarea, select {
+    @apply bg-background border-input rounded-md px-3 py-2 text-sm outline-none transition-colors;
+    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary focus-visible:outline-none;
+  }
+  
+  /* Typography enhancements */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+  
+  h1 {
+    @apply text-4xl leading-tight;
+  }
+  
+  h2 {
+    @apply text-2xl leading-tight;
+  }
+  
+  /* Enhanced link hover effect */
+  a:not(.plain) {
+    @apply relative;
+  }
+  
+  a:not(.plain)::after {
+    @apply absolute bottom-0 left-0 w-full h-px bg-primary/80 scale-x-0 transition-transform duration-300 origin-right;
+    content: "";
+  }
+  
+  a:not(.plain):hover::after {
+    @apply scale-x-100 origin-left;
+  }
+}
+
+/* Enhanced animations */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Multiple animation options for entrances */
+.animate-in {
+  animation: animate-in var(--transition-normal) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in var(--transition-normal) forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up var(--transition-normal) forwards;
+}
+
+.animate-slide-down {
+  animation: slide-down var(--transition-normal) forwards;
+}
+
+.animate-slide-left {
+  animation: slide-left var(--transition-normal) forwards;
+}
+
+.animate-slide-right {
+  animation: slide-right var(--transition-normal) forwards;
+}
+
+.animate-scale {
+  animation: scale var(--transition-normal) forwards;
+}
+
+.animate-out {
+  animation: animate-out var(--transition-normal) forwards;
+}
+
+/* Delay utility classes */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Keyframe animations */
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes animate-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(2rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-2rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-left {
+  from { opacity: 0; transform: translateX(2rem); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-2rem); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Pulse animation for attention */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s ease infinite;
+}
+
+/* Shimmer animation for loading states */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsla(var(--muted) / 0.1) 25%, 
+    hsla(var(--muted) / 0.3) 50%, 
+    hsla(var(--muted) / 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Glass morphism effect with enhanced quality */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-morphism {
+  background: hsla(var(--background), 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Modern glass card variations */
+.glass-card {
+  @apply relative rounded-xl overflow-hidden;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-card {
+  background: hsla(var(--card), 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Enhanced gradient border with animation */
+.gradient-border {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--primary)),
+    hsl(var(--accent)),
+    hsl(var(--primary))
+  );
+  background-size: 200% 200%;
+  animation: border-flow 4s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes border-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Enhanced background gradient effects */
+.gradient-bg {
+  @apply relative;
+  background: radial-gradient(
+    circle at top right,
+    hsl(var(--primary) / 0.15),
+    transparent 50%
+  ), radial-gradient(
+    circle at bottom left,
+    hsl(var(--accent) / 0.15),
+    transparent 50%
+  );
+}
+
+/* Soft glowing orbs for background effects */
+.blur-dot {
+  position: absolute;
+  border-radius: 100%;
+  filter: blur(80px);
+  z-index: -1;
+  opacity: 0.6;
+  animation: glow 10s ease-in-out infinite alternate;
+}
+
+.blur-dot.primary {
+  background: hsl(var(--primary) / 0.3);
+}
+
+.blur-dot.accent {
+  background: hsl(var(--accent) / 0.3);
+}
+
+.blur-dot.secondary {
+  background: hsl(var(--secondary) / 0.3);
+}
+
+@keyframes glow {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.7; }
+}
+
+/* Refined micro-interactions */
+.micro-interaction {
+  @apply transition-all duration-200;
+}
+
+.micro-interaction:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.micro-interaction:active {
+  transform: translateY(1px);
+  transition: transform 0.1s ease-in-out;
+}
+
+/* Button hover effects */
+.btn-hover-effect {
+  @apply relative overflow-hidden;
+}
+
+.btn-hover-effect::after {
+  @apply absolute inset-0 w-full h-full bg-white opacity-0 transition-opacity duration-300;
+  content: '';
+  mix-blend-mode: overlay;
+}
+
+.btn-hover-effect:hover::after {
+  @apply opacity-10;
+}
+
+/* Interactive card effect */
+.card-interactive {
+  @apply transition-all duration-300;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 3D button push effect */
+.btn-3d {
+  @apply relative transition-all duration-200;
+  transform-style: preserve-3d;
+  transform: perspective(800px) translateZ(0);
+}
+
+.btn-3d:hover {
+  transform: perspective(800px) translateZ(10px);
+}
+
+.btn-3d:active {
+  transform: perspective(800px) translateZ(2px);
+}

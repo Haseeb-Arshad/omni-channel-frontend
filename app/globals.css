@@ -1,24 +1,24 @@
 :root {
-  /* Modern, vibrant color palette */
+  /* Modern, vibrant color palette based on #2a52be */
   --background: 210 40% 98%; /* Soft, light blue-gray */
   --foreground: 222 47% 11%;
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
   --popover: 0 0% 100%;
   --popover-foreground: 222 47% 11%;
-  --primary: 222 89% 55%; /* Vibrant blue */
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222 47% 11%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215 16% 46%;
-  --accent: 262 83% 58%; /* Rich purple for accent */
-  --accent-foreground: 210 40% 98%;
+  --primary: 225 65% 45%; /* Royal blue #2a52be */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 225 40% 92%;
+  --secondary-foreground: 225 65% 35%;
+  --muted: 225 30% 96%;
+  --muted-foreground: 225 20% 45%;
+  --accent: 225 65% 55%; /* Slightly lighter royal blue */
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 222 89% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 225 30% 92%;
+  --input: 225 30% 92%;
+  --ring: 225 65% 45%;
   
   /* Enhanced UI variables */
   --radius: 0.75rem; /* Slightly larger radius for softer look */
@@ -38,25 +38,25 @@
 }
 
 .dark {
-  --background: 222 47% 11%; /* Rich dark blue */
-  --foreground: 213 31% 91%;
-  --card: 223 47% 14%; /* Slightly lighter than background for depth */
-  --card-foreground: 213 31% 91%;
-  --popover: 223 47% 14%;
-  --popover-foreground: 213 31% 91%;
-  --primary: 224 76% 65%; /* Bright, slightly desaturated blue */
-  --primary-foreground: 213 31% 91%;
-  --secondary: 222 47% 18%;
-  --secondary-foreground: 213 31% 91%;
-  --muted: 223 47% 20%;
-  --muted-foreground: 215 20% 65%;
-  --accent: 262 75% 65%; /* Vibrant purple */
-  --accent-foreground: 213 31% 91%;
+  --background: 225 40% 11%; /* Royal blue dark background */
+  --foreground: 0 0% 95%;
+  --card: 225 40% 14%; /* Slightly lighter than background for depth */
+  --card-foreground: 0 0% 95%;
+  --popover: 225 40% 14%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 225 65% 55%; /* Brighter royal blue in dark mode */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 225 40% 18%;
+  --secondary-foreground: 0 0% 95%;
+  --muted: 225 40% 20%;
+  --muted-foreground: 225 20% 75%;
+  --accent: 225 65% 65%; /* Vibrant royal blue */
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
-  --destructive-foreground: 213 31% 91%;
-  --border: 216 34% 17%;
-  --input: 216 34% 17%;
-  --ring: 224 76% 65%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 225 30% 20%;
+  --input: 225 30% 20%;
+  --ring: 225 65% 55%;
 }
 
 @tailwind base;
@@ -78,14 +78,14 @@
   /* Apply subtle gradient backgrounds */
   body {
     background-image: 
-      radial-gradient(at 100% 0%, hsla(var(--primary) / 0.05) 0px, transparent 50%), 
-      radial-gradient(at 0% 100%, hsla(var(--accent) / 0.07) 0px, transparent 50%);
+      radial-gradient(at 100% 0%, hsla(var(--primary) / 0.08) 0px, transparent 60%), 
+      radial-gradient(at 0% 100%, hsla(var(--accent) / 0.1) 0px, transparent 50%);
   }
   
   .dark body {
-    background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--primary) / 0.15), hsl(var(--background)), hsl(var(--accent) / 0.1));
+    background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--primary) / 0.2), hsl(var(--background)), hsl(var(--accent) / 0.15));
     background-size: 400% 400%;
-    animation: gradientBG 20s ease infinite;
+    animation: gradientBG 15s ease infinite;
   }
   
   /* Form elements styling */

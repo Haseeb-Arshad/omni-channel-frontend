@@ -458,6 +458,62 @@ export default function PlaygroundPage() {
 
   return (
       <TooltipProvider>
+        <style jsx global>{`
+          @keyframes typingDots {
+            0%, 20% { content: '.'; }
+            40%, 60% { content: '..'; }
+            80%, 100% { content: '...'; }
+          }
+          .typing-animation::after {
+            content: '...';
+            animation: typingDots 1.5s infinite;
+          }
+          .animate-float {
+            animation: float 3s ease-in-out infinite;
+          }
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+          }
+          .gradient-border {
+            position: relative;
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            border-radius: 0.75rem;
+          }
+          .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            margin: -1px;
+            border-radius: inherit;
+            background: linear-gradient(to right, hsl(225, 65%, 45%), hsl(225, 65%, 60%));
+            z-index: -1;
+            opacity: 0.2;
+            transition: opacity 0.3s ease;
+          }
+          .gradient-border:hover::before {
+            opacity: 0.5;
+          }
+          .card-hover-effect {
+            transition: all 0.3s ease;
+          }
+          .card-hover-effect:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(42, 82, 190, 0.15);
+          }
+          .minimalist-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+          .minimalist-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .minimalist-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(42, 82, 190, 0.3);
+            border-radius: 20px;
+          }
+        `}</style>
         <div className="flex flex-col h-[calc(100vh-4rem)]" style={{ minHeight: '85vh' }}> {/* Expanded height to fill screen */}
           <div className="flex items-center justify-between mb-6"> {/* Increased mb */} 
             <div>
@@ -507,7 +563,7 @@ export default function PlaygroundPage() {
 
         <div className="flex flex-1 gap-4 overflow-hidden h-full"> {/* Added h-full to ensure full height */}
           {/* Chat Interface */}
-          <Card className="flex-1 flex flex-col gradient-border overflow-hidden h-full"> {/* Added h-full for full height */} {/* flex-1 to take available space, flex-col for vertical layout */}
+          <Card className="flex-1 flex flex-col gradient-border overflow-hidden h-full shadow-lg border-primary/10 transition-all duration-300 ease-in-out"> {/* Added h-full for full height */} {/* flex-1 to take available space, flex-col for vertical layout */}
             <CardHeader className="border-b py-3 px-4"> {/* Adjusted padding */} 
               <div className="flex items-center gap-3"> {/* Increased gap */} 
                 <Avatar className="h-9 w-9 border border-primary/20"> {/* Slightly larger avatar */} 
@@ -524,13 +580,13 @@ export default function PlaygroundPage() {
             </CardHeader>
             {/* Messages Area - takes up remaining vertical space and scrolls */}
             <CardContent className="flex-1 p-0"> {/* flex-1 to grow, p-0 as ScrollArea will have padding */}
-              <ScrollArea className="h-[calc(100vh-10rem)] p-4"> {/* Taller height for chat content area */}
+              <ScrollArea className="h-[calc(100vh-15rem)] p-4 minimalist-scrollbar"> {/* Taller height for chat content area */}
                 {messages.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center gap-3">
-                    <div className="w-24 h-24 rounded-full bg-primary/5 flex items-center justify-center"> {/* Larger icon bg */} 
+                    <div className="w-24 h-24 rounded-full bg-primary/5 flex items-center justify-center animate-float"> {/* Larger icon bg with floating animation */} 
                       <MessageSquare className="h-12 w-12 text-primary/80" /> {/* Adjusted icon color/size */} 
                     </div>
-                    <h3 className="text-xl font-semibold">Start Your AI Conversation</h3>
+                    <h3 className="text-xl font-semibold bg-gradient-to-r from-primary to-primary/80 text-transparent bg-clip-text">Start Your AI Conversation</h3>
                     <p className="text-muted-foreground max-w-sm">
                       Type your message below to see how {activePersona.name} responds.
                     </p>
@@ -630,7 +686,7 @@ export default function PlaygroundPage() {
               </ScrollArea>
             </CardContent>
             {/* Message Input Area - stays at the bottom */}
-            <CardFooter className="p-4 border-t bg-background/95 backdrop-blur-sm"> 
+            <CardFooter className="p-4 border-t bg-background/95 backdrop-blur-sm sticky bottom-0 z-10"> 
               {/* API Error alert */}
               {apiError && (
                 <div className="mb-3 p-3 text-sm bg-destructive/10 text-destructive rounded-lg flex items-center gap-2"> 
@@ -641,7 +697,7 @@ export default function PlaygroundPage() {
               <form onSubmit={handleSendMessage} className="flex w-full items-start gap-3"> 
                 <Textarea
                   placeholder={`Ask ${activePersona.name}...`}
-                  className="min-h-[80px] resize-none rounded-lg p-4 pr-12 border-primary/20 focus-visible:ring-1 focus-visible:ring-primary text-base"
+                  className="min-h-[80px] resize-none rounded-lg p-4 pr-12 border-primary/20 focus-visible:ring-1 focus-visible:ring-primary text-base shadow-sm transition-shadow duration-300 ease-in-out focus-visible:shadow-md"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => {
@@ -653,7 +709,7 @@ export default function PlaygroundPage() {
                   ref={inputRef}
                   disabled={isProcessing}
                 />
-                <Button type="submit" size="icon" className="h-12 w-12 rounded-lg" disabled={isTyping || !inputValue.trim()}> 
+                <Button type="submit" size="icon" className="h-12 w-12 rounded-lg bg-primary hover:bg-primary/90 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg" disabled={isTyping || !inputValue.trim()}> 
                   {isTyping ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                 </Button>
               </form>
@@ -662,7 +718,7 @@ export default function PlaygroundPage() {
 
           {/* Settings Panel (Persona Sidebar) */}
           {showPanel && (
-            <Card className="w-[400px] flex flex-col transform transition-all duration-300 ease-in-out animate-in slide-in-from-right-12 bg-card"> 
+            <Card className="w-[400px] flex flex-col transform transition-all duration-300 ease-in-out animate-in slide-in-from-right-12 bg-card shadow-lg border-primary/10"> 
               <CardHeader className="border-b py-3 px-4"> 
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-base font-semibold flex items-center gap-2"> 
@@ -687,7 +743,7 @@ export default function PlaygroundPage() {
                       {personas.map((persona) => (
                         <div 
                           key={persona.id}
-                          className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-150 hover:bg-accent/80 ${activePersona.id === persona.id ? 'bg-primary/10 border-primary/50 shadow-sm' : 'border-border hover:border-accent-foreground/20'}`}
+                          className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-200 card-hover-effect ${activePersona.id === persona.id ? 'bg-primary/10 border-primary/50 shadow-sm' : 'border-border hover:border-primary/20'}`}
                           onClick={() => setActivePersona(persona)}
                           style={{ minWidth: '250px' }} 
                         >

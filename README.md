@@ -42,7 +42,7 @@ A modern, responsive frontend for the Omni-Channel communication platform, built
 
 3. Create a `.env.local` file in the root directory and add the following environment variables:
    ```env
-   NEXT_PUBLIC_API_URL=http://localhost:8000  # Your backend API URL
+   NEXT_PUBLIC_API_URL=http://localhost:3000  # Your backend API URL
    NEXT_PUBLIC_APP_URL=http://localhost:3001   # Frontend URL
    ```
 

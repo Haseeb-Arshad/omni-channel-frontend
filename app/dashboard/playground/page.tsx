@@ -47,7 +47,7 @@ const defaultPersonas: ApiPersona[] = [
     description: "A helpful customer support agent that assists customers with inquiries about products and services.",
     system_prompt: "You are a helpful customer support agent for our company. You should be friendly, professional, and concise. Always try to address the customer's concerns directly, and offer solutions when possible. If you don't know the answer, be honest and suggest ways the customer can get more help. Use the knowledge base documents to provide accurate information about our products and services.",
     tone: "professional",
-    model: "gpt-4",
+    model: "gpt-4o-mini",
     avatar: "/avatars/support.png", // Changed from avatarUrl to avatar to match lib/api Persona type
     // role: "Customer Support", // 'role' is not in lib/api Persona, consider adding if needed or removing
     is_active: true, // Assuming default personas are active
@@ -62,7 +62,7 @@ const defaultPersonas: ApiPersona[] = [
     description: "A persuasive sales representative that helps potential customers find the right products.",
     system_prompt: "You are a sales representative for our company. Your goal is to help potential customers find the right products for their needs. Be persuasive but not pushy. Highlight the benefits and unique selling points of our products. When appropriate, suggest complementary products or premium alternatives. Use the knowledge base to provide accurate information about product specifications, pricing, and availability.",
     tone: "persuasive",
-    model: "gpt-4",
+    model: "gpt-4o-mini",
     avatar: "/avatars/sales.png",
     is_active: true,
     created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
@@ -75,7 +75,7 @@ const defaultPersonas: ApiPersona[] = [
     description: "A knowledgeable technical support specialist that helps troubleshoot issues and provide technical guidance.",
     system_prompt: "You are a technical support specialist for our company. You help customers troubleshoot issues with our products and provide technical guidance. Be patient and thorough in your explanations. Walk customers through solutions step by step. Use technical terminology when appropriate, but be prepared to explain concepts in simpler terms when needed. Reference the knowledge base for accurate technical specifications and troubleshooting guides.",
     tone: "technical",
-    model: "gpt-4",
+    model: "gpt-4o-mini",
     avatar: "/avatars/tech.png",
     is_active: true,
     created_at: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
@@ -85,10 +85,8 @@ const defaultPersonas: ApiPersona[] = [
 
 // Define AI models
 const aiModels: ModelSetting[] = [
-  { id: "gpt-4", name: "GPT-4", description: "Most capable model, best for complex tasks" },
-  { id: "gpt-3.5", name: "GPT-3.5", description: "Faster responses, good for common questions" },
-  { id: "claude-3-sonnet", name: "Claude 3 Sonnet", description: "Advanced reasoning with high accuracy" },
-  { id: "claude-3-opus", name: "Claude 3 Opus", description: "Highest capability model for critical applications" },
+  { id: "gpt-4o-mini", name: "GPT-4o-mini", description: "Most capable model, best for complex tasks" },
+  { id: "gpt-4.1-mini", name: "GPT-4.1-mini", description: "Faster responses, good for common questions" },
 ];
 
 type Message = {
@@ -517,8 +515,8 @@ export default function PlaygroundPage() {
         <div className="flex flex-col h-[calc(100vh-4rem)]" style={{ minHeight: '85vh' }}> {/* Expanded height to fill screen */}
           <div className="flex items-center justify-between mb-6"> {/* Increased mb */} 
             <div>
-              <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-                <BrainCircuit className="h-6 w-6 text-primary" />
+              <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2 bg-gradient-to-r from-[#2a52be] to-[#2a52be]/70 bg-clip-text text-transparent">
+                <BrainCircuit className="h-6 w-6 text-[#2a52be]" />
                 AI Playground
               </h1>
               <p className="text-muted-foreground">
@@ -718,7 +716,7 @@ export default function PlaygroundPage() {
 
           {/* Settings Panel (Persona Sidebar) */}
           {showPanel && (
-            <Card className="w-[400px] flex flex-col transform transition-all duration-300 ease-in-out animate-in slide-in-from-right-12 bg-card shadow-lg border-primary/10"> 
+            <Card className="w-[400px] transform transition-all duration-300 ease-in-out animate-in slide-in-from-right-12 bg-card shadow-lg border-primary/10 flex flex-col"> 
               <CardHeader className="border-b py-3 px-4"> 
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-base font-semibold flex items-center gap-2"> 
@@ -731,8 +729,9 @@ export default function PlaygroundPage() {
                 </div>
                 <CardDescription className="text-xs">Customize your AI persona and model parameters.</CardDescription>
               </CardHeader>
-              <CardContent className="flex-1 p-0">
-                <ScrollArea className="h-full p-4 space-y-6"> 
+              <CardContent className="flex-1 p-0 overflow-hidden relative">
+                <ScrollArea className="h-[calc(100vh-15rem)] py-4 px-4 minimalist-scrollbar">
+                  <div className="space-y-6"> 
                   {/* Persona Selection */}
                   <div className="space-y-3">
                     <Label className="text-sm font-medium flex items-center gap-2 text-foreground">
@@ -891,56 +890,60 @@ export default function PlaygroundPage() {
                       </Select>
                     </div>
                   </div>
+                  </div>
                 </ScrollArea>
               </CardContent>
-              <CardFooter className="p-3 border-t bg-background/95 backdrop-blur-sm flex justify-between items-center">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-xs gap-1.5 h-8 rounded-md"
-                  onClick={() => {
-                    setActivePersona(personas.find(p => p.id === 'default') || defaultPersonas[0]);
-                    setTemperature(0.7);
-                    setMaxTokens(1000);
-                    setContextWindow(10);
-                    setUseKnowledgeBase(true);
-                    setSelectedKnowledgeBase(null);
-                    toast.info("Settings reset to default values.")
-                  }}
-                >
-                  <RotateCw className="h-3.5 w-3.5" />
-                  Reset Defaults
-                </Button>
-                <Button variant="outline" size="sm" className="text-xs gap-1.5 h-8 rounded-md" onClick={() => {
-                  // Logic to handle chat export
-                  const chatToExport = {
-                    persona: activePersona,
-                    settings: {
-                      temperature,
-                      maxTokens,
-                      contextWindow,
-                      useKnowledgeBase,
-                      selectedKnowledgeBaseId: selectedKnowledgeBase,
-                    },
-                    messages: messages.map(m => ({ 
-                      role: m.role, 
-                      content: m.content, 
-                      timestamp: m.timestamp,
-                      sources: m.sources?.map(s => ({ title: s.title, similarity: s.similarity }))
-                    }))
-                  };
-                  const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
-                    JSON.stringify(chatToExport, null, 2)
-                  )}`;
-                  const link = document.createElement("a");
-                  link.href = jsonString;
-                  link.download = `playground_chat_${activePersona.name.replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
-                  link.click();
-                  toast.success("Chat exported successfully!")
-                }}>
-                  <Download className="h-3.5 w-3.5" />
-                  Export Chat
-                </Button>
+              <CardFooter className="p-4 border-t space-y-2 bg-card/90 backdrop-blur-sm sticky bottom-0 z-10">
+                <div className="flex gap-2 w-full">
+                  <Button 
+                    variant="outline"
+                    className="flex-1 hover:bg-[#2a52be]/10 hover:text-[#2a52be] transition-colors duration-300"
+                    onClick={() => {
+                      setTemperature(0.7);
+                      setMaxTokens(1000);
+                      setContextWindow(10);
+                      toast.success('Settings reset to defaults');
+                    }}
+                  >
+                    <RotateCw className="mr-2 h-4 w-4" />
+                    Reset Defaults
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 hover:bg-[#2a52be]/10 hover:text-[#2a52be] transition-colors duration-300"
+                    onClick={() => {
+                      // Logic to handle chat export
+                      const chatToExport = {
+                        persona: activePersona,
+                        settings: {
+                          temperature,
+                          maxTokens,
+                          contextWindow,
+                          useKnowledgeBase,
+                          selectedKnowledgeBaseId: selectedKnowledgeBase,
+                        },
+                        messages: messages.map(m => ({ 
+                          role: m.role, 
+                          content: m.content, 
+                          timestamp: m.timestamp,
+                          sources: m.sources?.map(s => ({ title: s.title, similarity: s.similarity }))
+                        }))
+                      };
+                      const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
+                        JSON.stringify(chatToExport, null, 2)
+                      )}`;
+                      const link = document.createElement("a");
+                      link.href = jsonString;
+                      link.download = `playground_chat_${activePersona.name.replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
+                      link.click();
+                      toast.success("Chat exported successfully!")
+                    }}
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Chat
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
           )}

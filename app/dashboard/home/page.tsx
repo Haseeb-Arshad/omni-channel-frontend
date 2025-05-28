@@ -245,7 +245,7 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-2">
         <div className="flex items-baseline justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent pb-1">Dashboard</h1>
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-[#2a52be] to-[#2a52be]/70 bg-clip-text text-transparent pb-1">Dashboard</h1>
             <p className="text-muted-foreground">
               Welcome back! Here's an overview of your OmniChannel system.
             </p>
@@ -335,7 +335,7 @@ export default function DashboardPage() {
             </div>
           </CardContent>
           <CardFooter separated>
-            <Button className="w-full gap-1.5" variant="outline" asChild>
+            <Button className="w-full gap-1.5 hover:bg-[#2a52be]/5 hover:text-[#2a52be] hover:border-[#2a52be]/30 transition-all duration-300" variant="outline" asChild>
               <Link href="/dashboard/conversations/new">
                 <Plus className="h-3.5 w-3.5" />
                 <span>New Conversation</span>

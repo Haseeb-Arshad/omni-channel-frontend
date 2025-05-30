@@ -1,42 +1,66 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, DashboardCard, StatCard } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { motion, AnimatePresence } from "framer-motion"
+import { Skeleton } from "@/components/ui/skeleton"
+import { motion, AnimatePresence, useInView } from "framer-motion"
+import { useAnimations } from "@/hooks/use-animations"
+
+// Dashboard UI components
 import { 
+  StatsCard, 
+  ConversationCard, 
+  ChannelStatusCard,
+  ActionCard,
+  DashboardSection 
+} from "@/components/ui/dashboard"
+
+import { 
+  // Messaging
   MessageSquare, 
-  Plus, 
-  Users, 
-  ArrowUpRight, 
-  FileText, 
-  Bot, 
-  Settings, 
-  BarChart3, 
-  Zap, 
-  Clock, 
-  CheckCircle2, 
-  Upload, 
-  AlertCircle, 
-  CheckCircle,
-  AlertTriangle,
-  Bell,
-  ChevronUp,
-  ChevronDown,
-  Facebook,
-  Mail,
   MessageCircle,
-  RefreshCw,
+  Mail,
   Phone,
-  X
-} from "lucide-react"
+  Facebook,
+  Globe,
+  
+  // UI
+  Plus, 
+  ArrowUpRight, 
+  RefreshCw,
+  Settings,
+  Check,
+  X,
+  ExternalLink,
+  MoreHorizontal,
+  
+  // Status
+  AlertTriangle,
+  CheckCircle,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  Activity,
+  
+  // Actions
+  Upload,
+  Download,
+  FileText,
+  Users,
+  Bot,
+  BrainCircuit,
+  Zap,
+  PieChart
+} from "lucide-react";
 
 export default function DashboardPage() {
-
 
   // KPI metrics
   const kpiMetrics = [
@@ -154,13 +178,26 @@ export default function DashboardPage() {
     { id: "web", name: "Web Chat", status: "healthy", icon: <MessageCircle className="h-4 w-4" /> }
   ];
 
+  // Animation setup
+  const { initAnimations } = useAnimations();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.2 });
+  
+  useEffect(() => {
+    if (containerRef.current && isInView) {
+      initAnimations();
+    }
+  }, [isInView, initAnimations]);
+  
   // Animation variants for staggered animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.08,
+        ease: [0.22, 1, 0.36, 1],
+        duration: 0.5
       }
     }
   };
@@ -172,286 +209,208 @@ export default function DashboardPage() {
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 400,
-        damping: 30
+        stiffness: 300,
+        damping: 24
       }
     }
   };
   
-  // Icon mapping for channels
-  const getChannelIcon = (channel: string) => {
-    switch(channel) {
-      case 'sms': return <Phone className="h-4 w-4" />;
-      case 'facebook': return <Facebook className="h-4 w-4" />;
-      case 'email': return <Mail className="h-4 w-4" />;
-      case 'whatsapp': return <MessageSquare className="h-4 w-4" />;
-      case 'web': return <MessageCircle className="h-4 w-4" />;
-      default: return <MessageCircle className="h-4 w-4" />;
-    }
+  // Helper functions for routing
+  const navigateToConversation = (id: string) => {
+    // This is a placeholder function - in a real app, you would use router.push
+    console.log(`Navigating to conversation: ${id}`);
   };
 
   return (
     <motion.div 
-      className="flex flex-col gap-6"
+      ref={containerRef}
+      className="flex flex-col gap-8 pb-10"
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      animate={isInView ? "visible" : "hidden"}
+      data-scroll-section
     >
-      <style jsx global>{`
-        /* Enhanced card hover animations */
-        .dashboard-card {
-          transition: all 0.3s ease;
-          border: 1px solid rgba(42, 82, 190, 0.1);
-        }
-        .dashboard-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 25px -5px rgba(42, 82, 190, 0.15);
-          border-color: rgba(42, 82, 190, 0.3);
-        }
-        .stat-card {
-          position: relative;
-          overflow: hidden;
-        }
-        .stat-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(45deg, rgba(42, 82, 190, 0), rgba(42, 82, 190, 0));
-          transition: all 0.3s ease;
-          z-index: -1;
-        }
-        .stat-card:hover::before {
-          background: linear-gradient(45deg, rgba(42, 82, 190, 0.05), rgba(42, 82, 190, 0));
-        }
-        .conversation-item {
-          transition: all 0.25s ease-in-out;
-          border: 1px solid transparent;
-        }
-        .conversation-item:hover {
-          transform: translateY(-2px);
-          border-color: rgba(42, 82, 190, 0.3);
-          box-shadow: 0 4px 12px rgba(42, 82, 190, 0.1);
-        }
-        .table-row {
-          transition: background-color 0.2s ease;
-        }
-        .table-row:hover {
-          background-color: rgba(42, 82, 190, 0.05);
-        }
-      `}</style>
-      <div className="flex flex-col gap-2">
+      {/* Header Section */}
+      <motion.div 
+        className="flex flex-col gap-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
         <div className="flex items-baseline justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-[#2a52be] to-[#2a52be]/70 bg-clip-text text-transparent pb-1">Dashboard</h1>
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent pb-1">Dashboard</h1>
             <p className="text-muted-foreground">
               Welcome back! Here's an overview of your OmniChannel system.
             </p>
           </div>
-          <Button className="gap-2 bg-gradient-to-r from-[#2a52be] to-[#3a62ce] text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-            <Plus className="h-4 w-4" />
-            New Conversation
+          <Button asChild className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200">
+            <Link href="/dashboard/conversations/new">
+              <Plus className="h-4 w-4" />
+              New Conversation
+            </Link>
           </Button>
         </div>
-      </div>
-      
-      {/* KPI Section */}
-      <motion.div
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
-        variants={containerVariants}
-      >
-        {kpiMetrics.map((metric) => (
-          <motion.div key={metric.id} variants={itemVariants}>
-            <StatCard
-              icon={metric.icon}
-              value={metric.value}
-              label={metric.label}
-              trend={metric.change * (metric.changeType === "increase" ? 1 : -1)}
-              trendLabel={`vs ${metric.period}`}
-              color="#2a52be"
-              className="stat-card dashboard-card"
-            />
-          </motion.div>
-        ))}
       </motion.div>
       
+      {/* KPI Section */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {kpiMetrics.map((metric, index) => (
+          <StatsCard
+            key={metric.id}
+            index={index}
+            title={metric.label}
+            value={metric.value}
+            icon={metric.icon}
+            trend={metric.change * (metric.changeType === "increase" ? 1 : -1)}
+            trendLabel={`vs ${metric.period}`}
+          />
+        ))}
+      </div>
+      
       {/* Recent Conversations */}
-      <motion.div variants={containerVariants}>
-        <DashboardCard>
-          <CardHeader separated>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-xl">Recent Conversations</CardTitle>
-              <div className="flex gap-2">
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
-                  <RefreshCw className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="sm" className="h-8 gap-1 hover:bg-[#2a52be]/5 hover:text-[#2a52be] hover:border-[#2a52be]/30 transition-all duration-300" asChild>
-                  <Link href="/dashboard/conversations">
-                    <span>View All</span>
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2.5 mt-1">
-              {recentConversations.map((convo) => (
-                <motion.div 
-                  key={convo.id}
-                  variants={itemVariants}
-                  className="p-3.5 rounded-lg border bg-card/80 hover:bg-[#2a52be]/5 transition-all conversation-item"
-                >
-                  <div className="flex justify-between gap-4">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#2a52be]/10 to-[#3a62ce]/10 border border-[#2a52be]/5 flex items-center justify-center shadow-sm">
-                        {getChannelIcon(convo.channel)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-sm font-medium truncate">{convo.contact}</h3>
-                            {convo.unread && (
-                              <span className="flex-shrink-0 h-2 w-2 rounded-full bg-[#2a52be] animate-pulse"></span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <Badge variant="outline" className="px-1.5 py-0 h-5 text-[10px] font-normal border-[#2a52be]/10 bg-[#2a52be]/5 text-[#2a52be]/90 hover:bg-[#2a52be]/10 transition-colors">
-                              {convo.channelName}
-                            </Badge>
-                            <span className="text-muted-foreground/70">{convo.time}</span>
-                          </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground line-clamp-1 mt-1.5">
-                          {convo.preview}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+      <DashboardSection
+        title="Recent Conversations"
+        action={{ label: "View All", href: "/dashboard/conversations", icon: <ArrowUpRight className="h-3.5 w-3.5" /> }}
+        moreActions={
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        }
+        delay={0.1}
+      >
+        <Card className="border-primary/10 shadow-sm backdrop-blur-[2px] overflow-hidden">
+          <CardContent className="p-4 space-y-3">
+            {recentConversations.map((convo, index) => (
+              <ConversationCard
+                key={convo.id}
+                id={convo.id}
+                contact={{ name: convo.contact }}
+                message={convo.preview}
+                time={convo.time}
+                channel={convo.channel}
+                channelName={convo.channelName}
+                unread={convo.unread}
+                index={index}
+                onClick={() => navigateToConversation(convo.id)}
+              />
+            ))}
           </CardContent>
-          <CardFooter separated>
-            <Button className="w-full gap-1.5 hover:bg-[#2a52be]/5 hover:text-[#2a52be] hover:border-[#2a52be]/30 transition-all duration-300" variant="outline" asChild>
+          <CardFooter className="px-4 py-3 border-t">
+            <Button className="w-full gap-1.5" variant="outline" asChild>
               <Link href="/dashboard/conversations/new">
                 <Plus className="h-3.5 w-3.5" />
                 <span>New Conversation</span>
               </Link>
             </Button>
           </CardFooter>
-        </DashboardCard>
-      </motion.div>
+        </Card>
+      </DashboardSection>
       
-      {/* Channel Health & Quick Actions */}
+      {/* Two-column layout section */}
       <div className="grid gap-6 md:grid-cols-12">
         {/* Channel Health */}
-        <motion.div
-          className="md:col-span-6 lg:col-span-5"
-          variants={containerVariants}
-        >
-          <DashboardCard>
-            <CardHeader separated>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl">Channel Health</CardTitle>
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
-                  <RefreshCw className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3.5 mt-1">
-                {channelHealth.map((channel) => (
-                  <motion.div 
-                    key={channel.id}
-                    variants={itemVariants}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-card/80 hover:bg-[#2a52be]/5 transition-all conversation-item"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-full bg-gradient-to-br from-background to-muted border border-muted flex items-center justify-center shadow-sm">
-                        {channel.icon}
-                      </div>
-                      <span className="font-medium">{channel.name}</span>
-                    </div>
-                    <Badge 
-                      variant={channel.status === "healthy" ? "outline" : "destructive"} 
-                      className={channel.status === "healthy" ? "bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-200" : ""}
-                    >
-                      {channel.status === "healthy" ? (
-                        <span className="flex items-center gap-1">
-                          <CheckCircle2 className="h-3 w-3" />
-                          Healthy
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1">
-                          <AlertTriangle className="h-3 w-3" />
-                          Issues
-                        </span>
-                      )}
-                    </Badge>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter separated>
-              <Button variant="outline" className="w-full gap-1.5" asChild>
-                <Link href="/dashboard/channels">
-                  <Settings className="h-3.5 w-3.5" />
-                  <span>Manage Channels</span>
-                </Link>
+        <div className="md:col-span-6 lg:col-span-5">
+          <DashboardSection
+            title="Channel Health"
+            action={{ label: "Manage Channels", href: "/dashboard/channels", icon: <Settings className="h-3.5 w-3.5" /> }}
+            moreActions={
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
+                <RefreshCw className="h-4 w-4" />
               </Button>
-            </CardFooter>
-          </DashboardCard>
-        </motion.div>
+            }
+            delay={0.2}
+          >
+            <Card className="border-primary/10 shadow-sm backdrop-blur-[2px] overflow-hidden">
+              <CardContent className="p-4 space-y-3">
+                {channelHealth.map((channel, index) => (
+                  <ChannelStatusCard
+                    key={channel.id}
+                    id={channel.id}
+                    name={channel.name}
+                    status={channel.status as 'healthy' | 'issues' | 'offline'}
+                    icon={channel.icon}
+                    index={index}
+                    onClick={() => console.log(`Navigating to channel: ${channel.id}`)}
+                  />
+                ))}
+              </CardContent>
+            </Card>
+          </DashboardSection>
+        </div>
         
         {/* Quick Actions */}
-        <motion.div
-          className="md:col-span-6 lg:col-span-7"
-          variants={containerVariants}
-        >
-          <div className="grid gap-6 h-full">
-            {/* Add Channel */}
-            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full -mt-8 -mr-8"></div>
-              <CardHeader className="relative z-10">
-                <CardTitle>Connect a Channel</CardTitle>
-                <CardDescription>
-                  Integrate with SMS, WhatsApp, Email, or other messaging platforms
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="relative z-10">
-                <Button className="w-full group" asChild>
-                  <Link href="/dashboard/channels/connect" className="flex items-center gap-2 w-full justify-center">
-                    <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
-                    Add Channel
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-            
-            {/* Upload Documents */}
-            <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20 overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-bl-full -mt-8 -mr-8"></div>
-              <CardHeader className="relative z-10">
-                <CardTitle>Upload Knowledge</CardTitle>
-                <CardDescription>
-                  Add documents to your knowledge base for better AI responses
-                </CardDescription>
-              </CardHeader>
-              <CardFooter className="relative z-10">
-                <Button className="w-full bg-accent hover:bg-accent/90 group" asChild>
-                  <Link href="/dashboard/knowledge/upload" className="flex items-center gap-2 w-full justify-center">
-                    <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform duration-300" />
-                    Upload
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </motion.div>
+        <div className="md:col-span-6 lg:col-span-7">
+          <DashboardSection
+            title="Quick Actions"
+            description="Access common tasks and operations"
+            delay={0.3}
+          >
+            <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
+              <ActionCard 
+                title="Connect Channel"
+                description="Add SMS, WhatsApp, Email or other messaging platforms"
+                icon={<MessageCircle className="h-5 w-5" />}
+                buttonText="Add Channel"
+                buttonIcon={<Plus className="h-4 w-4" />}
+                href="/dashboard/channels/connect"
+                gradient="from-primary/5 to-primary/10 border-primary/20"
+                index={0}
+              />
+              
+              <ActionCard 
+                title="Upload Knowledge"
+                description="Add documents to your knowledge base for better AI responses"
+                icon={<Upload className="h-5 w-5" />}
+                buttonText="Upload"
+                buttonIcon={<Plus className="h-4 w-4" />}
+                href="/dashboard/knowledge/upload"
+                gradient="from-accent/5 to-accent/10 border-accent/20"
+                index={1}
+              />
+              
+              <ActionCard 
+                title="Manage Personas"
+                description="Create and customize AI personalities for your channels"
+                icon={<Bot className="h-5 w-5" />}
+                buttonText="Personas"
+                buttonIcon={<Users className="h-4 w-4" />}
+                href="/dashboard/persona"
+                gradient="from-indigo-500/5 to-indigo-500/10 border-indigo-500/20"
+                index={2}
+              />
+              
+              <ActionCard 
+                title="Analytics"
+                description="View conversation metrics and performance insights"
+                icon={<PieChart className="h-5 w-5" />}
+                buttonText="View Stats"
+                buttonIcon={<Activity className="h-4 w-4" />}
+                href="/dashboard/analytics"
+                gradient="from-emerald-500/5 to-emerald-500/10 border-emerald-500/20"
+                index={3}
+              />
+            </div>
+          </DashboardSection>
+        </div>
       </div>
+      
+      {/* Activity Feed Section - Coming Soon */}
+      <DashboardSection
+        title="Recent Activity"
+        description="Monitor your system's activity and performance"
+        action={{ label: "View All", href: "/dashboard/activity" }}
+        delay={0.4}
+      >
+        <Card className="border-primary/10 shadow-sm backdrop-blur-[2px] overflow-hidden p-8 flex items-center justify-center">
+          <div className="text-center">
+            <h3 className="text-lg font-medium mb-2">Activity Feed Coming Soon</h3>
+            <p className="text-muted-foreground text-sm max-w-md mx-auto">
+              We're working on a comprehensive activity feed to help you monitor all interactions across your channels in one place.
+            </p>
+          </div>
+        </Card>
+      </DashboardSection>
     </motion.div>
   )
 }

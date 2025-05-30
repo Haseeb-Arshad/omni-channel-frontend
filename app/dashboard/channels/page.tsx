@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence, useInView } from "framer-motion"
 import Link from "next/link"
 import { 
   MessageSquare, 
@@ -27,9 +28,24 @@ import {
   ExternalLink,
   Copy,
   CheckCircle2,
-  RefreshCw
+  RefreshCw,
+  Loader2,
+  ArrowUpRight,
+  MessageSquareDashed,
+  Activity,
+  PieChart
 } from "lucide-react"
 import api from "@/lib/api"
+
+// Custom Dashboard Components
+import { 
+  DashboardSection,
+  ChannelStatusCard,
+  ActionCard
+} from "@/components/ui/dashboard"
+
+// Animations
+import { useAnimations } from "@/hooks/use-animations"
 
 // Helper function to get channel identifier based on type
 function getChannelIdentifier(channel: any) {
@@ -79,6 +95,17 @@ export default function ChannelsPage() {
   const [connectedChannels, setConnectedChannels] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Animation setup
+  const { initAnimations } = useAnimations();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.1 });
+  
+  useEffect(() => {
+    if (containerRef.current && isInView) {
+      initAnimations();
+    }
+  }, [isInView, initAnimations]);
   
   // Mock data for sample channels to add (with only SMS and WhatsApp active)
   const availableChannels = [
@@ -254,32 +281,63 @@ export default function ChannelsPage() {
   }, []);
 
   return (
-    <div className="space-y-6 bg-white dark:bg-background">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Communication Channels</h1>
-          <p className="text-muted-foreground">Connect and manage all your communication channels</p>
+    <motion.div 
+      ref={containerRef}
+      className="flex flex-col gap-6 pb-6"
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      data-scroll-section
+    >
+      {/* Header Section */}
+      <motion.div 
+        className="flex flex-col gap-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="flex items-baseline justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent pb-1">Communication Channels</h1>
+            <p className="text-muted-foreground">
+              Connect and manage all your communication channels
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-1.5 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"
+              onClick={() => window.location.reload()}
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </Button>
+            <Button 
+              className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200" 
+              asChild
+            >
+              <Link href="/dashboard/channels/connect">
+                <Plus className="h-4 w-4" />
+                Add Channel
+              </Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="gap-1" onClick={() => window.location.reload()}>
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </Button>
-          <Button size="sm" className="gap-1" asChild>
-            <Link href="/dashboard/channels/connect">
-              <Plus className="h-4 w-4" />
-              Add Channel
-            </Link>
-          </Button>
-        </div>
-      </div>
+      </motion.div>
       
       <Tabs defaultValue="connected" value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 mb-6">
-          <TabsTrigger value="connected" className="text-center">
+        <TabsList className="grid w-full grid-cols-2 mb-6 bg-accent/20 p-1 rounded-lg">
+          <TabsTrigger 
+            value="connected" 
+            className="text-center data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200"
+          >
             Connected Channels
           </TabsTrigger>
-          <TabsTrigger value="available" className="text-center">
+          <TabsTrigger 
+            value="available" 
+            className="text-center data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200"
+          >
             Available Channels
           </TabsTrigger>
         </TabsList>
@@ -293,35 +351,46 @@ export default function ChannelsPage() {
             className="space-y-6"
           >
             {isLoading ? (
-              <div className="w-full p-12 flex justify-center items-center">
-                <div className="text-center">
-                  <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                  <p className="text-muted-foreground">Loading channels...</p>
+              <div className="flex flex-col items-center justify-center h-full p-12">
+                <div className="animate-spin mb-2">
+                  <Loader2 className="h-8 w-8 text-primary" />
                 </div>
+                <span className="text-sm text-muted-foreground">Loading channels...</span>
               </div>
             ) : error ? (
-              <div className="w-full p-12 flex justify-center items-center">
-                <div className="text-center text-red-500">
-                  <AlertCircle className="h-8 w-8 mx-auto mb-2" />
-                  <p>{error}</p>
-                  <Button onClick={() => window.location.reload()} variant="outline" size="sm" className="mt-4">
-                    <RefreshCw className="h-4 w-4 mr-2" /> Try Again
-                  </Button>
-                </div>
+              <div className="flex flex-col items-center justify-center h-full p-12">
+                <AlertCircle className="h-8 w-8 text-destructive mb-2" />
+                <h3 className="font-medium mb-1">Failed to load channels</h3>
+                <p className="text-sm text-muted-foreground text-center">{error}</p>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-4 gap-1.5 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"
+                  onClick={() => window.location.reload()}
+                >
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Try Again
+                </Button>
               </div>
             ) : connectedChannels.length > 0 ? (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {connectedChannels.map((channel) => (
-                  <motion.div key={channel.id} variants={itemVariants}>
-                    <Card className="overflow-hidden transition-all duration-200 hover:shadow-md border-opacity-80 hover:border-primary/20 h-full bg-white dark:bg-card">
+                {connectedChannels.map((channel, index) => (
+                  <motion.div 
+                    key={channel.id} 
+                    variants={itemVariants}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05, duration: 0.3 }}
+                  >
+                    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md border-primary/10 hover:border-primary/20 h-full backdrop-blur-[2px]">
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/5 flex items-center justify-center shadow-sm text-primary/80">
                               {channel.icon}
                             </div>
                             <div>
-                              <CardTitle>{channel.name}</CardTitle>
+                              <CardTitle className="text-lg">{channel.name}</CardTitle>
                               <p className="text-xs text-muted-foreground">{channel.identifier}</p>
                             </div>
                           </div>
@@ -330,12 +399,12 @@ export default function ChannelsPage() {
                               <TooltipTrigger asChild>
                                 <div>
                                   {channel.health === "healthy" ? (
-                                    <Badge variant="success" className="flex items-center gap-1">
+                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-200 flex items-center gap-1">
                                       <CheckCircle2 className="h-3 w-3" />
                                       Healthy
                                     </Badge>
                                   ) : (
-                                    <Badge variant="warning" className="flex items-center gap-1">
+                                    <Badge variant="outline" className="bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 border-amber-200 flex items-center gap-1">
                                       <AlertTriangle className="h-3 w-3" />
                                       Issues
                                     </Badge>
@@ -354,24 +423,24 @@ export default function ChannelsPage() {
                       <CardContent>
                         <div className="space-y-4">
                           <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-muted/30 rounded-lg p-3 text-center">
+                            <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/5 rounded-lg p-3 text-center shadow-sm">
                               <p className="text-xs text-muted-foreground">Messages Received</p>
-                              <p className="text-lg font-bold">{channel.messagesReceived}</p>
+                              <p className="text-lg font-bold text-primary">{channel.messagesReceived}</p>
                             </div>
-                            <div className="bg-muted/30 rounded-lg p-3 text-center">
+                            <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/5 rounded-lg p-3 text-center shadow-sm">
                               <p className="text-xs text-muted-foreground">Messages Sent</p>
-                              <p className="text-lg font-bold">{channel.messagesSent}</p>
+                              <p className="text-lg font-bold text-primary">{channel.messagesSent}</p>
                             </div>
                           </div>
 
                           {/* Webhook URL */}
-                          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                          <div className="p-3 bg-blue-50/50 dark:bg-blue-950/20 rounded-lg border border-blue-100 dark:border-blue-900/20 shadow-sm">
                             <div className="flex items-center justify-between mb-2">
-                              <h4 className="text-sm font-medium">Webhook URL</h4>
+                              <h4 className="text-sm font-medium text-blue-700 dark:text-blue-400">Webhook URL</h4>
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
-                                className="h-7 px-2 text-xs" 
+                                className="h-7 px-2 text-xs hover:bg-blue-100/50 hover:text-blue-700 transition-colors duration-200" 
                                 onClick={() => {
                                   navigator.clipboard.writeText(channel.webhookUrl);
                                   setCopied(true);
@@ -382,21 +451,31 @@ export default function ChannelsPage() {
                                 {copied ? "Copied!" : "Copy"}
                               </Button>
                             </div>
-                            <div className="text-xs font-mono bg-muted/50 p-2 rounded overflow-x-auto">
+                            <div className="text-xs font-mono bg-blue-50/80 dark:bg-blue-900/20 p-2 rounded overflow-x-auto border border-blue-100/50 dark:border-blue-800/20">
                               {channel.webhookUrl}
                             </div>
                           </div>
                         </div>
                       </CardContent>
-                      <CardFooter className="flex flex-col gap-2">
+                      <CardFooter className="flex flex-col gap-2 pt-2 border-t border-primary/10">
                         <div className="flex w-full justify-between gap-2">
-                          <Button variant="outline" size="sm" className="w-1/2" asChild>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-1/2 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-colors duration-200" 
+                            asChild
+                          >
                             <Link href={`/dashboard/channels/${channel.id}/settings`}>
                               <Settings className="h-4 w-4 mr-2" />
                               Settings
                             </Link>
                           </Button>
-                          <Button variant="outline" size="sm" className="w-1/2" asChild>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-1/2 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-colors duration-200" 
+                            asChild
+                          >
                             <Link href={`/dashboard/channels/${channel.id}/messages`}>
                               <MessageSquare className="h-4 w-4 mr-2" />
                               Messages
@@ -406,11 +485,11 @@ export default function ChannelsPage() {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20 w-full justify-start"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50/50 dark:hover:bg-red-950/20 mt-1 transition-colors duration-200" 
                           onClick={() => removeChannel(channel.id)}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          Disconnect Channel
+                          Remove Channel
                         </Button>
                       </CardFooter>
                     </Card>
@@ -495,6 +574,6 @@ export default function ChannelsPage() {
           </motion.div>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

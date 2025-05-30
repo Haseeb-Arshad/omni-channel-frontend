@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-// Dashboard layout is provided by the parent layout.tsx
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -95,11 +94,6 @@ export default function KnowledgeBasePage() {
     setSearchQuery(e.target.value)
   }
 
-  const handleDelete = (id: string) => {
-    setDocuments(documents.filter(doc => doc.id !== id))
-    toast.success("Document deleted successfully")
-  }
-
   const handleDownload = (id: string) => {
     // In a real application, this would trigger a download
     toast.success("Document download started")
@@ -148,7 +142,7 @@ export default function KnowledgeBasePage() {
     const matchesType = selectedType === "all" || (selectedType === docType);
     
     return matchesSearch && matchesStatus && matchesType;
-  })
+  });
 
   // Handle document delete with API
   const handleDeleteDocument = async (id: string) => {
@@ -168,213 +162,187 @@ export default function KnowledgeBasePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Knowledge Base</h1>
-        <p className="text-muted-foreground">
-          Upload and manage documents that your AI agent can use to provide accurate responses.
-        </p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">Knowledge Base</h1>
+          <p className="text-muted-foreground max-w-2xl">
+            Upload and manage documents that your AI agent can use to provide accurate responses.
+          </p>
+        </div>
+        <Button className="gap-2 shadow-sm" asChild>
+          <Link href="/dashboard/knowledge/upload">
+            <Upload className="h-4 w-4" />
+            <span>Upload Document</span>
+          </Link>
+        </Button>
       </div>
 
       {/* Action Bar */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 items-center bg-card/50 border border-border/50 rounded-lg p-3 shadow-sm">
         <div className="relative w-full sm:max-w-xs">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search documents..."
-            className="w-full rounded-md border border-input pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full rounded-md border border-input bg-background pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
             value={searchQuery}
             onChange={handleSearch}
           />
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Filter className="h-4 w-4" />
-            <span className="hidden sm:inline">Filter</span>
-          </Button>
-          <Button className="gap-2" asChild>
-            <Link href="/dashboard/knowledge/upload">
-              <Upload className="h-4 w-4" />
-              <span>Upload</span>
-            </Link>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span>Status:</span>
+          <select 
+            className="bg-background border border-input rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="processed">Processed</option>
+            <option value="processing">Processing</option>
+            <option value="failed">Failed</option>
+          </select>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span>Sort:</span>
+          <select 
+            className="bg-background border border-input rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="date">Date</option>
+            <option value="name">Name</option>
+            <option value="size">Size</option>
+          </select>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-8 w-8" 
+            onClick={handleSortToggle}
+          >
+            <ArrowUpDown className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      {/* Loading State */}
-      {isLoading ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <Card key={i} className="overflow-hidden">
-              <CardHeader className="pb-3">
-                <div className="flex justify-between">
-                  <div className="flex items-start gap-3">
-                    <Skeleton className="w-10 h-10 rounded-lg" />
+      {/* Document List/Grid */}
+      <div className="mt-6 space-y-6">
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, index) => (
+              <Card key={index} className="border-border/40 shadow-sm overflow-hidden">
+                <div className="p-4">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="h-10 w-10 rounded-md" />
                     <div className="space-y-2">
-                      <Skeleton className="h-5 w-40" />
-                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-4 w-40" />
+                      <Skeleton className="h-3 w-24" />
                     </div>
                   </div>
-                  <Skeleton className="h-6 w-24 rounded-full" />
+                  <div className="mt-4 space-y-2">
+                    <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-3 w-3/4" />
+                  </div>
                 </div>
-              </CardHeader>
-              <CardContent className="pb-3">
-                <Skeleton className="h-4 w-full my-1" />
-                <Skeleton className="h-4 w-4/5 my-1" />
-              </CardContent>
-              <CardFooter className="border-t pt-3 flex justify-between">
-                <Skeleton className="h-4 w-32" />
-                <div className="flex gap-2">
-                  <Skeleton className="h-8 w-8 rounded-full" />
-                  <Skeleton className="h-8 w-8 rounded-full" />
-                  <Skeleton className="h-8 w-8 rounded-full" />
-                </div>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      ) : error ? (
-        /* Error State */
-        <Card className="p-8 text-center">
-          <div className="flex flex-col items-center gap-3 max-w-md mx-auto">
-            <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
-              <AlertCircle className="h-6 w-6 text-destructive" />
-            </div>
-            <h3 className="text-xl font-semibold">Failed to load documents</h3>
-            <p className="text-muted-foreground mb-4">{error}</p>
-            <Button 
-              variant="outline" 
-              onClick={() => window.location.reload()}
-              className="flex items-center gap-2"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Try Again
-            </Button>
+                <CardFooter className="bg-secondary/20 border-t px-4 py-3 flex justify-between">
+                  <Skeleton className="h-3 w-20" />
+                  <Skeleton className="h-8 w-24 rounded-md" />
+                </CardFooter>
+              </Card>
+            ))}
           </div>
-        </Card>
-      ) : filteredDocuments.length > 0 ? (
-        /* Documents Grid */
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredDocuments.map((doc) => {
-            const fileType = getFileType(doc);
-            const status = mapStatus(doc.processing_status);
-            
-            return (
-              <Card key={doc.id} className="micro-interaction gradient-border overflow-hidden">
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+        ) : error ? (
+          <Card className="border-border/40 shadow-sm">
+            <CardContent className="pt-6 pb-4 text-center">
+              <p className="text-destructive">{error}</p>
+              <Button onClick={() => window.location.reload()} variant="outline" className="mt-4">
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Try Again
+              </Button>
+            </CardContent>
+          </Card>
+        ) : filteredDocuments.length === 0 ? (
+          <Card className="border-border/40 shadow-sm">
+            <CardContent className="pt-6 pb-4 text-center">
+              <p className="text-muted-foreground">No documents found. Try adjusting your search or filters.</p>
+              <Button asChild className="mt-4">
+                <Link href="/dashboard/knowledge/upload">
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload a document
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredDocuments.map((doc) => {
+              const status = mapStatus(doc.processing_status);
+              const fileType = getFileType(doc);
+              return (
+                <Card key={doc.id} className="overflow-hidden border-border/40 shadow-sm hover:shadow-md transition-all group">
+                  <CardHeader className="p-4 pb-3 space-y-0">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-shrink-0 h-11 w-11 bg-primary/10 rounded-md flex items-center justify-center">
                         {getFileIcon(fileType)}
                       </div>
-                      <div>
-                        <CardTitle className="text-base font-medium line-clamp-1">
+                      <div className="overflow-hidden">
+                        <CardTitle className="text-base font-medium truncate">
                           {doc.original_filename || doc.filename}
                         </CardTitle>
-                        <CardDescription className="flex items-center gap-1 mt-1">
-                          <span className="capitalize">{fileType}</span>
-                          <span className="text-muted-foreground">•</span>
-                          <span>{formatFileSize(doc.file_size)}</span>
+                        <CardDescription className="text-xs flex items-center gap-2">
+                          <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                            {fileType.toUpperCase()}
+                          </span>
+                          <span className="text-muted-foreground">{formatFileSize(doc.file_size)}</span>
                         </CardDescription>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 text-xs rounded-full py-1 px-2.5 bg-muted">
-                      {getStatusIcon(status)}
-                      <span>{getStatusText(status)}</span>
+                  </CardHeader>
+                  <CardContent className="px-4 py-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-1.5">
+                        {getStatusIcon(status)}
+                        <span className="text-xs font-medium">{getStatusText(status)}</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">{formatDate(doc.uploaded_at)}</span>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-3">
-                  {status === "processed" || status === "completed" ? (
-                    <div className="text-sm space-y-2">
-                      {/* Content summary if available */}
-                      {doc.content_summary ? (
-                        <p className="text-muted-foreground line-clamp-3">
-                          {doc.content_summary}
-                        </p>
-                      ) : (
-                        <p className="text-muted-foreground">
-                          Document successfully processed with {doc.chunk_count || 0} chunks.
-                        </p>
-                      )}
-                      {/* Document metadata */}
-                      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
-                        {/* PDF-specific info */}
-                        {doc.mime_type?.includes('pdf') && doc.metadata?.pageCount && (
-                          <div className="flex items-center text-xs text-muted-foreground">
-                            <FileText className="h-3 w-3 mr-1" />
-                            <span>{doc.metadata.pageCount} {doc.metadata.pageCount === 1 ? 'page' : 'pages'}</span>
-                          </div>
-                        )}
-                        {/* Show document tags if available */}
-                        {doc.tags && doc.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {doc.tags.slice(0, 3).map((tag, i) => (
-                              <span key={i} className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded-full">
-                                {tag}
-                              </span>
-                            ))}
-                            {doc.tags.length > 3 && (
-                              <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">+{doc.tags.length - 3}</span>
-                            )}
-                          </div>
+                    {doc.tags && doc.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {doc.tags.slice(0, 3).map((tag, i) => (
+                          <span key={i} className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded-full">
+                            {tag}
+                          </span>
+                        ))}
+                        {doc.tags.length > 3 && (
+                          <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">+{doc.tags.length - 3}</span>
                         )}
                       </div>
+                    )}
+                  </CardContent>
+                  <CardFooter className="bg-secondary/20 border-t px-4 py-3 flex justify-between">
+                    <div className="text-xs text-muted-foreground">
+                      Updated {new Date(doc.uploaded_at).toLocaleDateString()}
                     </div>
-                  ) : status === "processing" ? (
-                    <div className="text-sm text-muted-foreground flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-amber-500" />
-                      <span>Processing document. This may take a few minutes...</span>
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                        <Link href={`/dashboard/knowledge/view/${doc.id}`}>
+                          <Eye className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDownload(doc.id)}>
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-destructive hover:bg-destructive/10" 
+                        onClick={() => handleDeleteDocument(doc.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                  ) : (
-                    <div className="text-sm text-muted-foreground flex items-center gap-2">
-                      <AlertCircle className="h-4 w-4 text-destructive" />
-                      <span>{doc.status_message || "Failed to process document. Please try again."}</span>
-                    </div>
-                  )}
-                </CardContent>
-                <CardFooter className="border-t pt-3 flex justify-between text-xs text-muted-foreground">
-                  <div>Uploaded on {formatDate(doc.uploaded_at)}</div>
-                  <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleDownload(doc.id)}>
-                      <Download className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" asChild>
-                      <Link href={`/dashboard/knowledge/view/${doc.id}`}>
-                        <Eye className="h-4 w-4" />
-                      </Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDeleteDocument(doc.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardFooter>
-              </Card>
-            );
-          })}
-        </div>
-      ) : (
-        /* Empty State */
-        <Card className="p-8 text-center">
-          <div className="flex flex-col items-center gap-3 max-w-md mx-auto">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <FileText className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold">No documents found</h3>
-            <p className="text-muted-foreground mb-4">
-              {searchQuery ? 
-                "No documents match your search criteria. Try adjusting your filters or search query." : 
-                "Upload documents to your knowledge base to help the AI provide more accurate responses."}
-            </p>
-            <Button asChild>
-              <Link href="/dashboard/knowledge/upload" className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                Upload Your First Document
-              </Link>
-            </Button>
+                  </CardFooter>
+                </Card>
+              );
+            })}
           </div>
-        </Card>
-      )}
+        )}
+      </div>
     </div>
   )
 }

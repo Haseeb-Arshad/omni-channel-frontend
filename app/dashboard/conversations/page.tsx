@@ -1,21 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import Link from "next/link";
 import { 
   Search, Filter, MoreHorizontal, Send, Paperclip, 
   Smile, ChevronRight, Clock, Tag, User, AlertCircle,
   MessageSquare, Check, X, RefreshCw, Phone, Video,
   Mail, MessageCircle, Facebook, Globe, Info, FileText,
-  AtSign, Plus
+  AtSign, Plus, ArrowUpRight, Settings, ChevronDown,
+  Loader2, ArrowRight, ChevronLeft, MessageSquareDashed
 } from "lucide-react";
 
+// UI Components
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Select,
   SelectContent,
@@ -23,6 +26,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+// Custom Dashboard Components
+import { 
+  DashboardSection,
+  ConversationCard
+} from "@/components/ui/dashboard";
+
+// Animations
+import { useAnimations } from "@/hooks/use-animations";
 
 // Mock data for demonstration
 const mockConversations = [
@@ -325,6 +337,30 @@ export default function ConversationsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Animation setup
+  const { initAnimations } = useAnimations();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.1 });
+  
+  useEffect(() => {
+    if (containerRef.current && isInView) {
+      initAnimations();
+    }
+  }, [isInView, initAnimations]);
+  
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        ease: [0.22, 1, 0.36, 1],
+        duration: 0.5
+      }
+    }
+  };
 
   // Fetch conversations from API
   useEffect(() => {
@@ -410,52 +446,69 @@ export default function ConversationsPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)]">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent pb-1">Conversations</h1>
-          <p className="text-muted-foreground">Manage and respond to customer conversations across all channels</p>
+    <motion.div 
+      ref={containerRef}
+      className="flex flex-col h-[calc(100vh-4rem)] gap-6 pb-6"
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      data-scroll-section
+    >
+      {/* Header Section */}
+      <motion.div 
+        className="flex flex-col gap-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="flex items-baseline justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent pb-1">Conversations</h1>
+            <p className="text-muted-foreground">
+              Manage and respond to customer conversations across all channels
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-1.5 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </Button>
+            <Button 
+              className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200" 
+              asChild
+            >
+              <Link href="/dashboard/conversations/new">
+                <Plus className="h-4 w-4" />
+                New Conversation
+              </Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-1.5 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </Button>
-          <Button 
-            size="sm" 
-            className="gap-1.5 bg-gradient-to-r from-primary/90 to-indigo-600/90 text-primary-foreground shadow-md hover:shadow-lg" 
-            asChild
-          >
-            <Link href="/dashboard/conversations/new">
-              <Plus className="h-4 w-4" />
-              New Conversation
-            </Link>
-          </Button>
-        </div>
-      </div>
+      </motion.div>
 
-      <div className="bg-card rounded-xl border shadow-md flex flex-1 overflow-hidden">
+      <div className="bg-card/90 rounded-xl border border-primary/10 shadow-lg flex flex-1 overflow-hidden backdrop-blur-[2px]">
         {/* Conversation List */}
-        <div className="w-1/3 border-r flex flex-col">
-          <div className="p-4 border-b space-y-3 bg-gradient-to-r from-card/90 via-card/80 to-card/90">
+        <div className="w-1/3 border-r border-primary/10 flex flex-col">
+          <div className="p-4 border-b border-primary/10 space-y-3 bg-gradient-to-r from-card/95 via-card/90 to-card/95">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input 
                 placeholder="Search conversations..." 
-                className="pl-9 bg-background/70 focus-visible:bg-background border-muted focus-visible:ring-1 focus-visible:ring-primary/20"
+                className="pl-9 bg-background/80 focus-visible:bg-background border-primary/10 focus-visible:ring-1 focus-visible:ring-primary/30"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-primary/10 scrollbar-track-transparent">
               <Button 
                 variant={activeFilter === "all" ? "default" : "outline"} 
                 size="sm"
+                className={activeFilter === "all" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("all")}
               >
                 All
@@ -463,6 +516,7 @@ export default function ConversationsPage() {
               <Button 
                 variant={activeFilter === "unread" ? "default" : "outline"} 
                 size="sm"
+                className={activeFilter === "unread" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("unread")}
               >
                 Unread
@@ -470,6 +524,7 @@ export default function ConversationsPage() {
               <Button 
                 variant={activeFilter === "email" ? "default" : "outline"} 
                 size="sm"
+                className={activeFilter === "email" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("email")}
               >
                 <Mail className="h-3 w-3 mr-1" /> Email
@@ -477,6 +532,7 @@ export default function ConversationsPage() {
               <Button 
                 variant={activeFilter === "web" ? "default" : "outline"} 
                 size="sm"
+                className={activeFilter === "web" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("web")}
               >
                 <Globe className="h-3 w-3 mr-1" /> Web
@@ -484,6 +540,7 @@ export default function ConversationsPage() {
               <Button 
                 variant={activeFilter === "facebook" ? "default" : "outline"} 
                 size="sm"
+                className={activeFilter === "facebook" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("facebook")}
               >
                 <Facebook className="h-3 w-3 mr-1" /> Facebook
@@ -491,6 +548,7 @@ export default function ConversationsPage() {
               <Button 
                 variant={activeFilter === "whatsapp" ? "default" : "outline"} 
                 size="sm"
+                className={activeFilter === "whatsapp" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("whatsapp")}
               >
                 <MessageSquare className="h-3 w-3 mr-1" /> WhatsApp
@@ -498,6 +556,7 @@ export default function ConversationsPage() {
               <Button 
                 variant={activeFilter === "sms" ? "default" : "outline"} 
                 size="sm"
+                className={activeFilter === "sms" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("sms")}
               >
                 <Phone className="h-3 w-3 mr-1" /> SMS
@@ -505,101 +564,60 @@ export default function ConversationsPage() {
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto">
-            <AnimatePresence>
-              {isLoading ? (
-                <div className="p-8 text-center">
-                  <div className="animate-spin h-8 w-8 border-4 border-primary/40 border-t-primary rounded-full mx-auto mb-4 shadow-md"></div>
-                  <p className="text-muted-foreground">Loading conversations...</p>
+          <div className="flex-1 overflow-y-auto divide-y divide-primary/5">
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center h-full p-6">
+                <div className="animate-spin mb-2">
+                  <Loader2 className="h-8 w-8 text-primary" />
                 </div>
-              ) : error ? (
-                <div className="p-8 text-center text-red-500">
-                  <AlertCircle className="h-8 w-8 mx-auto mb-2" />
-                  <p>{error}</p>
-                  <Button onClick={() => window.location.reload()} variant="outline" size="sm" className="mt-4">
-                    <RefreshCw className="h-4 w-4 mr-2" /> Try Again
-                  </Button>
-                </div>
-              ) : filteredConversations.map((conversation, index) => {
-                // Ensure we always have a valid, non-empty key
-                const conversationKey = conversation.id ? `conversation-${conversation.id}` : `conversation-index-${index}`;
-                
-                return (
-                <motion.div 
-                  key={conversationKey}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  variants={listItemVariants}
-                  className={`p-4 border-b cursor-pointer transition-all duration-200 ${
-                    selectedConversation?.id === conversation.id ? 'bg-gradient-to-r from-primary/10 to-primary/5 border-primary/10 shadow-sm' : 'hover:bg-accent/50'
-                  } ${conversation.unread ? 'border-l-4 border-l-primary' : ''}`}
-                  onClick={() => setSelectedConversation(conversation)}
-                >
-                  <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-card/90 via-card/80 to-card/90 shadow-sm">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/10 to-indigo-600/10 border border-primary/5 flex items-center justify-center mr-3 shadow-sm">
-                        {conversation.contact && conversation.contact.name ? 
-                          conversation.contact.name.charAt(0) : '?'}
-                      </div>
-                      <div>
-                        <div className="font-medium">
-                          {conversation.contact && conversation.contact.name ? 
-                            conversation.contact.name : 'Unknown Contact'}
-                        </div>
-                        <div className="text-sm text-muted-foreground flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs h-5 px-1.5 py-0 border-primary/10 bg-primary/5 text-primary/80 hover:bg-primary/10 capitalize">
-                            {conversation.channel || 'chat'}
-                          </Badge>
-                          <span>
-                            {conversation.contact ? 
-                              getContactInfo(conversation.contact, conversation.channel || 'chat') : 
-                              'No contact info'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button size="icon" variant="ghost" className="rounded-full hover:bg-primary/10 hover:text-primary">
-                        <Phone className="h-4 w-4" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="rounded-full hover:bg-primary/10 hover:text-primary">
-                        <Video className="h-4 w-4" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="rounded-full hover:bg-primary/10 hover:text-primary">
-                        <User className="h-4 w-4" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="rounded-full hover:bg-primary/10 hover:text-primary">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </div>
+                <span className="text-sm text-muted-foreground">Loading conversations...</span>
+              </div>
+            ) : error ? (
+              <div className="flex flex-col items-center justify-center h-full p-6">
+                <AlertCircle className="h-8 w-8 text-destructive mb-2" />
+                <h3 className="font-medium mb-1">Failed to load conversations</h3>
+                <p className="text-sm text-muted-foreground text-center">{error}</p>
+                <Button variant="outline" size="sm" className="mt-4 gap-1.5">
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Try Again
+                </Button>
+              </div>
+            ) : filteredConversations.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full p-6">
+                <MessageSquareDashed className="h-8 w-8 text-muted-foreground mb-2" />
+                <h3 className="font-medium mb-1">No conversations found</h3>
+                <p className="text-sm text-muted-foreground text-center">
+                  {searchQuery ? `No results for "${searchQuery}"` : "Try different filters or start a conversation"}
+                </p>
+                <Button className="mt-4 gap-1.5 bg-gradient-to-r from-primary to-primary/80 text-white" asChild>
+                  <Link href="/dashboard/conversations/new">
+                    <Plus className="h-3.5 w-3.5" />
+                    New Conversation
+                  </Link>
+                </Button>
+              </div>
+            ) : (
+              <AnimatePresence>
+                {filteredConversations.map((conversation, index) => (
+                  <div 
+                    key={conversation.id || `conversation-${index}`}
+                    className={selectedConversation?.id === conversation.id ? 'bg-primary/5 border-l-2 border-primary' : ''}
+                  >
+                    <ConversationCard
+                      id={conversation.id}
+                      contact={{ name: conversation.contact?.name || 'Unknown' }}
+                      message={conversation.lastMessage || ''}
+                      time={conversation.timestamp || ''}
+                      channel={conversation.channel || 'chat'}
+                      channelName={conversation.channel || 'Chat'}
+                      unread={conversation.unread || false}
+                      index={index}
+                      onClick={() => setSelectedConversation(conversation)}
+                    />
                   </div>
-                  <div className="text-sm line-clamp-2">{conversation.lastMessage || 'New conversation'}</div>
-                  <div className="flex mt-2 gap-1.5">
-                    {conversation.tags && Array.isArray(conversation.tags) && conversation.tags.map((tag: string, i: number) => {
-                      // Ensure each tag has a unique key
-                      const tagKey = `tag-${conversation.id || index}-${i}-${tag.replace(/\s/g, '_')}`;
-                      return (
-                        <Badge key={tagKey} variant="outline" className="text-xs px-1 py-0">
-                          {tag}
-                        </Badge>
-                      );
-                    })}
-                    <Badge variant="outline" className="text-xs px-1 py-0">
-                      {conversation.status || 'active'}
-                    </Badge>
-                  </div>
-                </motion.div>
-              );
-              })}
-              {filteredConversations.length === 0 && (
-                <div className="p-8 text-center text-muted-foreground">
-                  <Info className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p>No conversations found</p>
-                  <p className="text-sm">Try adjusting your search or filters</p>
-                </div>
-              )}
-            </AnimatePresence>
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </div>
         
@@ -646,23 +664,32 @@ export default function ConversationsPage() {
                       key={messageKey} 
                       className={`flex ${message.sender === 'agent' ? 'justify-end' : 'justify-start'}`}
                     >
-                      <div 
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
                         className={`max-w-[80%] p-3 rounded-lg ${
                           message.sender === 'agent' 
-                            ? 'bg-gradient-to-r from-primary to-indigo-600 text-primary-foreground shadow-md' 
-                            : 'bg-muted/80 shadow-sm'
+                            ? 'bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md rounded-tr-none' 
+                            : 'bg-accent/80 backdrop-blur-[1px] shadow-sm rounded-tl-none'
                         }`}
                       >
                         <div className="text-sm">{message.content || 'No content'}</div>
-                        <div className="text-xs mt-1 flex items-center gap-1 opacity-80">
-                          {message.timestamp || new Date().toLocaleTimeString()}
+                        <div className="text-xs mt-1.5 flex items-center gap-1.5 opacity-80">
+                          <Badge 
+                            variant="outline" 
+                            className={`h-4 px-1 py-0 text-[10px] font-normal ${
+                              message.sender === 'agent'
+                                ? 'border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground/90'
+                                : 'border-foreground/10 bg-foreground/5 text-foreground/70'
+                            }`}
+                          >
+                            {message.channel || 'chat'}
+                          </Badge>
+                          <span>{message.timestamp || new Date().toLocaleTimeString()}</span>
                           {message.sender === 'agent' && <Check className="h-3 w-3" />}
-                          <span className="ml-1 flex items-center text-[10px] uppercase font-medium">
-                            {getChannelIcon(message.channel || 'chat')}
-                            <span className="ml-0.5">{message.channel || 'chat'}</span>
-                          </span>
                         </div>
-                      </div>
+                      </motion.div>
                     </div>
                   );
                   })
@@ -675,20 +702,20 @@ export default function ConversationsPage() {
                 )}
               </div>
               
-              <div className="mt-auto p-4 border-t bg-gradient-to-r from-background/90 to-background/80">
-                <div className="relative">
+              <div className="mt-auto p-4 border-t border-primary/10 bg-gradient-to-r from-card/95 to-card/90">
+                <div className="relative rounded-lg overflow-hidden shadow-sm border border-primary/10">
                   <Input 
                     placeholder="Type your message..."
-                    className="pr-24 bg-background/80 focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/20 border-muted"
+                    className="pr-24 bg-background/80 backdrop-blur-[1px] focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/30 border-transparent"
                   />
-                  <div className="absolute right-1 top-1 flex items-center space-x-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
+                  <div className="absolute right-1 top-1 flex items-center gap-1.5">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                       <Paperclip className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors duration-200">
                       <Smile className="h-4 w-4" />
                     </Button>
-                    <Button size="icon" className="h-8 w-8 rounded-full bg-gradient-to-r from-primary to-indigo-600 text-white hover:shadow-md">
+                    <Button size="icon" className="h-8 w-8 rounded-full bg-gradient-to-r from-primary to-primary/90 text-white shadow-sm hover:shadow-md transition-all duration-200">
                       <Send className="h-4 w-4" />
                     </Button>
                   </div>
@@ -697,11 +724,19 @@ export default function ConversationsPage() {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center p-8">
-              <MessageSquare className="h-12 w-12 text-muted-foreground/50 mb-4" />
-              <h3 className="text-lg font-medium mb-1">No conversation selected</h3>
-              <p className="text-muted-foreground max-w-sm">
-                Select a conversation from the list or start a new conversation
+              <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-6 rounded-full mb-4 shadow-sm">
+                <MessageSquareDashed className="h-12 w-12 text-primary/60" />
+              </div>
+              <h3 className="text-xl font-medium mb-2">No conversation selected</h3>
+              <p className="text-muted-foreground max-w-sm mb-6">
+                Select a conversation from the list or start a new one to begin messaging
               </p>
+              <Button className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200" asChild>
+                <Link href="/dashboard/conversations/new">
+                  <Plus className="h-4 w-4" />
+                  New Conversation
+                </Link>
+              </Button>
             </div>
           )}
         </div>
@@ -810,6 +845,6 @@ export default function ConversationsPage() {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

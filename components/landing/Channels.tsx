@@ -1,172 +1,219 @@
-'use client';
-
-import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { gsap } from 'gsap';
-import { Marquee, FadeInView, RevealText } from '@/components/ui/advanced-animations';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { MessageCircle } from 'lucide-react';
+import React, { useRef } from 'react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import { MessageSquare, PhoneCall, Mail, Globe, MessageCircle } from 'lucide-react';
 
-const channels = [
-  {
-    name: "Twilio SMS",
-    icon: "/icons/twilio.svg",
-    description: "Connect your Twilio account to handle SMS conversations with end-to-end encryption.",
-    available: true,
-    color: "rgb(240, 0, 0)",
-  },
-  {
-    name: "WhatsApp",
-    icon: "/icons/whatsapp.svg",
-    description: "Integrate with WhatsApp Business API to reach over 2 billion users worldwide.",
-    available: false,
-    comingSoon: true,
-    color: "rgb(37, 211, 102)",
-  },
-  {
-    name: "Telegram",
-    icon: "/icons/telegram.svg",
-    description: "Add Telegram support for real-time messaging and group interactions.",
-    available: false,
-    comingSoon: true,
-    color: "rgb(0, 136, 204)",
-  },
-  {
-    name: "Slack",
-    icon: "/icons/slack.svg",
-    description: "Connect to Slack for team collaborations and internal communications.",
-    available: false,
-    comingSoon: true,
-    color: "rgb(74, 21, 75)",
-  },
-  {
-    name: "Email",
-    icon: "/icons/email.svg",
-    description: "Handle email communications through SMTP integration with your preferred provider.",
-    available: true,
-    color: "rgb(66, 133, 244)",
-  },
-  {
-    name: "Web Chat",
-    icon: "/icons/webchat.svg",
-    description: "Embed a customizable chat widget on your website for instant visitor engagement.",
-    available: true,
-    color: "rgb(255, 149, 0)",
-  },
-];
+interface ChannelCardProps {
+  icon: React.ReactNode;
+  color: string;
+  title: string;
+  description: string;
+  delay: number;
+}
 
-export default function Channels() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!headingRef.current) return;
-    
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: headingRef.current,
-        start: "top 80%",
-      },
-    });
-    
-    tl.from(headingRef.current.querySelectorAll('.reveal-text'), {
-      y: 50,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power3.out",
-    });
-  }, []);
-
+const ChannelCard: React.FC<ChannelCardProps> = ({ icon, color, title, description, delay }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(cardRef, { once: false, margin: "-100px" });
+  
   return (
-    <section
-      ref={sectionRef}
-      className="py-24 px-4 bg-gradient-to-b from-background via-muted/30 to-background"
+    <motion.div
+      ref={cardRef}
+      className="relative group"
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.6, delay: delay * 0.1, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className={`channel-card relative rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-xl`}>
+        {/* Card Background with gradient */}
+        <div className={`absolute inset-0 ${color} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
+        
+        <div className="relative p-6 flex flex-col">
+          {/* Channel Icon */}
+          <div className={`w-12 h-12 ${color.replace('bg-', 'text-')} rounded-lg bg-white/5 flex items-center justify-center mb-4`}>
+            {icon}
+          </div>
+          
+          {/* Channel Content */}
+          <h3 className="text-xl font-medium mb-2">{title}</h3>
+          <p className="text-muted-foreground">{description}</p>
+        </div>
+      </div>
+      
+      {/* Bottom border animation */}
+      <motion.div 
+        className={`h-1 ${color} rounded-b-xl`}
+        initial={{ width: "0%" }}
+        whileInView={{ width: "100%" }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: delay * 0.1 + 0.3 }}
+      />
+    </motion.div>
+  );
+};
+
+const Channels: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start']
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  
+  const channels = [
+    {
+      icon: <MessageCircle className="w-6 h-6" />,
+      color: "bg-green-500",
+      title: "WhatsApp",
+      description: "Connect with customers on their preferred messaging platform with rich media support."
+    },
+    {
+      icon: <MessageSquare className="w-6 h-6" />,
+      color: "bg-blue-500",
+      title: "SMS",
+      description: "Reach customers directly with text messaging for time-sensitive communications."
+    },
+    {
+      icon: <Mail className="w-6 h-6" />,
+      color: "bg-purple-500",
+      title: "Email",
+      description: "Send detailed messages with attachments through integrated email functionality."
+    },
+    {
+      icon: <Globe className="w-6 h-6" />,
+      color: "bg-amber-500",
+      title: "Web Chat",
+      description: "Provide real-time support through your website with our embedded chat widget."
+    }
+  ];
+  
+  return (
+    <section 
+      ref={containerRef}
+      className="relative py-32 overflow-hidden"
       data-scroll-section
     >
-      <div className="container max-w-6xl mx-auto">
-        <div ref={headingRef} className="text-center mb-16">
-          <RevealText className="reveal-text">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Connect Every Channel</h2>
-          </RevealText>
-          <RevealText className="reveal-text" delay={0.1}>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mt-4">
-              Seamlessly integrate with multiple communication platforms and manage them all from a single dashboard
-            </p>
-          </RevealText>
+      <div className="absolute inset-0 bg-gradient-to-b from-background to-background/95 z-0" />
+      
+      {/* Decorative elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/4 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/5 blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-gradient-to-br from-blue-500/10 to-indigo-500/5 blur-3xl" />
+      </div>
+      
+      <div className="container px-4 mx-auto relative z-10">
+        <div className="max-w-xl mx-auto text-center mb-16">
+          <motion.span
+            className="inline-block text-sm font-medium text-primary mb-3 px-3 py-1 bg-primary/10 rounded-full"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            data-scroll
+            data-scroll-speed="0.3"
+          >
+            Multi-Channel Support
+          </motion.span>
+          
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            data-scroll
+            data-scroll-speed="0.2"
+          >
+            All Your Communication Channels in One Place
+          </motion.h2>
+          
+          <motion.p
+            className="text-muted-foreground text-lg"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            Seamlessly integrate and manage multiple communication channels from a single unified platform.
+          </motion.p>
         </div>
         
         <div className="relative">
-          {/* Channel cards with staggered animations */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {channels.map((channel, i) => (
-              <FadeInView
-                key={i}
-                delay={i * 0.1}
-                threshold={0.1}
-              >
-                <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg border border-border/50 bg-card/50 backdrop-blur-sm group">
-                  {channel.comingSoon && (
-                    <div className="absolute top-3 right-3 bg-primary/20 text-primary text-xs py-1 px-3 rounded-full font-medium z-10">
-                      Coming Soon
-                    </div>
-                  )}
-                  <div 
-                    className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-700 -z-0" 
-                    style={{ background: `radial-gradient(circle at center, ${channel.color}, transparent 70%)` }} 
-                  />
-                  <CardHeader className="pb-2 relative z-10">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-lg bg-background flex items-center justify-center p-2 relative overflow-hidden">
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-10 duration-700 transition-opacity" style={{ backgroundColor: channel.color }} />
-                        {/* Fallback icon if SVG not available */}
-                        <MessageCircle className="h-6 w-6 text-primary" />
-                      </div>
-                      <h3 className="text-xl font-semibold">{channel.name}</h3>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="relative z-10">
-                    <p className="text-sm text-muted-foreground">{channel.description}</p>
-                  </CardContent>
-                  <CardFooter className="relative z-10">
-                    <Button 
-                      variant={channel.available ? "default" : "outline"} 
-                      className="w-full group-hover:shadow-md transition-shadow"
-                      disabled={!channel.available}
-                    >
-                      {channel.available ? "Connect Now" : "Coming Soon"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </FadeInView>
+          {/* Channel Illustration */}
+          <motion.div 
+            className="mb-16 relative flex justify-center"
+            style={{ y }}
+          >
+            <motion.div
+              className="relative w-full max-w-lg"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <svg viewBox="0 0 700 400" className="w-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="channel-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="rgba(124, 58, 237, 0.2)" />
+                    <stop offset="100%" stopColor="rgba(59, 130, 246, 0.2)" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Center Hub */}
+                <circle cx="350" cy="200" r="60" fill="url(#channel-gradient)" stroke="#7c3aed" strokeWidth="2" />
+                <text x="350" y="205" textAnchor="middle" fill="#fff" fontWeight="bold" fontSize="18">OmniChannel</text>
+                
+                {/* Connection Lines */}
+                <motion.g
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  whileInView={{ pathLength: 1, opacity: 1 }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
+                >
+                  <path d="M350,140 L350,50" stroke="#7c3aed" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                  <path d="M350,260 L350,350" stroke="#3b82f6" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                  <path d="M290,200 L150,200" stroke="#10b981" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                  <path d="M410,200 L550,200" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                </motion.g>
+                
+                {/* Channel Nodes */}
+                <motion.g
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+                >
+                  <circle cx="350" cy="50" r="30" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6" strokeWidth="2" />
+                  <circle cx="350" cy="350" r="30" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6" strokeWidth="2" />
+                  <circle cx="150" cy="200" r="30" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" strokeWidth="2" />
+                  <circle cx="550" cy="200" r="30" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" strokeWidth="2" />
+                </motion.g>
+                
+                {/* Channel Icons */}
+                <motion.g
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 1 }}
+                >
+                  <text x="350" y="55" textAnchor="middle" fill="#8b5cf6" fontWeight="500" fontSize="12">Email</text>
+                  <text x="350" y="355" textAnchor="middle" fill="#3b82f6" fontWeight="500" fontSize="12">SMS</text>
+                  <text x="150" y="205" textAnchor="middle" fill="#10b981" fontWeight="500" fontSize="12">WhatsApp</text>
+                  <text x="550" y="205" textAnchor="middle" fill="#f59e0b" fontWeight="500" fontSize="12">Web Chat</text>
+                </motion.g>
+              </svg>
+            </motion.div>
+          </motion.div>
+          
+          {/* Channel Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {channels.map((channel, index) => (
+              <ChannelCard
+                key={index}
+                icon={channel.icon}
+                color={channel.color}
+                title={channel.title}
+                description={channel.description}
+                delay={index}
+              />
             ))}
           </div>
-        </div>
-        
-        {/* Partners section with marquee effect */}
-        <div className="mt-24">
-          <RevealText className="text-center mb-8">
-            <h3 className="text-xl font-medium text-muted-foreground">Trusted By Industry-Leading Companies</h3>
-          </RevealText>
-          
-          <Marquee 
-            speed={20} 
-            className="py-6"
-          >
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="mx-8 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                <div className="bg-card/50 h-16 w-32 rounded-md flex items-center justify-center">
-                  <div className="text-2xl font-bold text-muted-foreground">
-                    Partner {i + 1}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Marquee>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default Channels;

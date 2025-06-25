@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
 import RouteGuard from "@/components/auth/RouteGuard";
 import "./globals.css";
+import { PerformanceMonitor } from '@/components/performance-monitor';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,8 @@ export default function RootLayout({
                 {/* Main content */}
                 <main className="animate-in">
                   {children}
+                  {/* Performance monitor only shown in development */}
+                  {process.env.NODE_ENV === 'development' && <PerformanceMonitor />}
                 </main>
                 
                 {/* Toaster for notifications */}

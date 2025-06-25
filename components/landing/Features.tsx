@@ -1,136 +1,155 @@
-'use client';
-
-import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { MessageSquare, BrainCircuit, Upload, Bot, Zap } from 'lucide-react';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { TiltCard, RevealText, StaggerContainer, StaggerItem, FadeInView } from '@/components/ui/advanced-animations';
+import { MessageSquare, Mail, Phone, Bot, Shield, BarChart3 } from 'lucide-react';
 
-// Register GSAP plugins
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+interface FeatureCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  delay: number;
+  className?: string;
 }
 
-const features = [
-  {
-    icon: <MessageSquare className="h-10 w-10 text-primary" />,
-    title: "Omnichannel Communication",
-    description: "Connect with customers across multiple channels including SMS, WhatsApp, Telegram, and more - all in one unified interface.",
-  },
-  {
-    icon: <BrainCircuit className="h-10 w-10 text-primary" />,
-    title: "AI-Powered Assistance",
-    description: "Leverage cutting-edge AI models to provide intelligent responses and automate customer interactions with context from your knowledge base.",
-  },
-  {
-    icon: <Upload className="h-10 w-10 text-primary" />,
-    title: "Knowledge Base Integration",
-    description: "Upload documents that your AI can reference to provide accurate and contextual responses, ensuring consistency across all communications.",
-  },
-  {
-    icon: <Bot className="h-10 w-10 text-primary" />,
-    title: "Custom AI Personas",
-    description: "Create AI personas with specific tones and system prompts that perfectly match your brand identity and communication style.",
-  },
-  {
-    icon: <Zap className="h-10 w-10 text-primary" />,
-    title: "Real-time Analytics",
-    description: "Gain insights into customer interactions, response times, and satisfaction metrics to continually improve your communication strategy.",
-  },
-  {
-    icon: <MessageSquare className="h-10 w-10 text-primary" />,
-    title: "Seamless Integration",
-    description: "Connect with your existing CRM and support tools through our open API, ensuring a smooth workflow for your team.",
-  },
-];
+const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, delay, className = '' }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(cardRef, { once: false, margin: "-100px" });
 
-export default function Features() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    if (!sectionRef.current) return;
-    
-    // Animate the heading when it enters the viewport
-    if (headingRef.current) {
-      ScrollTrigger.create({
-        trigger: headingRef.current,
-        start: "top 80%",
-        onEnter: () => {
-          gsap.to(headingRef.current!.querySelectorAll('.reveal-text'), {
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 1,
-            ease: "power4.out",
-          });
-        },
-      });
-    }
-  }, []);
-  
   return (
-    <section
-      ref={sectionRef}
-      className="py-24 px-4 relative overflow-hidden"
-      data-scroll-section
+    <motion.div
+      ref={cardRef}
+      className={`feature-card relative rounded-xl p-6 bg-gradient-to-br from-background to-background/80 border border-white/10 shadow-lg backdrop-blur-sm overflow-hidden ${className}`}
+      initial={{ y: 60, opacity: 0 }}
+      animate={isInView ? { y: 0, opacity: 1 } : { y: 60, opacity: 0 }}
+      transition={{ duration: 0.7, delay: delay * 0.1, ease: [0.25, 0.25, 0, 1] }}
+      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      data-scroll
+      data-scroll-speed="0.2"
     >
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-primary/5 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-background/80 to-transparent" />
-        <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[100px]" />
-        <div className="absolute top-2/3 right-1/4 w-80 h-80 bg-indigo-500/5 rounded-full blur-[80px]" />
-      </div>
+      {/* Highlight effect */}
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/30 to-indigo-500/30 rounded-xl blur opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       
-      <div className="container max-w-6xl mx-auto">
-        <div ref={headingRef} className="text-center mb-16">
-          <RevealText className="reveal-text">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Advanced Features for Modern Business</h2>
-          </RevealText>
-          <RevealText className="reveal-text" delay={0.1}>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mt-4">
-              Everything you need to streamline communication and enhance customer interactions
-              with AI-powered assistance.
-            </p>
-          </RevealText>
+      {/* Background particle */}
+      <div className="absolute -right-12 -bottom-12 w-48 h-48 rounded-full bg-gradient-to-r from-primary/10 to-indigo-500/10 blur-2xl" />
+      
+      <div className="relative z-10 flex flex-col">
+        <div className="flex items-center justify-center w-14 h-14 rounded-lg bg-primary/10 text-primary mb-4">
+          {icon}
         </div>
         
-        <div ref={cardsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 z-10">
-          {features.map((feature, i) => (
-            <FadeInView 
-              key={i}
-              delay={i * 0.1} 
-              className="h-full"
-              threshold={0.1}
-            >
-              <TiltCard className="h-full transition-all duration-300 hover:shadow-xl">
-                <Card className="h-full border border-border/50 bg-card/50 backdrop-blur-sm">
-                  <CardHeader className="pb-2">
-                    <div className="mb-4 p-2 w-fit rounded-xl bg-primary/10">
-                      {feature.icon}
-                    </div>
-                    <motion.h3 
-                      className="text-xl font-semibold"
-                      initial={{ opacity: 0.5 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      {feature.title}
-                    </motion.h3>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </TiltCard>
-            </FadeInView>
+        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        
+        <p className="text-muted-foreground">{description}</p>
+      </div>
+    </motion.div>
+  );
+};
+
+const Features: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start']
+  });
+
+  const sectionOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const sectionY = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [100, 0, 0, 100]);
+
+  useEffect(() => {
+    if (!titleRef.current) return;
+    
+    gsap.from(titleRef.current, {
+      scrollTrigger: {
+        trigger: titleRef.current,
+        start: 'top bottom',
+        end: 'bottom top',
+      },
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      ease: 'power3.out',
+    });
+  }, []);
+
+  const features = [
+    {
+      icon: <MessageSquare className="w-6 h-6" />,
+      title: "Multi-channel Messaging",
+      description: "Unify SMS, WhatsApp, Email, and Web Chat in a single interface for seamless communications."
+    },
+    {
+      icon: <Bot className="w-6 h-6" />,
+      title: "AI-Powered Responses",
+      description: "Let AI handle routine inquiries while you focus on complex customer interactions."
+    },
+    {
+      icon: <Shield className="w-6 h-6" />,
+      title: "Secure Authentication",
+      description: "Enterprise-grade security with email and Google OAuth authentication systems."
+    },
+    {
+      icon: <Mail className="w-6 h-6" />,
+      title: "Automated Workflows",
+      description: "Set up triggers and actions to streamline repetitive tasks and responses."
+    },
+    {
+      icon: <Phone className="w-6 h-6" />,
+      title: "Seamless Integration",
+      description: "Connect with your existing tools and platforms for a unified workflow."
+    },
+    {
+      icon: <BarChart3 className="w-6 h-6" />,
+      title: "Analytics & Insights",
+      description: "Gain valuable insights with comprehensive reporting and analytics dashboards."
+    }
+  ];
+
+  return (
+    <section 
+      id="features"
+      ref={containerRef}
+      className="relative py-32 overflow-hidden bg-gradient-to-b from-background/90 via-background to-background/90"
+      data-scroll-section
+    >
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+        <div className="absolute -left-40 top-1/3 w-80 h-80 bg-primary/20 rounded-full filter blur-[100px]" />
+        <div className="absolute -right-40 bottom-1/3 w-80 h-80 bg-indigo-500/20 rounded-full filter blur-[100px]" />
+      </div>
+      
+      <motion.div 
+        style={{ opacity: sectionOpacity, y: sectionY }}
+        className="container px-4 mx-auto relative z-10"
+      >
+        <div 
+          ref={titleRef}
+          className="max-w-xl mx-auto text-center mb-16"
+          data-scroll
+          data-scroll-speed="0.3"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Powerful Features for Modern Communication</h2>
+          <p className="text-muted-foreground text-lg">
+            Experience the full potential of OmniChannel with these cutting-edge capabilities designed to streamline your communication workflow.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={index}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+              delay={index}
+            />
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
-}
+};
+
+export default Features;

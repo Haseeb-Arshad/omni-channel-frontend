@@ -1,257 +1,239 @@
-'use client';
-
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { gsap } from 'gsap';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Zap, BrainCircuit, MessageCircle, Bot } from 'lucide-react';
-import { MagneticButton, PerspectiveText, FadeInView } from '@/components/ui/advanced-animations';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Button } from '../ui/button';
 
-export default function CTA() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+const CTA: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: false, amount: 0.3 });
   
-  // Parallax effect with framer motion
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: containerRef,
     offset: ["start end", "end start"]
   });
   
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   
-  useEffect(() => {
-    if (!cardRef.current || !contentRef.current) return;
-    
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 80%",
-      }
-    });
-    
-    tl.from(contentRef.current.querySelectorAll('.reveal-item'), {
-      y: 40,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power3.out",
-    });
-    
-    // Card animation
-    tl.from(cardRef.current.querySelectorAll('.card-item'), {
-      y: 30,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power3.out",
-    }, "-=0.6");
-    
-    return () => {
-      tl.kill();
-    };
-  }, []);
-  
+  const benefits = [
+    "No credit card required",
+    "Free plan available",
+    "Setup in minutes",
+    "24/7 customer support"
+  ];
+
   return (
     <section
-      ref={sectionRef}
-      className="py-32 px-4 relative overflow-hidden"
+      ref={containerRef}
+      className="relative py-32 overflow-hidden"
       data-scroll-section
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent"
-          style={{ y }}
+      {/* Background elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-0" />
+      
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Animated gradient blobs */}
+        <motion.div
+          className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full filter blur-[120px]"
+          animate={{
+            x: [0, 30, 0],
+            y: [0, 20, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
         />
-        <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-b from-transparent to-background/30" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[120px] bg-primary/5" />
+        
+        <motion.div
+          className="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-500/20 rounded-full filter blur-[120px]"
+          animate={{
+            x: [0, -30, 0],
+            y: [0, -20, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+        />
       </div>
       
-      <div className="container max-w-6xl mx-auto">
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="grid lg:grid-cols-2 gap-16 items-center"
-        >
-          {/* Left side: Content */}
-          <div ref={contentRef} className="space-y-6">
-            <div className="reveal-item">
-              <PerspectiveText className="inline-block">
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  Ready to transform your customer experience?
+      <motion.div 
+        style={{ opacity, y }}
+        className="container px-4 mx-auto relative z-10"
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Text and CTA */}
+            <div className="space-y-8">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="space-y-5"
+                data-scroll
+                data-scroll-speed="0.3"
+              >
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+                  Start Unifying Your Communication Today
                 </h2>
-              </PerspectiveText>
-            </div>
-            
-            <p className="text-xl text-muted-foreground mb-8 reveal-item">
-              Start using OmniChannel today and see how AI-assisted communication can revolutionize your customer interactions.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 reveal-item">
-              <MagneticButton strength={20}>
-                <Button 
-                  size="lg" 
-                  className="group relative overflow-hidden bg-gradient-to-r from-primary to-indigo-500 hover:shadow-lg hover:shadow-primary/20 transition-shadow px-8 py-6 text-lg"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    <Zap className="h-5 w-5" />
-                    Get Started for Free
-                  </span>
-                  <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </Button>
-              </MagneticButton>
+                <p className="text-xl text-muted-foreground">
+                  Join thousands of businesses that use OmniChannel to streamline their customer interactions across multiple platforms.
+                </p>
+              </motion.div>
               
-              <MagneticButton strength={10}>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-primary/20 hover:border-primary/40 px-8 py-6 text-lg"
-                >
-                  <Link href="/docs" className="flex items-center gap-2">
-                    Book a Demo
-                  </Link>
-                </Button>
-              </MagneticButton>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                className="flex flex-wrap gap-3"
+              >
+                {benefits.map((benefit, index) => (
+                  <div 
+                    key={index}
+                    className="flex items-center space-x-2 text-sm text-muted-foreground px-3 py-1.5 rounded-full bg-muted/50"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
+                    <span>{benefit}</span>
+                  </div>
+                ))}
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                className="flex flex-col sm:flex-row items-start gap-4"
+              >
+                <Link href="/auth/register" passHref>
+                  <Button size="lg" className="min-w-[180px] h-14 text-lg rounded-full bg-gradient-to-r from-primary to-indigo-500 hover:from-primary/90 hover:to-indigo-500/90 shadow-lg shadow-primary/25 group">
+                    Get Started Free
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+                <div className="text-sm text-muted-foreground mt-2 sm:mt-4">
+                  or <Link href="/pricing" className="text-primary hover:underline">view our pricing plans</Link>
+                </div>
+              </motion.div>
             </div>
             
-            <div className="pt-8 reveal-item">
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Zap className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-medium">Quick Setup</h4>
-                    <p className="text-sm text-muted-foreground">Connect your channels in minutes, not days</p>
-                  </div>
-                </div>
+            {/* Right Column - Animated Illustration */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="relative"
+              data-scroll
+              data-scroll-speed="-0.2"
+            >
+              <div className="relative bg-gradient-to-br from-background to-muted rounded-xl p-1 shadow-2xl shadow-primary/10 border border-white/10 overflow-hidden">
+                <div className="absolute inset-0 bg-grid-white/5 bg-[size:20px_20px]" />
                 
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <BrainCircuit className="h-5 w-5 text-primary" />
+                <div className="relative bg-white/5 backdrop-blur-sm rounded-lg p-8 overflow-hidden">
+                  {/* Dashboard Preview */}
+                  <div className="space-y-6">
+                    {/* Dashboard Header */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-indigo-500 flex items-center justify-center">
+                          <span className="text-white font-bold">OC</span>
+                        </div>
+                        <div className="font-medium">OmniChannel Dashboard</div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <div className="w-6 h-6 rounded-full bg-white/10" />
+                        <div className="w-6 h-6 rounded-full bg-white/10" />
+                      </div>
+                    </div>
+                    
+                    {/* Dashboard Cards */}
+                    <div className="grid grid-cols-3 gap-4">
+                      <motion.div 
+                        className="col-span-1 h-24 rounded-lg bg-white/5 border border-white/10 p-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                      >
+                        <div className="text-xs text-muted-foreground">Total Conversations</div>
+                        <div className="text-2xl font-semibold mt-2">2,845</div>
+                      </motion.div>
+                      <motion.div 
+                        className="col-span-1 h-24 rounded-lg bg-gradient-to-br from-primary/20 to-indigo-500/20 border border-primary/20 p-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                      >
+                        <div className="text-xs text-muted-foreground">Response Time</div>
+                        <div className="text-2xl font-semibold mt-2">10m</div>
+                      </motion.div>
+                      <motion.div 
+                        className="col-span-1 h-24 rounded-lg bg-white/5 border border-white/10 p-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                        transition={{ duration: 0.5, delay: 0.7 }}
+                      >
+                        <div className="text-xs text-muted-foreground">Satisfaction</div>
+                        <div className="text-2xl font-semibold mt-2">98%</div>
+                      </motion.div>
+                    </div>
+                    
+                    {/* Channel Section */}
+                    <motion.div
+                      className="space-y-3"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                      transition={{ duration: 0.5, delay: 0.8 }}
+                    >
+                      <div className="text-sm font-medium">Active Channels</div>
+                      <div className="flex items-center justify-between bg-white/5 rounded-lg p-3 border border-white/10">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                            <div className="w-4 h-4 rounded-full bg-green-500" />
+                          </div>
+                          <span>WhatsApp</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">Connected</span>
+                      </div>
+                      <div className="flex items-center justify-between bg-white/5 rounded-lg p-3 border border-white/10">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                            <div className="w-4 h-4 rounded-full bg-blue-500" />
+                          </div>
+                          <span>SMS</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">Connected</span>
+                      </div>
+                    </motion.div>
                   </div>
-                  <div>
-                    <h4 className="text-base font-medium">Smart AI</h4>
-                    <p className="text-sm text-muted-foreground">Powered by advanced language models</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <MessageCircle className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-medium">24/7 Support</h4>
-                    <p className="text-sm text-muted-foreground">Always available when you need help</p>
-                  </div>
+                  
+                  {/* Animated Notification */}
+                  <motion.div
+                    className="absolute bottom-4 right-4 max-w-[200px] bg-gradient-to-r from-primary/10 to-indigo-500/10 backdrop-blur-sm rounded-lg p-3 border border-primary/20 shadow-lg shadow-primary/10"
+                    initial={{ opacity: 0, x: 20, y: 10 }}
+                    animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 20, y: 10 }}
+                    transition={{ duration: 0.5, delay: 1 }}
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-xs text-white">✓</div>
+                      <div>
+                        <div className="text-xs font-medium">New message received</div>
+                        <div className="text-xs text-muted-foreground mt-1">Process completed successfully</div>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-          
-          {/* Right side: Floating dashboard preview */}
-          <div ref={cardRef} className="relative">
-            <FadeInView 
-              delay={0.2}
-              threshold={0.1}
-              className="pointer-events-none"
-            >
-              <div className="absolute -top-12 -right-12 w-64 h-64 bg-primary/10 rounded-full blur-[100px]" />
-              <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-indigo-500/10 rounded-full blur-[80px]" />
-              
-              <Card className="glass-card p-6 shadow-2xl border border-white/10 card-item">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-                  <h3 className="font-medium">OmniChannel Dashboard</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                    <span className="text-sm">Connected</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-4 card-item">
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                        <MessageCircle className="h-4 w-4 text-primary" />
-                      </div>
-                      <span>Twilio SMS</span>
-                    </div>
-                    <div className="text-sm text-green-500">Connected</div>
-                  </div>
-                  
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-background/50 card-item">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                        <BrainCircuit className="h-4 w-4" />
-                      </div>
-                      <span>Knowledge Base</span>
-                    </div>
-                    <div className="text-sm text-green-500">3 Documents</div>
-                  </div>
-                  
-                  <div className="flex justify-between items-center p-3 rounded-lg bg-background/50 card-item">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                        <Bot className="h-4 w-4" />
-                      </div>
-                      <span>AI Persona</span>
-                    </div>
-                    <div className="text-sm text-green-500">Active</div>
-                  </div>
-                </div>
-                
-                <div className="mt-6 pt-4 border-t border-white/10 card-item">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm">Recent Activity</div>
-                    <div className="text-xs text-muted-foreground">Today</div>
-                  </div>
-                  
-                  <div className="mt-4 space-y-3">
-                    <div className="flex items-center gap-3 text-xs">
-                      <div className="w-1 h-1 rounded-full bg-green-500"></div>
-                      <span className="text-muted-foreground">12:42 PM</span>
-                      <span>New conversation from +1234567890</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 text-xs">
-                      <div className="w-1 h-1 rounded-full bg-blue-500"></div>
-                      <span className="text-muted-foreground">11:15 AM</span>
-                      <span>Knowledge base updated with new content</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 text-xs">
-                      <div className="w-1 h-1 rounded-full bg-amber-500"></div>
-                      <span className="text-muted-foreground">09:30 AM</span>
-                      <span>AI Persona settings modified</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-              
-              {/* Floating notification */}
-              <motion.div 
-                className="absolute -top-6 right-8 card-item"
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.5, ease: "easeOut" }}
-              >
-                <Card className="glass-card p-3 shadow-xl border border-white/10 max-w-[200px]">
-                  <div className="flex items-center gap-2 text-xs">
-                    <div className="w-4 h-4 rounded-full bg-green-500/20 flex items-center justify-center">
-                      <span className="text-green-500 text-[10px]">✓</span>
-                    </div>
-                    <span>New integration added!</span>
-                  </div>
-                </Card>
-              </motion.div>
-            </FadeInView>
-          </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </section>
   );
-}
+};
+
+export default CTA;

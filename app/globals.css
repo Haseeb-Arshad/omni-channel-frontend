@@ -191,11 +191,84 @@ html.has-scroll-dragging {
   }
 }
 
-/* Enhanced animations */
+/* Enhanced animations - optimized for performance */
 @keyframes gradientBG {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+/* Performance optimizations to help smoother scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  /* Apply will-change carefully to optimize rendering */
+  .will-change-opacity {
+    will-change: opacity;
+  }
+  
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  /* Only apply during animation to avoid memory issues */
+  .animating {
+    will-change: transform, opacity;
+  }
+}
+
+/* Reduce animation for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Lazy loading support for images and sections */
+.lazy-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.lazy-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Progressive image loading */
+.progressive-img {
+  position: relative;
+  overflow: hidden;
+}
+
+.progressive-img img.preview {
+  filter: blur(10px);
+  transition: filter 0.3s ease;
+}
+
+.progressive-img img.reveal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: opacity;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.progressive-img img.reveal.is-loaded {
+  opacity: 1;
+}
+
+/* Optimize smooth scroll content */
+.smooth-scroll-content {
+  opacity: 0.3;
+  transition: opacity 0.5s ease-out;
+}
+
+.smooth-scroll-content.is-ready {
+  opacity: 1;
 }
 
 /* Multiple animation options for entrances */
@@ -235,14 +308,15 @@ html.has-scroll-dragging {
   opacity: 0;
 }
 
-.animate-stagger-fade.animate-visible > *:nth-child(1) { animation: fadeIn 0.5s var(--ease-out-quart) forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(2) { animation: fadeIn 0.5s var(--ease-out-quart) 0.1s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(3) { animation: fadeIn 0.5s var(--ease-out-quart) 0.2s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(4) { animation: fadeIn 0.5s var(--ease-out-quart) 0.3s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(5) { animation: fadeIn 0.5s var(--ease-out-quart) 0.4s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(6) { animation: fadeIn 0.5s var(--ease-out-quart) 0.5s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(7) { animation: fadeIn 0.5s var(--ease-out-quart) 0.6s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(8) { animation: fadeIn 0.5s var(--ease-out-quart) 0.7s forwards; }
+/* Optimized staggered animations - reduce time between animations for faster perceived loading */
+.animate-stagger-fade.animate-visible > *:nth-child(1) { animation: fadeIn 0.3s var(--ease-out-quart) forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(2) { animation: fadeIn 0.3s var(--ease-out-quart) 0.05s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(3) { animation: fadeIn 0.3s var(--ease-out-quart) 0.1s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(4) { animation: fadeIn 0.3s var(--ease-out-quart) 0.15s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(5) { animation: fadeIn 0.3s var(--ease-out-quart) 0.2s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(6) { animation: fadeIn 0.3s var(--ease-out-quart) 0.25s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(7) { animation: fadeIn 0.3s var(--ease-out-quart) 0.3s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(8) { animation: fadeIn 0.3s var(--ease-out-quart) 0.35s forwards; }
 
 @keyframes fadeIn {
   from { opacity: 0; }

@@ -37,7 +37,16 @@ interface Message {
   }>;
 }
 
-export default function ChannelMessagesPage({ params }: { params: { id: string } }) {
+// Define props interface to match the expected PageProps constraint
+type ChannelMessagesProps = {
+  params: {
+    id: string;
+  };
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+export default function ChannelMessagesPage(props: ChannelMessagesProps) {
+  const { params } = props;
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(true);

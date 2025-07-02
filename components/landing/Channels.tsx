@@ -23,25 +23,22 @@ const ChannelCard: React.FC<ChannelCardProps> = ({ icon, color, title, descripti
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.6, delay: delay * 0.1, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className={`channel-card relative rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-xl`}>
-        {/* Card Background with gradient */}
-        <div className={`absolute inset-0 ${color} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
-        
+      <div className={`channel-card relative rounded-lg overflow-hidden transition-all duration-300 border border-slate-700 bg-slate-800 shadow-lg hover:border-${color.replace('bg-', '')}/40`}>
         <div className="relative p-6 flex flex-col">
           {/* Channel Icon */}
-          <div className={`w-12 h-12 ${color.replace('bg-', 'text-')} rounded-lg bg-white/5 flex items-center justify-center mb-4`}>
+          <div className={`w-12 h-12 rounded-lg ${color}/20 text-${color.replace('bg-', '')} flex items-center justify-center mb-4`}>
             {icon}
           </div>
           
           {/* Channel Content */}
-          <h3 className="text-xl font-medium mb-2">{title}</h3>
-          <p className="text-muted-foreground">{description}</p>
+          <h3 className="text-xl font-medium mb-2 text-white">{title}</h3>
+          <p className="text-slate-300">{description}</p>
         </div>
       </div>
       
-      {/* Bottom border animation */}
+      {/* Bottom accent line - colored version */}
       <motion.div 
-        className={`h-1 ${color} rounded-b-xl`}
+        className={`h-0.5 ${color} rounded-b-lg`}
         initial={{ width: "0%" }}
         whileInView={{ width: "100%" }}
         transition={{ duration: 0.8, ease: "easeOut", delay: delay * 0.1 + 0.3 }}
@@ -89,21 +86,19 @@ const Channels: React.FC = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative py-32 overflow-hidden"
+      className="relative py-32 overflow-hidden bg-slate-900"
       data-scroll-section
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-background to-background/95 z-0" />
-      
-      {/* Decorative elements */}
+      {/* Subtle decorative elements */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/5 blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-gradient-to-br from-blue-500/10 to-indigo-500/5 blur-3xl" />
+        <div className="absolute top-1/4 right-1/3 w-64 h-64 rounded-full bg-blue-600 opacity-[0.07] blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-teal-500 opacity-[0.06] blur-3xl" />
       </div>
       
-      <div className="container px-4 mx-auto relative z-10">
+      <div className="minimalist-container px-4 mx-auto relative z-10">
         <div className="max-w-xl mx-auto text-center mb-16">
           <motion.span
-            className="inline-block text-sm font-medium text-primary mb-3 px-3 py-1 bg-primary/10 rounded-full"
+            className="inline-block text-sm font-medium text-white mb-3 px-3 py-1 bg-slate-800 border border-slate-700 rounded-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -114,7 +109,7 @@ const Channels: React.FC = () => {
           </motion.span>
           
           <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-4"
+            className="text-3xl md:text-4xl font-bold mb-4 text-white"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -125,7 +120,7 @@ const Channels: React.FC = () => {
           </motion.h2>
           
           <motion.p
-            className="text-muted-foreground text-lg"
+            className="text-slate-300 text-lg"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}

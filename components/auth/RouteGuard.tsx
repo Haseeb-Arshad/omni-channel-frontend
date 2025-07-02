@@ -15,6 +15,18 @@ export const RouteGuard = ({ children }: RouteGuardProps) => {
   const pathname = usePathname();
 
   useEffect(() => {
+    // DEV MODE: Skip authentication checks and allow access to all routes
+    console.log('[RouteGuard] DEV MODE: Authentication bypassed');
+    
+    // If user is on the auth page, redirect them to dashboard
+    if (pathname === '/auth') {
+      console.log('[RouteGuard] Redirecting to dashboard');
+      router.push('/dashboard');
+      return;
+    }
+    
+    // Original authentication logic - commented out for development
+    /*
     // Skip redirection logic if we're still loading
     if (isLoading) {
       return;
@@ -35,9 +47,12 @@ export const RouteGuard = ({ children }: RouteGuardProps) => {
       console.log('[RouteGuard] Redirecting to dashboard');
       router.push('/dashboard');
     }
-  }, [isAuthenticated, isLoading, pathname, router]);
+    */
+  }, [pathname, router]);
 
-  // Show loading indicator while checking authentication
+  // DEV MODE: Always render children without authentication loading
+  // Comment out loading indicator for development
+  /*
   if ((isLoading || (!isAuthenticated && pathname.startsWith('/dashboard')))) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-background to-background/95">
@@ -49,6 +64,7 @@ export const RouteGuard = ({ children }: RouteGuardProps) => {
       </div>
     );
   }
+  */
 
   // Render the children only if the user is allowed to access the route
   return <>{children}</>;

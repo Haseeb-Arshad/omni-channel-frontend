@@ -38,11 +38,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Check if user is authenticated on initial load only (not on every pathname change)
+  // Development bypass: Auto-authenticate without login
   useEffect(() => {
     const initAuth = async () => {
       setIsLoading(true);
-      await checkAuth();
+      
+      // DEV MODE: Set authenticated without checking backend
+      console.log('[AuthContext] DEV MODE: Auto-authenticating user');
+      const mockUser = {
+        id: 'dev-user-123',
+        email: 'dev@example.com',
+        name: 'Development User',
+        role: 'admin',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      setUser(mockUser);
+      setIsAuthenticated(true);
+      localStorage.setItem('dev-auto-auth', 'true');
       setIsLoading(false);
     };
 
@@ -50,13 +63,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // Log current auth state for debugging
     console.log('[AuthContext] Auth state after initialization:', { 
-      isAuthenticated, 
+      isAuthenticated: true, // Always authenticated in dev mode
       pathname,
-      userExists: !!user
+      userExists: true 
     });
   }, []); // Only run once on component mount
 
   const checkAuth = async (): Promise<boolean> => {
+    // DEV MODE: Always return authenticated
+    console.log('[AuthContext] DEV MODE: checkAuth always returns true');
+    
+    if (!user) {
+      const mockUser = {
+        id: 'dev-user-123',
+        email: 'dev@example.com',
+        name: 'Development User',
+        role: 'admin',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      setUser(mockUser);
+    }
+    
+    setIsAuthenticated(true);
+    return true;
+    
+    /* Original authentication logic - commented out for development
     try {
       // Check if token exists in localStorage
       const token = localStorage.getItem('token');
@@ -84,6 +116,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsAuthenticated(false);
       return false;
     }
+    */
   };
 
   const login = async (email: string, password: string, remember: boolean = false): Promise<boolean> => {

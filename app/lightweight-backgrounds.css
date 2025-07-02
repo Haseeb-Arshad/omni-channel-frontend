@@ -1,0 +1,77 @@
+/* Lightweight Starfield Background */
+.star-background {
+  position: relative;
+  background: #050816;
+}
+
+.stars-small,
+.stars-medium,
+.stars-large {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-repeat: repeat;
+  animation: stars-move 100s linear infinite;
+}
+
+.stars-small {
+  background-image: radial-gradient(1px 1px at calc(100% * var(--x, 0)) calc(100% * var(--y, 0)), #fff, transparent);
+  background-size: 200px 200px;
+  opacity: 0.3;
+}
+
+.stars-medium {
+  background-image: radial-gradient(2px 2px at calc(100% * var(--x, 1)) calc(100% * var(--y, 2)), #fff, transparent);
+  background-size: 400px 400px;
+  opacity: 0.5;
+}
+
+.stars-large {
+  background-image: radial-gradient(3px 3px at calc(100% * var(--x, 3)) calc(100% * var(--y, 4)), #fff, transparent);
+  background-size: 600px 600px;
+  opacity: 0.4;
+}
+
+@keyframes stars-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 10000px 5000px;
+  }
+}
+
+/* Lightweight Geometric Background */
+.geometric-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.geometric-shape {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(45deg, hsl(var(--primary)) 0%, hsl(var(--indigo-500)) 100%);
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  filter: blur(50px);
+  opacity: 0.15;
+  animation: shape-float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shape-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translate(5%, 5%) scale(0.8) rotate(5deg);
+  }
+  50% {
+    transform: translate(0%, 10%) scale(1.1) rotate(10deg);
+  }
+  75% {
+    transform: translate(-5%, 5%) scale(0.9) rotate(5deg);
+  }
+}

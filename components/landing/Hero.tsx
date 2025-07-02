@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { gsap } from 'gsap';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -81,15 +80,15 @@ const Hero: React.FC = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-screen pt-40 pb-24 overflow-hidden bg-gradient-to-b from-background via-background to-background/90"
+      className="minimalist minimalist-section relative min-h-screen pt-40 pb-24 overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800"
       data-scroll-section
     >
       <div className="absolute w-full h-full top-0 left-0 z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-500 rounded-full opacity-[0.08] blur-[120px]" />
-        <div className="absolute top-[40%] left-[-10%] w-[600px] h-[600px] bg-purple-500 rounded-full opacity-[0.08] blur-[150px]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-500 rounded-full opacity-[0.15] blur-[120px]" />
+        <div className="absolute top-[40%] left-[-10%] w-[600px] h-[600px] bg-teal-400 rounded-full opacity-[0.1] blur-[150px]" />
       </div>
       
-      <div className="container px-4 mx-auto relative z-10">
+      <div className="minimalist-container px-4 mx-auto relative z-10">
         <motion.div 
           ref={textRef}
           style={{ y: y1, opacity }}
@@ -97,22 +96,22 @@ const Hero: React.FC = () => {
           data-scroll
           data-scroll-speed="1"
         >
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-blue-600">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">
             Unify All Your Communication Channels
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8">
+          <p className="text-xl md:text-2xl text-slate-300 mb-8">
             One platform to connect, engage and respond across SMS, WhatsApp, Email and Web Chat—powered by AI
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-            <Link href="/auth/register" passHref>
-              <Button size="lg" className="min-w-[180px] h-14 text-lg rounded-full bg-gradient-to-r from-primary to-indigo-500 hover:from-primary/90 hover:to-indigo-500/90 shadow-lg shadow-primary/25">
-                Get Started
+            <Link href="/dashboard" passHref>
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 min-w-[180px] h-14 text-lg text-white border-0">
+                Go to Dashboard
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link href="#features" passHref>
-              <Button variant="outline" size="lg" className="min-w-[180px] h-14 text-lg rounded-full border-2">
+              <Button variant="outline" size="lg" className="border-slate-400 text-white hover:bg-slate-700 hover:text-white min-w-[180px] h-14 text-lg">
                 Learn More
               </Button>
             </Link>
@@ -126,32 +125,34 @@ const Hero: React.FC = () => {
           data-scroll
           data-scroll-speed="-0.5"
         >
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl shadow-primary/20 border border-white/10 bg-gradient-to-br from-slate-900 to-slate-800">
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-[var(--shadow-medium)] border-[var(--border-subtle)] bg-white">
             <div className="absolute inset-0 bg-grid-white/5 bg-[size:20px_20px]" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-full max-w-3xl px-8">
-                <div className="w-full h-12 rounded-lg mb-6 bg-white/5 flex items-center gap-2 px-4">
+                <div className="w-full h-12 rounded-lg mb-6 bg-[hsl(var(--gray-light))] flex items-center gap-2 px-4">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
                   <div className="w-3 h-3 rounded-full bg-yellow-500" />
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                   <div className="flex-1"></div>
-                  <div className="h-5 w-32 rounded bg-white/10" />
+                  <div className="h-5 w-32 rounded bg-[hsl(var(--gray-medium))]" />
                 </div>
                 <div className="grid grid-cols-3 gap-6">
                   <div className="col-span-1 space-y-4">
-                    <div className="h-8 w-full rounded bg-white/10" />
-                    <div className="h-24 w-full rounded bg-white/5" />
-                    <div className="h-32 w-full rounded bg-white/5" />
+                    <div className="h-8 w-full rounded bg-[hsl(var(--gray-light))]" />
+                    <div className="h-24 w-full rounded bg-[hsl(var(--gray-light))]" />
+                    <div className="h-32 w-full rounded bg-[hsl(var(--gray-light))]" />
                   </div>
                   <div className="col-span-2 space-y-4">
-                    <div className="h-8 w-1/3 rounded bg-white/10" />
-                    <div className="h-64 w-full rounded bg-gradient-to-br from-primary/20 to-indigo-500/20 flex items-center justify-center">
-                      <div className="text-2xl font-bold text-primary/50">OmniChannel Dashboard</div>
+                    <div className="h-8 w-1/3 rounded bg-[hsl(var(--gray-light))]" />
+                    <div className="h-64 w-full rounded bg-[hsl(var(--gray-light))] flex items-center justify-center">
+                      <div className="text-2xl font-bold text-[hsl(var(--charcoal))]">
+                        OmniChannel Dashboard
+                      </div>
                     </div>
                     <div className="grid grid-cols-3 gap-3">
-                      <div className="h-10 rounded bg-white/5" />
-                      <div className="h-10 rounded bg-primary/20" />
-                      <div className="h-10 rounded bg-white/5" />
+                      <div className="h-10 rounded bg-[hsl(var(--gray-light))]" />
+                      <div className="h-10 rounded bg-[hsl(var(--charcoal-light))]" />
+                      <div className="h-10 rounded bg-[hsl(var(--gray-light))]" />
                     </div>
                   </div>
                 </div>
@@ -160,21 +161,21 @@ const Hero: React.FC = () => {
           </div>
           
           {/* Floating elements */}
-          <div className="absolute -top-12 -left-12 w-24 h-24 rounded-xl bg-gradient-to-br from-primary to-purple-500 p-1 shadow-xl animate-float-slow">
-            <div className="w-full h-full rounded-lg bg-background/90 flex items-center justify-center">
-              <div className="text-4xl font-bold text-primary">W</div>
+          <div className="absolute -top-12 -left-12 w-24 h-24 rounded-lg bg-white p-1 shadow-[var(--shadow-medium)] animate-float-slow">
+            <div className="w-full h-full rounded-lg bg-[hsl(var(--cream))] flex items-center justify-center">
+              <div className="text-4xl font-bold text-[hsl(var(--charcoal))]">W</div>
             </div>
           </div>
           
-          <div className="absolute -bottom-8 -right-8 w-28 h-28 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 p-1 shadow-xl animate-float">
-            <div className="w-full h-full rounded-lg bg-background/90 flex items-center justify-center">
-              <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-indigo-500">@</div>
+          <div className="absolute -bottom-8 -right-8 w-28 h-28 rounded-lg bg-white p-1 shadow-[var(--shadow-medium)] animate-float">
+            <div className="w-full h-full rounded-lg bg-[hsl(var(--cream))] flex items-center justify-center">
+              <div className="text-4xl font-bold text-[hsl(var(--charcoal))]">@</div>
             </div>
           </div>
           
-          <div className="absolute top-1/2 -translate-y-1/2 -right-16 w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 p-1 shadow-xl animate-float-slow">
-            <div className="w-full h-full rounded-full bg-background/90 flex items-center justify-center">
-              <div className="text-3xl font-bold text-emerald-500">S</div>
+          <div className="absolute top-1/2 -translate-y-1/2 -right-16 w-20 h-20 rounded-full bg-white p-1 shadow-[var(--shadow-medium)] animate-float-slow">
+            <div className="w-full h-full rounded-full bg-[hsl(var(--cream))] flex items-center justify-center">
+              <div className="text-3xl font-bold text-[hsl(var(--gray-dark))]">S</div>
             </div>
           </div>
         </motion.div>
@@ -182,12 +183,12 @@ const Hero: React.FC = () => {
       
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center justify-center">
         <motion.div 
-          className="w-8 h-12 rounded-full border-2 border-muted p-1 flex items-start justify-center"
+          className="w-8 h-12 rounded-full border-2 border-[hsl(var(--gray-medium))] p-1 flex items-start justify-center"
           initial={{ y: 0 }}
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
         >
-          <div className="w-1.5 h-3 rounded-full bg-primary" />
+          <div className="w-1.5 h-3 rounded-full bg-[hsl(var(--charcoal))]" />
         </motion.div>
       </div>
     </section>

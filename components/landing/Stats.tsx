@@ -19,7 +19,7 @@ const StatItem: React.FC<{ number: number; label: string; suffix?: string; delay
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.5, delay: delay * 0.1, ease: [0.25, 0.25, 0, 1] }}
     >
-      <h3 className="text-4xl md:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-500 flex justify-center">
+      <h3 className="text-4xl md:text-5xl font-bold mb-2 text-white flex justify-center">
         {isInView ? (
           <CountUp 
             isCounting
@@ -33,7 +33,7 @@ const StatItem: React.FC<{ number: number; label: string; suffix?: string; delay
           `0${suffix}`
         )}
       </h3>
-      <p className="text-muted-foreground">{label}</p>
+      <p className="text-slate-300">{label}</p>
     </motion.div>
   );
 };
@@ -52,23 +52,22 @@ const Stats: React.FC = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative py-24 overflow-hidden"
+      className="relative py-24 overflow-hidden bg-slate-900"
       data-scroll-section
     >
-      {/* Background effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-background to-background/95 z-0">
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
+      {/* Subtle background grid */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-blue-900/5 to-teal-900/5">
+        <div className="absolute inset-0 bg-[size:50px_50px] border-t border-slate-700/10" />
       </div>
       
-      {/* Glass panel */}
       <motion.div 
         style={{ opacity, scale }}
-        className="container px-4 mx-auto relative z-10"
+        className="minimalist-container px-4 mx-auto relative z-10"
       >
-        <div className="max-w-4xl mx-auto bg-gradient-to-b from-white/[0.05] to-white/[0.02] rounded-2xl border border-white/10 backdrop-blur-sm p-10 md:p-14 shadow-xl">
+        <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-800 to-slate-800/90 backdrop-blur-sm rounded-lg border border-slate-700 p-10 md:p-14 shadow-xl">
           <div className="text-center mb-10">
             <motion.h2 
-              className="text-3xl md:text-4xl font-bold mb-4"
+              className="text-3xl md:text-4xl font-bold mb-4 text-white"
               initial={{ opacity: 0, y: -20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
@@ -78,7 +77,7 @@ const Stats: React.FC = () => {
               Trusted by Businesses Worldwide
             </motion.h2>
             <motion.div 
-              className="h-1 w-24 bg-gradient-to-r from-primary to-indigo-500 mx-auto rounded-full"
+              className="h-px w-24 bg-gradient-to-r from-blue-500 to-teal-500 mx-auto"
               initial={{ width: 0, opacity: 0 }}
               whileInView={{ width: 96, opacity: 1 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
@@ -92,23 +91,23 @@ const Stats: React.FC = () => {
             <StatItem number={1500} label="Active Users" suffix="+" delay={3} />
           </div>
           
-          {/* Animated dots for decoration */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 opacity-30 hidden md:block">
+          {/* Minimal subtle dots for decoration */}
+          <div className="absolute -top-12 -right-12 w-48 h-48 opacity-10 hidden md:block">
             <div className="relative w-full h-full">
-              {[...Array(50)].map((_, i) => (
+              {[...Array(20)].map((_, i) => (
                 <motion.div 
                   key={i}
-                  className="absolute w-1.5 h-1.5 rounded-full bg-primary"
+                  className="absolute w-1 h-1 rounded-full bg-blue-400"
                   initial={{
                     x: Math.random() * 100 - 50,
                     y: Math.random() * 100 - 50,
-                    opacity: Math.random() * 0.5 + 0.3,
+                    opacity: Math.random() * 0.3 + 0.1,
                     scale: Math.random() * 0.5 + 0.5
                   }}
                   animate={{
                     x: Math.random() * 100 - 50,
                     y: Math.random() * 100 - 50,
-                    opacity: Math.random() * 0.5 + 0.3,
+                    opacity: Math.random() * 0.3 + 0.1,
                     scale: Math.random() * 0.5 + 0.5
                   }}
                   transition={{
@@ -122,22 +121,22 @@ const Stats: React.FC = () => {
             </div>
           </div>
           
-          <div className="absolute -bottom-12 -left-12 w-48 h-48 opacity-30 hidden md:block">
+          <div className="absolute -bottom-12 -left-12 w-48 h-48 opacity-10 hidden md:block">
             <div className="relative w-full h-full">
-              {[...Array(50)].map((_, i) => (
+              {[...Array(20)].map((_, i) => (
                 <motion.div 
                   key={i}
-                  className="absolute w-1.5 h-1.5 rounded-full bg-indigo-500"
+                  className="absolute w-1 h-1 rounded-full bg-blue-400"
                   initial={{
                     x: Math.random() * 100 - 50,
                     y: Math.random() * 100 - 50,
-                    opacity: Math.random() * 0.5 + 0.3,
+                    opacity: Math.random() * 0.3 + 0.1,
                     scale: Math.random() * 0.5 + 0.5
                   }}
                   animate={{
                     x: Math.random() * 100 - 50,
                     y: Math.random() * 100 - 50,
-                    opacity: Math.random() * 0.5 + 0.3,
+                    opacity: Math.random() * 0.3 + 0.1,
                     scale: Math.random() * 0.5 + 0.5
                   }}
                   transition={{

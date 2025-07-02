@@ -1,0 +1,283 @@
+/* Sleek Minimalist Theme with Charcoal, Gray, and Cream White */
+
+:root {
+  /* Refined color palette */
+  --charcoal: 212 20% 12%; /* Deeper Charcoal */
+  --charcoal-light: 212 15% 22%; /* Lighter Charcoal */
+  --gray-dark: 212 10% 32%; /* Dark Gray */
+  --gray-medium: 212 10% 50%; /* Medium Gray */
+  --gray-light: 212 12% 92%; /* Light Gray - slightly bluer */
+  --cream: 38 25% 98%; /* Purer Cream White */
+  --accent: 230 60% 60%; /* Subtle blue accent for occasional use */
+  
+  /* Enhanced shadow variables for sleek look */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-strong: 0 8px 30px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
+  
+  /* Refined border variables */
+  --border-subtle: 1px solid rgba(0, 0, 0, 0.06);
+  --border-medium: 1px solid rgba(0, 0, 0, 0.08);
+  
+  /* Smoother transitions */
+  --transition-minimal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sleek minimalist theme overrides */
+.minimalist {
+  /* Base colors */
+  --background: var(--cream);
+  --foreground: var(--charcoal);
+  
+  /* Component colors */
+  --card: #ffffff;
+  --card-foreground: var(--charcoal);
+  --popover: #ffffff;
+  --popover-foreground: var(--charcoal);
+  
+  /* Primary colors */
+  --primary: var(--charcoal);
+  --primary-foreground: #ffffff;
+  
+  /* Secondary colors */
+  --secondary: var(--gray-light);
+  --secondary-foreground: var(--charcoal);
+  
+  /* Muted colors */
+  --muted: var(--gray-light);
+  --muted-foreground: var(--gray-medium);
+  
+  /* Accent colors */
+  --accent: hsl(var(--accent));
+  --accent-foreground: #ffffff;
+  
+  /* Other UI colors */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.06);
+  --input: var(--gray-light);
+  --ring: var(--charcoal);
+  
+  /* Additional variables */
+  --content-max-width: 1280px;
+  --section-spacing: 8rem;
+  --component-spacing: 3rem;
+}
+
+/* Sleek modern typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700&display=swap');
+
+.minimalist {
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  font-feature-settings: "salt", "ss01", "ss02";
+  -webkit-font-smoothing: antialiased;
+}
+
+.minimalist h1, .minimalist h2 {
+  font-family: 'Sora', 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.minimalist h3, .minimalist h4 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+/* Sleek section styling */
+.minimalist-section {
+  padding: 8rem 0;
+  background-color: hsl(var(--background));
+  border-bottom: var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+}
+
+.minimalist-section.dark {
+  background-color: hsl(var(--charcoal));
+  color: white;
+}
+
+/* Container with improved responsive behavior */
+.minimalist-container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+/* Sleek card styling */
+.minimalist-card {
+  background-color: var(--card);
+  border-radius: 12px;
+  border: var(--border-subtle);
+  box-shadow: var(--shadow-subtle);
+  transition: all var(--transition-bounce);
+  overflow: hidden;
+  height: 100%;
+}
+
+.minimalist-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Glass card variant */
+.minimalist-card.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Sleek button styling */
+.minimalist-btn {
+  background-color: hsl(var(--charcoal));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 500;
+  transition: all var(--transition-bounce);
+  box-shadow: var(--shadow-subtle);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.minimalist-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  transition: height var(--transition-minimal);
+  z-index: -1;
+}
+
+.minimalist-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+  text-decoration: none; /* Remove hover underline */
+}
+
+.minimalist-btn:hover::after {
+  height: 100%;
+}
+
+.minimalist-btn.primary {
+  background-color: hsl(var(--accent));
+}
+
+.minimalist-btn-outline {
+  background-color: transparent;
+  color: hsl(var(--charcoal));
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 500;
+  transition: all var(--transition-bounce);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.minimalist-btn-outline:hover {
+  border-color: hsl(var(--charcoal));
+  background-color: rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+  text-decoration: none; /* Remove hover underline */
+}
+
+/* Remove underlines on hover for links with subtle alternative */
+.minimalist a {
+  transition: all var(--transition-minimal);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.minimalist a:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+/* Enhanced animations */
+@keyframes sleek-fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sleek-scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.minimalist .animate-fade-in {
+  animation: sleek-fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.minimalist .animate-scale-in {
+  animation: sleek-scale-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Sleek grid with improved responsive behavior */
+.minimalist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2.5rem;
+}
+
+/* Custom scrollbar */
+.minimalist ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.minimalist ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.minimalist ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+}
+
+.minimalist ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Stylish text highlight */
+.minimalist ::selection {
+  background: hsl(var(--accent) / 0.2);
+}
+
+/* Modern dividers */
+.minimalist-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, var(--border-medium), transparent);
+  margin: 2rem 0;
+}
+
+/* Image treatments */
+.minimalist-image {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+  transition: all var(--transition-minimal);
+}
+
+.minimalist-image:hover {
+  transform: scale(1.01);
+  box-shadow: var(--shadow-medium);
+}

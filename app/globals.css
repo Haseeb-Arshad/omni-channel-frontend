@@ -1,5 +1,13 @@
 :root {
-  /* Modern, vibrant color palette based on #2a52be */
+  /* Custom color palette based on design image */
+  --background: 0 0% 98%;
+  --foreground: 220 12% 28%;
+  --primary: 220 15% 15%;
+  --secondary: 213 8% 36%;
+  --accent: 217 53% 60%;
+  --muted: 217 12% 85%;
+  --border: 0 0% 84%;
+  --input: 0 0% 84%;
   --background: 210 40% 98%; /* Soft, light blue-gray */
   --foreground: 222 47% 11%;
   --card: 0 0% 100%;
@@ -134,33 +142,20 @@ html.has-scroll-dragging {
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-gray-200;
   }
   
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gray-50 text-gray-900;
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
-  /* Apply subtle gradient backgrounds */
-  body {
-    background-image: 
-      radial-gradient(at 100% 0%, hsla(var(--primary) / 0.08) 0px, transparent 60%), 
-      radial-gradient(at 0% 100%, hsla(var(--accent) / 0.1) 0px, transparent 50%);
-  }
-  
-  .dark body {
-    background: linear-gradient(-45deg, hsl(var(--background)), hsl(var(--primary) / 0.2), hsl(var(--background)), hsl(var(--accent) / 0.15));
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-  }
-  
   /* Form elements styling */
   input, textarea, select {
-    @apply bg-background border-input rounded-md px-3 py-2 text-sm outline-none transition-colors;
-    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary focus-visible:outline-none;
+    @apply bg-white border-gray-300 rounded-md px-3 py-2 text-sm outline-none transition-colors;
+    @apply focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus-visible:outline-none;
   }
   
   /* Typography enhancements */
@@ -174,20 +169,6 @@ html.has-scroll-dragging {
   
   h2 {
     @apply text-2xl leading-tight;
-  }
-  
-  /* Enhanced link hover effect */
-  a:not(.plain) {
-    @apply relative;
-  }
-  
-  a:not(.plain)::after {
-    @apply absolute bottom-0 left-0 w-full h-px bg-primary/80 scale-x-0 transition-transform duration-300 origin-right;
-    content: "";
-  }
-  
-  a:not(.plain):hover::after {
-    @apply scale-x-100 origin-left;
   }
 }
 

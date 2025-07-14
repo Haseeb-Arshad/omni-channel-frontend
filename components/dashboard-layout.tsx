@@ -21,7 +21,11 @@ import {
   Home,
   ChevronsLeft,
   ChevronsRight,
-  BookOpen
+  BookOpen,
+  Database,
+  Zap,
+  Circle,
+  Sparkles
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { usePathname, useRouter } from 'next/navigation';
@@ -188,9 +192,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: <Home className="h-[18px] w-[18px]" />, label: 'Dashboard', href: '/dashboard/home' },
     { icon: <MessageCircle className="h-[18px] w-[18px]" />, label: 'Conversations', href: '/dashboard/conversations' },
     { icon: <MessageSquare className="h-[18px] w-[18px]" />, label: 'Channels', href: '/dashboard/channels' },
-    { icon: <BookOpen className="h-[18px] w-[18px]" />, label: 'Knowledge Base', href: '/dashboard/knowledge' },
-    { icon: <Users className="h-[18px] w-[18px]" />, label: 'AI Personas', href: '/dashboard/persona' },
-    { icon: <Bot className="h-[18px] w-[18px]" />, label: 'AI Playground', href: '/dashboard/playground' },
+    { icon: <Database className="h-[18px] w-[18px]" />, label: 'Knowledge Base', href: '/dashboard/knowledge' },
+    { icon: <Sparkles className="h-[18px] w-[18px]" />, label: 'AI Personas', href: '/dashboard/persona' },
+    { icon: <Zap className="h-[18px] w-[18px]" />, label: 'AI Playground', href: '/dashboard/playground' },
     { icon: <Settings className="h-[18px] w-[18px]" />, label: 'Settings', href: '/dashboard/settings' },
   ];
   
@@ -215,44 +219,45 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   };
   
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
       <motion.aside
-        className="fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-card border-r shadow-sm"
+        className="fixed left-0 top-0 bottom-0 z-50 flex flex-col bg-white border-r border-gray-200 shadow-xl"
         variants={sidebarVariants}
         initial="expanded"
         animate={collapsed ? "collapsed" : "expanded"}
       >
-        <div className="flex items-center justify-between h-16 border-b px-4 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
+        {/* Header */}
+        <div className="h-16 border-b border-gray-200 px-4 flex items-center justify-between bg-gray-50/50">
           <AnimatePresence mode="wait">
             {!collapsed ? (
               <motion.div 
                 key="full-logo"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center space-x-2 overflow-hidden"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="flex items-center space-x-3"
               >
-                <Link href="/dashboard" className="flex items-center space-x-2">
-                  <div className="relative h-8 w-8 bg-gradient-to-br from-primary to-indigo-600 rounded-full overflow-hidden flex items-center justify-center shadow-sm ring-1 ring-primary/10">
-                    <span className="text-white font-medium text-xs">OC</span>
+                <Link href="/dashboard" className="flex items-center space-x-3">
+                  <div className="relative h-9 w-9 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm">
+                    <span className="text-white font-bold text-sm">OC</span>
                   </div>
-                  <span className="font-semibold text-base bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent whitespace-nowrap">OmniChannel</span>
+                  <span className="font-semibold text-lg text-gray-900">OmniChannel</span>
                 </Link>
               </motion.div>
             ) : (
               <motion.div 
                 key="icon-only"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className="flex justify-center w-full"
               >
                 <Link href="/dashboard">
-                  <div className="relative h-8 w-8 bg-gradient-to-br from-primary to-indigo-600 rounded-full overflow-hidden flex items-center justify-center shadow-sm ring-1 ring-primary/10">
-                    <span className="text-white font-medium text-xs">OC</span>
+                  <div className="relative h-9 w-9 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+                    <span className="text-white font-bold text-sm">OC</span>
                   </div>
                 </Link>
               </motion.div>
@@ -261,19 +266,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           
           <button
             onClick={toggleSidebar}
-            className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors duration-200"
           >
             {collapsed ? (
-              <ChevronsRight className="h-4 w-4" />
+              <ChevronsRight className="h-4 w-4 text-gray-600" />
             ) : (
-              <ChevronsLeft className="h-4 w-4" />
+              <ChevronsLeft className="h-4 w-4 text-gray-600" />
             )}
           </button>
         </div>
         
-        <nav className="flex-1 pt-5 px-2 space-y-1 overflow-y-auto">
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {navItems.map((item, i) => {
-            // Special case for dashboard to prevent it from being active for all routes
             const isActive = item.href === '/dashboard/home' 
               ? pathname === '/dashboard' || pathname === '/dashboard/home' || pathname === '/dashboard/home/'
               : pathname.startsWith(item.href);
@@ -286,34 +291,30 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 initial="hidden"
                 animate="visible"
               >
-                <TooltipProvider delayDuration={200}>
+                <TooltipProvider delayDuration={300}>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link 
                         href={item.href}
                         className={cn(
-                          "group flex items-center rounded-lg transition-all duration-200 relative overflow-hidden",
-                          collapsed ? "justify-center py-3 px-0 mx-2" : "px-3 py-2.5 mx-0",
+                          "group flex items-center rounded-xl transition-all duration-200 relative",
+                          collapsed ? "justify-center py-3 px-0" : "px-3 py-2.5",
                           isActive ? 
-                            "text-primary" : 
-                            "text-muted-foreground"
+                            "bg-gray-900 text-white shadow-lg" : 
+                            "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         )}
                       >
                         <div 
                           className={cn(
                             "flex items-center justify-center transition-all",
-                            collapsed ? "w-10 h-10" : "w-8 h-8 mr-3",
-                            isActive && "text-primary"
+                            collapsed ? "w-10 h-10" : "w-5 h-5 mr-3"
                           )}
                         >
                           {item.icon}
                         </div>
                         
                         {!collapsed && (
-                          <span className={cn(
-                            "text-sm font-medium whitespace-nowrap",
-                            isActive && "font-semibold"
-                          )}>
+                          <span className="text-sm font-medium whitespace-nowrap">
                             {item.label}
                           </span>
                         )}
@@ -321,16 +322,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         {isActive && (
                           <motion.div 
                             layoutId="activeNav"
-                            className="absolute inset-0 bg-primary/10 rounded-lg border-l-2 border-primary z-[-1]"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.2 }}
+                            className="absolute inset-0 bg-gray-900 rounded-xl"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                            style={{ zIndex: -1 }}
                           />
                         )}
                       </Link>
                     </TooltipTrigger>
                     {collapsed && (
-                      <TooltipContent side="right">
+                      <TooltipContent side="right" className="font-medium">
                         {item.label}
                       </TooltipContent>
                     )}
@@ -341,29 +343,30 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           })}
         </nav>
         
-        <div className="p-3 border-t">
-          <TooltipProvider delayDuration={200}>
+        {/* User Section */}
+        <div className="p-4 border-t border-gray-200">
+          <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <button 
                   onClick={handleLogout}
                   disabled={isLoading}
                   className={cn(
-                    "flex items-center w-full text-sm font-medium rounded-lg transition-all duration-200",
+                    "flex items-center w-full text-sm font-medium rounded-xl transition-all duration-200",
                     collapsed ? "justify-center py-3 px-0" : "px-3 py-2.5",
-                    "text-destructive hover:bg-destructive/10 disabled:opacity-50"
+                    "text-red-600 hover:bg-red-50 hover:text-red-700 disabled:opacity-50"
                   )}
                 >
                   {isLoading ? (
-                    <Loader2 className={cn("h-[18px] w-[18px] animate-spin", !collapsed && "mr-3")} />
+                    <Loader2 className={cn("h-5 w-5 animate-spin", !collapsed && "mr-3")} />
                   ) : (
-                    <LogOut className={cn("h-[18px] w-[18px]", !collapsed && "mr-3")} />
+                    <LogOut className={cn("h-5 w-5", !collapsed && "mr-3")} />
                   )}
                   {!collapsed && "Sign Out"}
                 </button>
               </TooltipTrigger>
               {collapsed && (
-                <TooltipContent side="right">
+                <TooltipContent side="right" className="font-medium">
                   Sign Out
                 </TooltipContent>
               )}
@@ -372,43 +375,41 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
       </motion.aside>
       
-      {/* Mobile sidebar - Overlay */}
+      {/* Mobile Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div 
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={toggleMobileMenu}
             />
             
-            {/* Mobile menu */}
             <motion.div
-              className="fixed inset-y-0 left-0 z-40 w-64 bg-card/95 border-r shadow-xl md:hidden"
+              className="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-gray-200 shadow-2xl md:hidden"
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             >
-              <div className="flex items-center justify-between h-16 border-b px-4 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent">
-                <Link href="/dashboard" className="flex items-center space-x-2">
-                  <div className="relative h-9 w-9 bg-gradient-to-br from-primary to-indigo-600 rounded-full overflow-hidden flex items-center justify-center shadow-md ring-2 ring-primary/20">
+              <div className="h-16 border-b border-gray-200 px-4 flex items-center justify-between bg-gray-50/50">
+                <Link href="/dashboard" className="flex items-center space-x-3">
+                  <div className="relative h-9 w-9 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm">
                     <span className="text-white font-bold text-sm">OC</span>
                   </div>
-                  <span className="font-semibold text-xl bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">OmniChannel</span>
+                  <span className="font-semibold text-lg text-gray-900">OmniChannel</span>
                 </Link>
                 <button
                   onClick={toggleMobileMenu}
-                  className="text-muted-foreground hover:text-foreground p-2 rounded-md hover:bg-primary/10"
+                  className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors duration-200"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-5 w-5 text-gray-600" />
                 </button>
               </div>
               
-              <nav className="flex-1 pt-5 px-4 space-y-1 overflow-y-auto">
+              <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
                 {navItems.map((item) => {
                   const isActive = item.href === '/dashboard/home' 
                     ? pathname === '/dashboard' || pathname === '/dashboard/home' || pathname === '/dashboard/home/'
@@ -418,11 +419,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <Link 
                       key={item.href}
                       href={item.href}
-                      className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                        ${isActive ? 'bg-primary/10 text-primary' : 'hover:bg-primary/10 hover:text-primary'}`}
+                      className={cn(
+                        "group flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200",
+                        isActive ? 
+                          "bg-gray-900 text-white shadow-lg" : 
+                          "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      )}
                       onClick={toggleMobileMenu}
                     >
-                      <div className={`mr-3 ${isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-primary'} transition-colors`}>
+                      <div className="mr-3 w-5 h-5 flex items-center justify-center">
                         {item.icon}
                       </div>
                       {item.label}
@@ -431,12 +436,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 })}
               </nav>
               
-              <div className="p-4 border-t">
+              <div className="p-4 border-t border-gray-200">
                 <button 
                   onClick={handleLogout}
                   disabled={isLoading}
-                  className="flex items-center w-full px-3 py-3 text-sm font-medium rounded-lg
-                    text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+                  className="flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 text-red-600 hover:bg-red-50 hover:text-red-700 disabled:opacity-50"
                 >
                   {isLoading ? (
                     <Loader2 className="mr-3 h-5 w-5 animate-spin" />
@@ -458,96 +462,94 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         initial="hidden"
         animate={["visible", collapsed ? "collapsed" : "expanded"]}
       >
-        {/* Top navbar */}
-        <header className="h-16 border-b bg-background/90 backdrop-blur-md sticky top-0 z-10 flex items-center justify-between px-4 sm:px-6 shadow-sm">
+        {/* Top Bar */}
+        <header className="h-16 border-b border-gray-200 bg-white/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-6">
           <div className="flex items-center gap-4">
             <button 
               onClick={toggleMobileMenu}
-              className="md:hidden text-muted-foreground hover:text-foreground p-2 rounded-md hover:bg-primary/5 transition-colors"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5 text-gray-600" />
             </button>
             
-            <div className="hidden md:flex items-center space-x-1">
-              <Link href="/dashboard/home" className="p-2 rounded-md hover:bg-primary/5 text-muted-foreground hover:text-foreground transition-colors">
-                <Home className="h-5 w-5" />
+            <div className="hidden md:flex items-center space-x-2">
+              <Link href="/dashboard/home" className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                <Home className="h-5 w-5 text-gray-600" />
               </Link>
-              <div className="h-5 border-r mx-1 border-border/50"></div>
+              <div className="h-4 w-px bg-gray-300"></div>
             </div>
             
-            <div className="relative max-w-md hidden md:flex items-center">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <div className="relative hidden md:flex items-center">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input 
                 type="search" 
-                placeholder="Search..." 
-                className="pl-9 h-9 w-[180px] lg:w-[280px] bg-background/50 focus-visible:bg-background border-muted" 
+                placeholder="Search everything..." 
+                className="pl-10 h-9 w-80 bg-gray-50 border-gray-200 focus:bg-white focus:border-gray-300 rounded-xl transition-colors duration-200" 
               />
             </div>
           </div>
           
-          <div className="flex items-center space-x-3">
-            <button className="p-2 rounded-md hover:bg-primary/5 text-muted-foreground hover:text-foreground transition-colors relative">
-              <HelpCircle className="h-5 w-5" />
+          <div className="flex items-center space-x-2">
+            <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 relative">
+              <HelpCircle className="h-5 w-5 text-gray-600" />
             </button>
             
-            <button className="p-2 rounded-md hover:bg-primary/5 text-muted-foreground hover:text-foreground transition-colors relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card"></span>
+            <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 relative">
+              <Bell className="h-5 w-5 text-gray-600" />
+              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
             </button>
             
-            <ThemeToggle />
-            
-            <div className="h-5 border-r mx-0.5 border-border/50 hidden sm:block"></div>
+            <div className="h-4 w-px bg-gray-300 mx-2"></div>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative rounded-full p-0 h-9 overflow-hidden focus-visible:ring-offset-0 focus-visible:ring-1">
-                  <Avatar className="h-9 w-9 border-2 border-background transition-all hover:border-primary/20">
-                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-indigo-600/20 text-foreground">
+                <Button variant="ghost" className="relative rounded-full p-0 h-9 w-9">
+                  <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
+                    <AvatarFallback className="bg-gray-900 text-white font-medium">
                       {getInitials()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 mt-1">
-                <DropdownMenuLabel className="font-normal">
+              <DropdownMenuContent align="end" className="w-64 mt-2 bg-white border-gray-200 shadow-xl rounded-xl">
+                <DropdownMenuLabel className="font-normal p-4">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{user?.username || 'User'}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user?.email || 'user@example.com'}</p>
+                    <p className="text-sm font-medium text-gray-900">{user?.username || 'User'}</p>
+                    <p className="text-xs text-gray-500">{user?.email || 'user@example.com'}</p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-gray-200" />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings" className="cursor-pointer">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Account Settings</span>
+                  <Link href="/dashboard/settings" className="cursor-pointer p-3 flex items-center">
+                    <Settings className="mr-3 h-4 w-4 text-gray-500" />
+                    <span className="text-sm font-medium">Account Settings</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-gray-200" />
                 <DropdownMenuItem 
                   onClick={handleLogout} 
-                  className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
+                  className="text-red-600 focus:bg-red-50 focus:text-red-700 cursor-pointer p-3 flex items-center"
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <LogOut className="mr-3 h-4 w-4" />
+                  <span className="text-sm font-medium">Sign Out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </header>
         
-        {/* Page content */}
+        {/* Page Content */}
         <main 
           ref={mainContentRef}
-          className="flex-1 overflow-y-auto bg-gradient-to-b from-background to-background/95"
+          className="flex-1 overflow-y-auto bg-gray-50"
           data-scroll-container
         >
           <motion.div 
-            className="mx-auto w-full max-w-7xl p-4 sm:p-6 relative"
-            initial={{ opacity: 0, y: 10 }}
+            className="mx-auto w-full max-w-7xl p-6"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
-              duration: 0.4, 
+              duration: 0.5, 
               ease: [0.22, 1, 0.36, 1]
             }}
             data-scroll-section

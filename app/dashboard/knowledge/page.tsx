@@ -1,347 +1,309 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import Link from "next/link"
-import { FileText, Upload, Search, Filter, Trash2, Download, Eye, ArrowUpDown, Plus, FileIcon, CheckCircle2, Clock, AlertCircle, RefreshCw } from "lucide-react"
+import { motion } from "framer-motion"
+import { Search, ChevronDown, Plus, MoreHorizontal, Folder, FileText, User, Calendar, Grid3X3, Menu, X, Download, Eye, Trash2, Filter, SortDesc, FolderOpen, Home, Database, RefreshCw, Settings, Bell, Star } from "lucide-react"
 import { toast } from "sonner"
 import api, { Document as ApiDocument } from "@/lib/api"
 import { formatFileSize, formatDate } from "@/lib/utils"
+import { cn } from "@/lib/utils"
+
+// Folder structure interface
+interface FolderItem {
+  id: string
+  name: string
+  type: 'folder' | 'file'
+  fileCount?: number
+  children?: FolderItem[]
+  icon?: React.ReactNode
+  color?: string
+  addedBy?: string
+  lastModified?: string
+  size?: number
+}
+
+// Sample folder structure matching the image
+const folderStructure: FolderItem[] = [
+  {
+    id: "general",
+    name: "General Knowledge",
+    type: "folder",
+    fileCount: 10,
+    children: [
+      {
+        id: "onboarding",
+        name: "Onboarding",
+        type: "folder",
+        fileCount: 3,
+        children: [
+          { id: "subfolder1", name: "Subfolder 1", type: "folder", fileCount: 5 },
+          { id: "subfolder2", name: "Subfolder 2", type: "folder", fileCount: 10 }
+        ]
+      },
+      { id: "integrations", name: "Integrations", type: "folder", fileCount: 0 },
+      { id: "documents", name: "Documents", type: "folder", fileCount: 0 }
+    ]
+  },
+  { id: "onboarding-design", name: "Onboarding Design", type: "folder", fileCount: 0 },
+  { id: "team-interviews", name: "Team Interviews", type: "folder", fileCount: 0 }
+]
+
+// Sample files matching the image
+const sampleFiles: FolderItem[] = [
+  {
+    id: "onboarding-guide",
+    name: "Onboarding-Guide.pdf",
+    type: "file",
+    addedBy: "kevin@mail.com",
+    lastModified: "2024-01-15",
+    size: 2450000
+  },
+  {
+    id: "product-roadmap",
+    name: "Product-Roadmap.docx",
+    type: "file",
+    addedBy: "antonwe@gmail.com",
+    lastModified: "2024-01-14",
+    size: 1850000
+  }
+]
 
 export default function KnowledgeBasePage() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedStatus, setSelectedStatus] = useState("all")
-  const [selectedType, setSelectedType] = useState("all")
-  const [sortBy, setSortBy] = useState("date")
-  const [sortOrder, setSortOrder] = useState("desc")
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [selectedFolder, setSelectedFolder] = useState("general")
+  const [expandedFolders, setExpandedFolders] = useState<string[]>(["general", "onboarding"])
+  const [activeView, setActiveView] = useState<"folders" | "tags">("folders")
+  const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState("General Knowledge")
+  const [isLoading, setIsLoading] = useState(false)
   const [documents, setDocuments] = useState<ApiDocument[]>([])
+  const [currentFiles, setCurrentFiles] = useState(sampleFiles)
   
-  // Fetch documents from API
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        const response = await api.listDocuments();
-        if (response.success && response.data) {
-          setDocuments(response.data);
-        } else {
-          setError(response.message || 'Failed to load documents');
-        }
-      } catch (err) {
-        console.error('Error fetching documents:', err);
-        setError('Failed to load documents. Please try again later.');
-        // Add mock data for development testing when API fails
-        if (process.env.NODE_ENV !== 'production') {
-          setDocuments([
-            {
-              id: '1',
-              user_id: 1,
-              filename: 'example-document.pdf',
-              original_filename: 'Product Catalog.pdf',
-              file_path: '/path/to/file',
-              mime_type: 'application/pdf',
-              file_size: 1258000,
-              processing_status: 'processed',
-              uploaded_at: new Date().toISOString()
+  // Toggle folder expansion
+  const toggleFolder = (folderId: string) => {
+    setExpandedFolders(prev => 
+      prev.includes(folderId) 
+        ? prev.filter(id => id !== folderId)
+        : [...prev, folderId]
+    )
+  }
+
+  // Render folder tree
+  const renderFolderTree = (folders: FolderItem[], level = 0) => {
+    return folders.map(folder => (
+      <div key={folder.id} className="select-none">
+        <div 
+          className={cn(
+            "flex items-center gap-2 px-2 py-1.5 text-sm cursor-pointer rounded-md hover:bg-gray-100 transition-colors",
+            selectedFolder === folder.id && "bg-gray-100"
+          )}
+          style={{ paddingLeft: `${level * 12 + 8}px` }}
+          onClick={() => {
+            if (folder.children) {
+              toggleFolder(folder.id)
             }
-          ]);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchDocuments();
-  }, []);
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "processed":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />
-      case "processing":
-        return <Clock className="h-4 w-4 text-amber-500" />
-      case "failed":
-        return <AlertCircle className="h-4 w-4 text-destructive" />
-      default:
-        return null
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "processed":
-        return "Processed"
-      case "processing":
-        return "Processing"
-      case "failed":
-        return "Failed"
-      default:
-        return status
-    }
-  }
-
-  const getFileIcon = (fileType: string) => {
-    return <FileIcon className="h-6 w-6 text-primary" />
-  }
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  }
-
-  const handleDownload = (id: string) => {
-    // In a real application, this would trigger a download
-    toast.success("Document download started")
-  }
-
-  const handleSortToggle = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-  }
-
-  // Map processing_status to UI status
-  const mapStatus = (status?: string): "processed" | "processing" | "failed" | "pending" => {
-    switch (status) {
-      case "completed":
-        return "processed";
-      case "pending":
-      case "processing":
-        return "processing";
-      case "failed":
-        return "failed";
-      default:
-        return "processing";
-    }
-  }
-
-  // Get file type from mime_type or filename
-  const getFileType = (doc: ApiDocument) => {
-    if (doc.mime_type) {
-      const parts = doc.mime_type.split('/');
-      if (parts.length > 1) return parts[1].toUpperCase();
-    }
-    
-    // Fallback to extension from filename
-    const ext = doc.filename.split('.').pop() || '';
-    return ext.toUpperCase();
-  }
-
-  const filteredDocuments = documents.filter(doc => {
-    const matchesSearch = 
-      (doc.filename?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false) ||
-      (doc.original_filename?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
-    
-    const docStatus = mapStatus(doc.processing_status);
-    const docType = getFileType(doc).toLowerCase();
-    
-    const matchesStatus = selectedStatus === "all" || docStatus === selectedStatus;
-    const matchesType = selectedType === "all" || (selectedType === docType);
-    
-    return matchesSearch && matchesStatus && matchesType;
-  });
-
-  // Handle document delete with API
-  const handleDeleteDocument = async (id: string) => {
-    try {
-      const response = await api.deleteDocument(id);
-      if (response.success) {
-        setDocuments(prevDocuments => prevDocuments.filter(doc => doc.id !== id));
-        toast.success("Document deleted successfully");
-      } else {
-        toast.error(response.message || "Failed to delete document");
-      }
-    } catch (error) {
-      console.error("Error deleting document:", error);
-      toast.error("An error occurred while deleting the document");
-    }
-  };
-
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Knowledge Base</h1>
-          <p className="text-muted-foreground max-w-2xl">
-            Upload and manage documents that your AI agent can use to provide accurate responses.
-          </p>
+            setSelectedFolder(folder.id)
+          }}
+        >
+          {folder.children && (
+            <ChevronDown 
+              className={cn(
+                "h-4 w-4 transition-transform text-gray-500",
+                !expandedFolders.includes(folder.id) && "-rotate-90"
+              )}
+            />
+          )}
+          <Folder className="h-4 w-4 text-gray-600" />
+          <span className="text-gray-700">{folder.name}</span>
+          {folder.fileCount !== undefined && (
+            <span className="ml-auto text-xs text-gray-500">{folder.fileCount}</span>
+          )}
         </div>
-        <Button className="gap-2 shadow-sm" asChild>
-          <Link href="/dashboard/knowledge/upload">
-            <Upload className="h-4 w-4" />
-            <span>Upload Document</span>
-          </Link>
-        </Button>
-      </div>
-
-      {/* Action Bar */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center bg-card/50 border border-border/50 rounded-lg p-3 shadow-sm">
-        <div className="relative w-full sm:max-w-xs">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search documents..."
-            className="w-full rounded-md border border-input bg-background pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Status:</span>
-          <select 
-            className="bg-background border border-input rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="processed">Processed</option>
-            <option value="processing">Processing</option>
-            <option value="failed">Failed</option>
-          </select>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Sort:</span>
-          <select 
-            className="bg-background border border-input rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <option value="date">Date</option>
-            <option value="name">Name</option>
-            <option value="size">Size</option>
-          </select>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="h-8 w-8" 
-            onClick={handleSortToggle}
-          >
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Document List/Grid */}
-      <div className="mt-6 space-y-6">
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[...Array(6)].map((_, index) => (
-              <Card key={index} className="border-border/40 shadow-sm overflow-hidden">
-                <div className="p-4">
-                  <div className="flex items-center gap-3">
-                    <Skeleton className="h-10 w-10 rounded-md" />
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-40" />
-                      <Skeleton className="h-3 w-24" />
-                    </div>
-                  </div>
-                  <div className="mt-4 space-y-2">
-                    <Skeleton className="h-3 w-full" />
-                    <Skeleton className="h-3 w-3/4" />
-                  </div>
-                </div>
-                <CardFooter className="bg-secondary/20 border-t px-4 py-3 flex justify-between">
-                  <Skeleton className="h-3 w-20" />
-                  <Skeleton className="h-8 w-24 rounded-md" />
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        ) : error ? (
-          <Card className="border-border/40 shadow-sm">
-            <CardContent className="pt-6 pb-4 text-center">
-              <p className="text-destructive">{error}</p>
-              <Button onClick={() => window.location.reload()} variant="outline" className="mt-4">
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Try Again
-              </Button>
-            </CardContent>
-          </Card>
-        ) : filteredDocuments.length === 0 ? (
-          <Card className="border-border/40 shadow-sm">
-            <CardContent className="pt-6 pb-4 text-center">
-              <p className="text-muted-foreground">No documents found. Try adjusting your search or filters.</p>
-              <Button asChild className="mt-4">
-                <Link href="/dashboard/knowledge/upload">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Upload a document
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredDocuments.map((doc) => {
-              const status = mapStatus(doc.processing_status);
-              const fileType = getFileType(doc);
-              return (
-                <Card key={doc.id} className="overflow-hidden border-border/40 shadow-sm hover:shadow-md transition-all group">
-                  <CardHeader className="p-4 pb-3 space-y-0">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 h-11 w-11 bg-primary/10 rounded-md flex items-center justify-center">
-                        {getFileIcon(fileType)}
-                      </div>
-                      <div className="overflow-hidden">
-                        <CardTitle className="text-base font-medium truncate">
-                          {doc.original_filename || doc.filename}
-                        </CardTitle>
-                        <CardDescription className="text-xs flex items-center gap-2">
-                          <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
-                            {fileType.toUpperCase()}
-                          </span>
-                          <span className="text-muted-foreground">{formatFileSize(doc.file_size)}</span>
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="px-4 py-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-1.5">
-                        {getStatusIcon(status)}
-                        <span className="text-xs font-medium">{getStatusText(status)}</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">{formatDate(doc.uploaded_at)}</span>
-                    </div>
-                    {doc.tags && doc.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {doc.tags.slice(0, 3).map((tag, i) => (
-                          <span key={i} className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded-full">
-                            {tag}
-                          </span>
-                        ))}
-                        {doc.tags.length > 3 && (
-                          <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">+{doc.tags.length - 3}</span>
-                        )}
-                      </div>
-                    )}
-                  </CardContent>
-                  <CardFooter className="bg-secondary/20 border-t px-4 py-3 flex justify-between">
-                    <div className="text-xs text-muted-foreground">
-                      Updated {new Date(doc.uploaded_at).toLocaleDateString()}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-                        <Link href={`/dashboard/knowledge/view/${doc.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDownload(doc.id)}>
-                        <Download className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-destructive hover:bg-destructive/10" 
-                        onClick={() => handleDeleteDocument(doc.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardFooter>
-                </Card>
-              );
-            })}
+        {folder.children && expandedFolders.includes(folder.id) && (
+          <div className="ml-2">
+            {renderFolderTree(folder.children, level + 1)}
           </div>
         )}
+      </div>
+    ))
+  }
+
+  // Get avatar color based on email
+  const getAvatarColor = (email: string) => {
+    const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500', 'bg-red-500']
+    const index = email.charCodeAt(0) % colors.length
+    return colors[index]
+  }
+
+  // Get initials from email
+  const getInitials = (email: string) => {
+    const name = email.split('@')[0]
+    return name.charAt(0).toUpperCase()
+  }
+
+  return (
+    <div className="h-full bg-gray-50 flex">
+      {/* Sidebar */}
+      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        {/* Header */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                <Database className="w-5 h-5 text-white" />
+              </div>
+              <h1 className="text-lg font-semibold text-gray-900">Knowledge Base</h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <button className="p-1 hover:bg-gray-100 rounded">
+                <Plus className="w-4 h-4 text-gray-600" />
+              </button>
+              <button className="p-1 hover:bg-gray-100 rounded">
+                <Settings className="w-4 h-4 text-gray-600" />
+              </button>
+            </div>
+          </div>
+
+          {/* Knowledge Base Selector */}
+          <div className="relative">
+            <button className="w-full flex items-center justify-between p-2 text-left bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <span className="text-sm font-medium text-gray-700">{selectedKnowledgeBase}</span>
+              <ChevronDown className="w-4 h-4 text-gray-500" />
+            </button>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="p-4 border-b border-gray-200">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200">
+          <button
+            className={cn(
+              "flex-1 py-2 px-4 text-sm font-medium transition-colors",
+              activeView === "folders" 
+                ? "text-blue-600 border-b-2 border-blue-600" 
+                : "text-gray-600 hover:text-gray-900"
+            )}
+            onClick={() => setActiveView("folders")}
+          >
+            Folders
+          </button>
+          <button
+            className={cn(
+              "flex-1 py-2 px-4 text-sm font-medium transition-colors",
+              activeView === "tags" 
+                ? "text-blue-600 border-b-2 border-blue-600" 
+                : "text-gray-600 hover:text-gray-900"
+            )}
+            onClick={() => setActiveView("tags")}
+          >
+            Tags
+          </button>
+        </div>
+
+        {/* Folder Tree */}
+        <div className="flex-1 overflow-y-auto p-4">
+          {renderFolderTree(folderStructure)}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200 p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Folders</h2>
+          
+          {/* Folder Grid */}
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            {[
+              { name: "Onboarding", files: "15 Files", color: "bg-blue-500" },
+              { name: "Integrations", files: "5 Files", color: "bg-green-500" },
+              { name: "Documents", files: "10 Files", color: "bg-purple-500" }
+            ].map((folder, index) => (
+              <motion.div
+                key={folder.name}
+                className="relative group cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <div className="bg-gray-100 rounded-lg p-4 hover:bg-gray-200 transition-colors">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center">
+                        <Folder className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className={cn("w-3 h-3 rounded-full", folder.color)}></div>
+                        <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 className="font-medium text-gray-900 mb-1">{folder.name}</h3>
+                  <p className="text-sm text-gray-600">{folder.files}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Files Section */}
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Files</h3>
+            
+            {/* Files Table Header */}
+            <div className="grid grid-cols-2 gap-4 mb-4 text-sm font-medium text-gray-600">
+              <div>Name</div>
+              <div className="text-right">Added By</div>
+            </div>
+            
+            {/* Files List */}
+            <div className="space-y-3">
+              {currentFiles.map((file) => (
+                <motion.div
+                  key={file.id}
+                  className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:shadow-sm transition-shadow"
+                  whileHover={{ y: -1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-red-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900">{file.name}</h4>
+                      <p className="text-sm text-gray-600">{formatFileSize(file.size || 0)}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className={cn(
+                        "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white",
+                        getAvatarColor(file.addedBy || '')
+                      )}>
+                        {getInitials(file.addedBy || '')}
+                      </div>
+                      <span className="text-sm text-gray-700">{file.addedBy}</span>
+                    </div>
+                    <button className="p-1 hover:bg-gray-100 rounded">
+                      <MoreHorizontal className="w-4 h-4 text-gray-500" />
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

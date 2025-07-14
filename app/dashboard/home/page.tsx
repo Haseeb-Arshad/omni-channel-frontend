@@ -196,17 +196,17 @@ export default function DashboardHome() {
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">
-            Welcome back! Here's what's happening with your conversations today.
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back!</h1>
+          <p className="text-gray-600">
+            Here's what's happening with your conversations today.
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <div className="text-right">
+          <div className="text-right bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
             <p className="text-sm font-medium text-gray-900">
               {currentTime.toLocaleDateString('en-US', { 
                 weekday: 'long', 
@@ -226,17 +226,17 @@ export default function DashboardHome() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="eleven-card-grid cols-4">
         {stats.map((stat, index) => (
           <StatCard key={index} {...stat} />
         ))}
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Quick Actions */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+          <div className="eleven-card bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
             <div className="space-y-3">
               {quickActions.map((action, index) => (
@@ -248,7 +248,7 @@ export default function DashboardHome() {
 
         {/* Recent Activity */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+          <div className="eleven-card bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
               <button className="text-sm text-gray-500 hover:text-gray-700 transition-colors">
@@ -265,14 +265,14 @@ export default function DashboardHome() {
       </div>
 
       {/* Performance Chart Placeholder */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+      <div className="eleven-card bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Performance Overview</h2>
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
               7 days
             </button>
-            <button className="px-3 py-1 text-sm bg-gray-900 text-white rounded-lg">
+            <button className="px-3 py-1 text-sm bg-primary text-white rounded-lg">
               30 days
             </button>
             <button className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">

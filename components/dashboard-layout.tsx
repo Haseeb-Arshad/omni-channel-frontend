@@ -2,32 +2,31 @@
 
 import { ReactNode, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  LayoutGrid, 
   MessageSquare, 
   MessageCircle,
-  Upload, 
   Users, 
   Settings, 
   LogOut, 
   Menu, 
   X,
   Bell,
-  Bot,
   Loader2,
   Search,
   HelpCircle,
   Home,
   ChevronsLeft,
   ChevronsRight,
-  BookOpen,
   Database,
   Zap,
-  Circle,
-  Sparkles
+  Sparkles,
+  Mail,
+  Globe,
+  Phone,
+  Bot,
+  Inbox
 } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -43,6 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import "@/app/elevenlabs-theme.css";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -54,7 +54,30 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user, logout, isLoading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const mainContentRef = useRef<HTMLDivElement>(null);
+  
+  // Apply Eleven Labs theme to body
+  useEffect(() => {
+    document.body.classList.add('eleven-labs-theme');
+    return () => {
+      document.body.classList.remove('eleven-labs-theme');
+    };
+  }, []);
+  
+  // Handle mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
   
   // Get initials for avatar
   const getInitials = () => {
@@ -80,42 +103,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     setCollapsed(!collapsed);
   };
   
-  // Add smooth scrolling to the main content
-  useEffect(() => {
-    if (mainContentRef.current) {
-      // Import and initialize smooth scrolling libraries dynamically
-      const initSmoothScroll = async () => {
-        try {
-          const LocomotiveScroll = (await import('locomotive-scroll')).default;
-          const scroll = new LocomotiveScroll({
-            el: mainContentRef.current as HTMLElement,
-            smooth: true,
-            smoothMobile: false,
-            resetNativeScroll: true
-          });
-          
-          return () => scroll.destroy();
-        } catch (error) {
-          console.error("Failed to initialize smooth scroll:", error);
-        }
-      };
-      
-      // Only initialize on desktop to avoid mobile performance issues
-      if (window.innerWidth > 768) {
-        const cleanup = initSmoothScroll();
-        return () => {
-          if (cleanup instanceof Promise) {
-            cleanup.then(fn => fn && fn());
-          }
-        };
-      }
-    }
-  }, []);
-  
   // Animation variants
   const sidebarVariants = {
     expanded: { 
-      width: 200,
+      width: 280,
       transition: {
         type: "spring",
         stiffness: 400,
@@ -124,7 +115,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       }
     },
     collapsed: { 
-      width: 64,
+      width: 80,
       transition: {
         type: "spring",
         stiffness: 400,
@@ -132,7 +123,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         duration: 0.3
       }
     },
-    hidden: { x: -64, opacity: 0 },
+    hidden: { x: -80, opacity: 0 },
     visible: { 
       x: 0, 
       opacity: 1,
@@ -146,7 +137,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   
   const contentVariants = {
     expanded: {
-      paddingLeft: 240,
+      marginLeft: 280,
       transition: {
         type: "spring",
         stiffness: 300,
@@ -155,7 +146,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       }
     },
     collapsed: {
-      paddingLeft: 72,
+      marginLeft: 80,
       transition: {
         type: "spring",
         stiffness: 300,
@@ -163,12 +154,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         duration: 0.3
       }
     },
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
+    mobile: {
+      marginLeft: 0,
       transition: {
-        duration: 0.4,
-        ease: [0.22, 1, 0.36, 1]
+        type: "spring",
+        stiffness: 300,
+        damping: 26,
+        duration: 0.3
       }
     }
   };
@@ -191,17 +183,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navItems = [
     { icon: <Home className="h-[18px] w-[18px]" />, label: 'Dashboard', href: '/dashboard/home' },
     { icon: <MessageCircle className="h-[18px] w-[18px]" />, label: 'Conversations', href: '/dashboard/conversations' },
-    { icon: <MessageSquare className="h-[18px] w-[18px]" />, label: 'Channels', href: '/dashboard/channels' },
-    { icon: <Database className="h-[18px] w-[18px]" />, label: 'Knowledge Base', href: '/dashboard/knowledge' },
-    { icon: <Sparkles className="h-[18px] w-[18px]" />, label: 'AI Personas', href: '/dashboard/persona' },
-    { icon: <Zap className="h-[18px] w-[18px]" />, label: 'AI Playground', href: '/dashboard/playground' },
+    { icon: <Globe className="h-[18px] w-[18px]" />, label: 'Channels', href: '/dashboard/channels' },
+    { icon: <Inbox className="h-[18px] w-[18px]" />, label: 'Inbox', href: '/dashboard/inbox' },
+    { icon: <Database className="h-[18px] w-[18px]" />, label: 'Knowledge Base', href: '/dashboard/kb' },
+    { icon: <Users className="h-[18px] w-[18px]" />, label: 'Personas', href: '/dashboard/persona' },
+    { icon: <Bot className="h-[18px] w-[18px]" />, label: 'Playground', href: '/dashboard/playground' },
     { icon: <Settings className="h-[18px] w-[18px]" />, label: 'Settings', href: '/dashboard/settings' },
   ];
   
   // Handle page title display
   const getPageTitle = () => {
     // Check if we're on the main dashboard
-    if (pathname === '/dashboard' || pathname === '/dashboard/') {
+    if (pathname === '/dashboard' || pathname === '/dashboard/' || pathname === '/dashboard/home') {
       return 'Dashboard';
     }
     
@@ -219,16 +212,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   };
   
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden">
+    <div className="h-screen bg-gray-50/30 flex overflow-hidden eleven-labs-theme">
       {/* Sidebar */}
       <motion.aside
-        className="fixed left-0 top-0 bottom-0 z-50 flex flex-col bg-white border-r border-gray-200 shadow-xl"
+        className="fixed left-0 top-0 bottom-0 z-50 flex flex-col bg-white border-r border-gray-200/60 shadow-lg eleven-sidebar"
         variants={sidebarVariants}
         initial="expanded"
         animate={collapsed ? "collapsed" : "expanded"}
       >
         {/* Header */}
-        <div className="h-16 border-b border-gray-200 px-4 flex items-center justify-between bg-gray-50/50">
+        <div className="h-16 border-b border-gray-200/60 px-4 flex items-center justify-between bg-gray-50/30">
           <AnimatePresence mode="wait">
             {!collapsed ? (
               <motion.div 
@@ -239,8 +232,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className="flex items-center space-x-3"
               >
-                <Link href="/dashboard" className="flex items-center space-x-3">
-                  <div className="relative h-9 w-9 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm">
+                <Link href="/dashboard/home" className="flex items-center space-x-3">
+                  <div className="relative h-9 w-9 bg-primary rounded-xl flex items-center justify-center shadow-sm">
                     <span className="text-white font-bold text-sm">OC</span>
                   </div>
                   <span className="font-semibold text-lg text-gray-900">OmniChannel</span>
@@ -255,8 +248,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className="flex justify-center w-full"
               >
-                <Link href="/dashboard">
-                  <div className="relative h-9 w-9 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+                <Link href="/dashboard/home">
+                  <div className="relative h-9 w-9 bg-primary rounded-xl flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
                     <span className="text-white font-bold text-sm">OC</span>
                   </div>
                 </Link>
@@ -266,7 +259,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           
           <button
             onClick={toggleSidebar}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors duration-200 hidden md:block"
           >
             {collapsed ? (
               <ChevronsRight className="h-4 w-4 text-gray-600" />
@@ -297,17 +290,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       <Link 
                         href={item.href}
                         className={cn(
-                          "group flex items-center rounded-xl transition-all duration-200 relative",
-                          collapsed ? "justify-center py-3 px-0" : "px-3 py-2.5",
+                          "eleven-nav-item group flex items-center rounded-xl transition-all duration-200 relative",
+                          collapsed ? "justify-center py-3 px-2" : "px-3 py-2.5",
                           isActive ? 
-                            "bg-gray-900 text-white shadow-lg" : 
+                            "bg-primary text-white shadow-lg eleven-nav-item active" : 
                             "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         )}
                       >
                         <div 
                           className={cn(
                             "flex items-center justify-center transition-all",
-                            collapsed ? "w-10 h-10" : "w-5 h-5 mr-3"
+                            collapsed ? "w-8 h-8" : "w-5 h-5 mr-3"
                           )}
                         >
                           {item.icon}
@@ -322,7 +315,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         {isActive && (
                           <motion.div 
                             layoutId="activeNav"
-                            className="absolute inset-0 bg-gray-900 rounded-xl"
+                            className="absolute inset-0 bg-primary rounded-xl"
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -344,7 +337,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </nav>
         
         {/* User Section */}
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200/60">
+          {!collapsed && (
+            <div className="mb-4 flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-600 font-medium">{getInitials()}</span>
+              </div>
+              <div>
+                <p className="text-sm font-medium">{user?.username || 'User'}</p>
+                <p className="text-xs text-gray-500">{user?.email || 'user@example.com'}</p>
+              </div>
+            </div>
+          )}
           <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -353,7 +357,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   disabled={isLoading}
                   className={cn(
                     "flex items-center w-full text-sm font-medium rounded-xl transition-all duration-200",
-                    collapsed ? "justify-center py-3 px-0" : "px-3 py-2.5",
+                    collapsed ? "justify-center py-3 px-2" : "px-3 py-2.5",
                     "text-red-600 hover:bg-red-50 hover:text-red-700 disabled:opacity-50"
                   )}
                 >
@@ -394,9 +398,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             >
-              <div className="h-16 border-b border-gray-200 px-4 flex items-center justify-between bg-gray-50/50">
-                <Link href="/dashboard" className="flex items-center space-x-3">
-                  <div className="relative h-9 w-9 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="h-16 border-b border-gray-200/60 px-4 flex items-center justify-between bg-gray-50/30">
+                <Link href="/dashboard/home" className="flex items-center space-x-3">
+                  <div className="relative h-9 w-9 bg-primary rounded-xl flex items-center justify-center shadow-sm">
                     <span className="text-white font-bold text-sm">OC</span>
                   </div>
                   <span className="font-semibold text-lg text-gray-900">OmniChannel</span>
@@ -420,9 +424,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "group flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200",
+                        "eleven-nav-item group flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-200",
                         isActive ? 
-                          "bg-gray-900 text-white shadow-lg" : 
+                          "bg-primary text-white shadow-lg eleven-nav-item active" : 
                           "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       )}
                       onClick={toggleMobileMenu}
@@ -436,7 +440,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 })}
               </nav>
               
-              <div className="p-4 border-t border-gray-200">
+              <div className="p-4 border-t border-gray-200/60">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-600 font-medium">{getInitials()}</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{user?.username || 'User'}</p>
+                    <p className="text-xs text-gray-500">{user?.email || 'user@example.com'}</p>
+                  </div>
+                </div>
                 <button 
                   onClick={handleLogout}
                   disabled={isLoading}
@@ -457,13 +470,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       
       {/* Main Content */}
       <motion.div 
-        className="flex-1 flex flex-col relative"
+        className="flex-1 flex flex-col relative eleven-content"
         variants={contentVariants}
-        initial="hidden"
-        animate={["visible", collapsed ? "collapsed" : "expanded"]}
+        initial="expanded"
+        animate={isMobile ? "mobile" : collapsed ? "collapsed" : "expanded"}
       >
         {/* Top Bar */}
-        <header className="h-16 border-b border-gray-200 bg-white/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-6">
+        <header className="h-16 border-b border-gray-200/60 bg-white/95 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-6">
           <div className="flex items-center gap-4">
             <button 
               onClick={toggleMobileMenu}
@@ -472,10 +485,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <Menu className="h-5 w-5 text-gray-600" />
             </button>
             
-            <div className="hidden md:flex items-center space-x-2">
-              <Link href="/dashboard/home" className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                <Home className="h-5 w-5 text-gray-600" />
-              </Link>
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="h-8 w-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <span className="text-primary font-semibold text-sm">{getPageTitle().charAt(0)}</span>
+                </div>
+                <h1 className="text-lg font-semibold text-gray-900">{getPageTitle()}</h1>
+              </div>
               <div className="h-4 w-px bg-gray-300"></div>
             </div>
             
@@ -505,7 +521,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative rounded-full p-0 h-9 w-9">
                   <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
-                    <AvatarFallback className="bg-gray-900 text-white font-medium">
+                    <AvatarFallback className="bg-primary text-white font-medium">
                       {getInitials()}
                     </AvatarFallback>
                   </Avatar>
@@ -541,11 +557,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Page Content */}
         <main 
           ref={mainContentRef}
-          className="flex-1 overflow-y-auto bg-gray-50"
+          className="flex-1 overflow-y-auto bg-gray-50/30 eleven-content"
           data-scroll-container
         >
           <motion.div 
-            className="mx-auto w-full max-w-7xl p-6"
+            className="mx-auto w-full max-w-7xl px-6 py-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 

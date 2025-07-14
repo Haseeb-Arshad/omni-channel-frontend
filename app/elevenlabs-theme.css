@@ -1,0 +1,283 @@
+/* Eleven Labs Inspired Theme - Clean, White, Minimalist */
+
+:root {
+  /* Color palette based on Eleven Labs design */
+  --white-pure: 0 0% 100%;
+  --white-off: 210 40% 98%;
+  --gray-50: 220 20% 97%;
+  --gray-100: 220 14% 96%;
+  --gray-200: 220 13% 91%;
+  --gray-300: 216 12% 84%;
+  --gray-400: 218 11% 65%;
+  --gray-500: 220 9% 46%;
+  --gray-600: 215 14% 34%;
+  --gray-700: 217 19% 27%;
+  --gray-800: 215 28% 17%;
+  --gray-900: 221 39% 11%;
+  --black: 0 0% 0%;
+  --blue-light: 214 100% 60%;
+  --blue-primary: 224 64% 33%;
+  --blue-dark: 222 47% 23%;
+
+  /* Shadow variables for depth */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.1), 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.1), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0 12px 16px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.03);
+  
+  /* Border radiuses */
+  --radius-sm: 0.25rem;  /* 4px */
+  --radius-md: 0.375rem; /* 6px */
+  --radius-lg: 0.5rem;   /* 8px */
+  --radius-xl: 0.75rem;  /* 12px */
+  --radius-full: 9999px;
+  
+  /* Animation timings - Eleven Labs uses very subtle, quick animations */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Eleven Labs Theme Class - to be applied to the dashboard */
+.eleven-labs-theme {
+  /* Base colors */
+  --background: var(--white-pure);
+  --foreground: var(--gray-900);
+  
+  /* Component colors */
+  --card: var(--white-pure);
+  --card-foreground: var(--gray-900);
+  --popover: var(--white-pure);
+  --popover-foreground: var(--gray-900);
+  
+  /* Primary colors */
+  --primary: var(--blue-primary);
+  --primary-foreground: var(--white-pure);
+  
+  /* Secondary colors */
+  --secondary: var(--gray-100);
+  --secondary-foreground: var(--gray-800);
+  
+  /* Muted colors */
+  --muted: var(--gray-100);
+  --muted-foreground: var(--gray-500);
+  
+  /* Accent colors */
+  --accent: var(--blue-light);
+  --accent-foreground: var(--white-pure);
+  
+  /* UI colors */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: var(--white-pure);
+  --border: var(--gray-200);
+  --input: var(--gray-200);
+  --ring: var(--blue-light);
+  
+  /* Spacing and layout */
+  --page-padding: 1.5rem;
+  --container-width: 1200px;
+  
+  /* Font tweaks for Eleven Labs style */
+  font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography adjustments - Eleven Labs uses clean typography */
+.eleven-labs-theme h1 {
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.eleven-labs-theme h2 {
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.eleven-labs-theme h3 {
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+/* Eleven Labs style cards */
+.eleven-card {
+  background-color: var(--card);
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  overflow: hidden;
+}
+
+.eleven-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Clean button styles similar to Eleven Labs */
+.eleven-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  height: 2.5rem;
+  padding: 0 1rem;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.eleven-button-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.eleven-button-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.eleven-button-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.eleven-button-outline {
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+.eleven-button-outline:hover {
+  background: hsl(var(--secondary));
+  border-color: hsl(var(--secondary));
+}
+
+/* Eleven Labs style dashboard layout components */
+.eleven-sidebar {
+  background: hsl(var(--background));
+  border-right: 1px solid hsl(var(--border));
+  width: 280px;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  transition: transform var(--transition-base);
+  z-index: 40;
+}
+
+.eleven-content {
+  margin-left: 280px;
+  padding: 2rem;
+  max-width: 100%;
+  transition: margin-left var(--transition-base);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .eleven-sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .eleven-sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .eleven-content {
+    margin-left: 0;
+  }
+}
+
+/* Eleven Labs style navigation */
+.eleven-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  color: hsl(var(--gray-700));
+  border-radius: var(--radius-md);
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.eleven-nav-item:hover {
+  background-color: hsl(var(--gray-100));
+}
+
+.eleven-nav-item.active {
+  background-color: hsl(var(--blue-primary) / 0.1);
+  color: hsl(var(--blue-primary));
+}
+
+.eleven-nav-item svg {
+  margin-right: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Eleven Labs style animations */
+@keyframes elevenlabs-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes elevenlabs-slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes elevenlabs-scale {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.eleven-fade-in {
+  animation: elevenlabs-fade-in var(--transition-base) forwards;
+}
+
+.eleven-slide-up {
+  animation: elevenlabs-slide-up var(--transition-base) forwards;
+}
+
+.eleven-scale {
+  animation: elevenlabs-scale var(--transition-base) forwards;
+}
+
+/* Staggered animation for lists */
+.eleven-stagger > * {
+  opacity: 0;
+}
+
+.eleven-stagger.animate > *:nth-child(1) { animation: elevenlabs-slide-up var(--transition-base) forwards; }
+.eleven-stagger.animate > *:nth-child(2) { animation: elevenlabs-slide-up var(--transition-base) 50ms forwards; }
+.eleven-stagger.animate > *:nth-child(3) { animation: elevenlabs-slide-up var(--transition-base) 100ms forwards; }
+.eleven-stagger.animate > *:nth-child(4) { animation: elevenlabs-slide-up var(--transition-base) 150ms forwards; }
+.eleven-stagger.animate > *:nth-child(5) { animation: elevenlabs-slide-up var(--transition-base) 200ms forwards; }
+.eleven-stagger.animate > *:nth-child(6) { animation: elevenlabs-slide-up var(--transition-base) 250ms forwards; }
+.eleven-stagger.animate > *:nth-child(7) { animation: elevenlabs-slide-up var(--transition-base) 300ms forwards; }
+.eleven-stagger.animate > *:nth-child(8) { animation: elevenlabs-slide-up var(--transition-base) 350ms forwards; }
+
+/* Custom scrollbar */
+.eleven-labs-theme ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.eleven-labs-theme ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.eleven-labs-theme ::-webkit-scrollbar-thumb {
+  background: hsl(var(--gray-300));
+  border-radius: 6px;
+}
+
+.eleven-labs-theme ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--gray-400));
+}

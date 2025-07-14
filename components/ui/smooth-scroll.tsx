@@ -3,7 +3,6 @@ import { useScroll, useTransform, motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin';
-import LocomotiveScroll from 'locomotive-scroll';
 
 // Register GSAP plugins only once on client side
 let pluginsRegistered = false;
@@ -31,7 +30,7 @@ interface SmoothScrollProps {
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children, enabled = true, options }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<LocomotiveScroll | null>(null);
+  const scrollRef = useRef<any>(null);
   const [isReady, setIsReady] = useState(false);
 
   // Initialize smooth scroll with lazy loading
@@ -40,11 +39,14 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children, enabled = true, o
     if (!enabled) return;
     if (!containerRef.current) return;
     
-    let scrollInstance: LocomotiveScroll | null = null;
+    let scrollInstance: any = null;
     
     // Use requestIdleCallback for non-critical initialization
-    const initScroll = () => {
+    const initScroll = async () => {
       try {
+        // Dynamically import LocomotiveScroll to avoid SSR issues
+        const LocomotiveScroll = (await import('locomotive-scroll')).default;
+        
         // Initialize Locomotive Scroll with performance optimizations
         scrollInstance = new LocomotiveScroll({
           el: containerRef.current as HTMLElement,

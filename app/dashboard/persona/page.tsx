@@ -351,24 +351,65 @@ export default function PersonaPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      className="space-y-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">AI Personas</h1>
-          <p className="text-muted-foreground max-w-2xl">
+      <motion.div 
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div>
+          <motion.h1 
+            className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent mb-2"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            AI Personas 🤖
+          </motion.h1>
+          <motion.p 
+            className="text-slate-600 text-lg max-w-2xl"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
             Create and customize AI personas for different communication channels. Each persona can have its own personality, tone, and knowledge base access.
-          </p>
+          </motion.p>
         </div>
-        <Button className="gap-2 shadow-sm" onClick={handleCreateNewPersona}>
-          <Plus className="h-4 w-4" />
-          <span>Create Persona</span>
-        </Button>
-      </div>
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Button 
+            className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl font-semibold" 
+            onClick={handleCreateNewPersona}
+          >
+            <Plus className="h-4 w-4" />
+            <span>Create Persona</span>
+          </Button>
+        </motion.div>
+      </motion.div>
 
-      <div className="grid gap-6 md:grid-cols-4 lg:grid-cols-4">
+      <div className="grid gap-8 md:grid-cols-4 lg:grid-cols-4">
         {/* Left Pane - Persona Management */}
-        <Card className="md:col-span-1 lg:col-span-1 shadow-sm border-border/50 hover:shadow-md transition-all duration-300">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+        >
+          <Card className="md:col-span-1 lg:col-span-1 bg-white/80 backdrop-blur-sm border-white/20 shadow-xl shadow-black/5 hover:shadow-2xl hover:shadow-black/10 transition-all duration-300 overflow-hidden relative">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-50/50 to-purple-50/50"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-100/30 to-purple-100/30 rounded-full -translate-y-16 translate-x-16"></div>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center justify-between">
               <span className="flex items-center gap-2">

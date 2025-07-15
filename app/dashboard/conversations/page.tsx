@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import Link from "next/link";
-import { 
-  Search, Filter, MoreHorizontal, Send, Paperclip, 
+import {
+  Search, Filter, MoreHorizontal, Send, Paperclip,
   Smile, ChevronRight, Clock, Tag, User, AlertCircle,
   MessageSquare, Check, X, RefreshCw, Phone, Video,
   Mail, MessageCircle, Facebook, Globe, Info, FileText,
@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 
 // Custom Dashboard Components
-import { 
+import {
   DashboardSection,
   ConversationCard
 } from "@/components/ui/dashboard";
@@ -53,45 +53,45 @@ const mockConversations = [
     tags: ["Support", "Order Issue"],
     assignedTo: "John Doe",
     history: [
-      { 
-        id: "m1", 
-        content: "Hello, I ordered product XYZ last week and it still hasn't arrived. Order #12345", 
-        timestamp: "Yesterday, 2:30 PM", 
+      {
+        id: "m1",
+        content: "Hello, I ordered product XYZ last week and it still hasn't arrived. Order #12345",
+        timestamp: "Yesterday, 2:30 PM",
         sender: "customer",
         channel: "email"
       },
-      { 
-        id: "m2", 
-        content: "Hi Jane, I'm sorry to hear about the delay. Let me check the status of your order right away.", 
-        timestamp: "Yesterday, 2:45 PM", 
+      {
+        id: "m2",
+        content: "Hi Jane, I'm sorry to hear about the delay. Let me check the status of your order right away.",
+        timestamp: "Yesterday, 2:45 PM",
         sender: "agent",
         channel: "email"
       },
-      { 
-        id: "m3", 
-        content: "I've checked your order and it looks like there was a delay at our warehouse. It should ship today and arrive within 2-3 business days. I'll email you the tracking information once it's available.", 
-        timestamp: "Yesterday, 2:52 PM", 
+      {
+        id: "m3",
+        content: "I've checked your order and it looks like there was a delay at our warehouse. It should ship today and arrive within 2-3 business days. I'll email you the tracking information once it's available.",
+        timestamp: "Yesterday, 2:52 PM",
         sender: "agent",
         channel: "email"
       },
-      { 
-        id: "m4", 
-        content: "Thank you for checking. I was getting worried since the website said it would arrive by yesterday.", 
-        timestamp: "Yesterday, 3:05 PM", 
+      {
+        id: "m4",
+        content: "Thank you for checking. I was getting worried since the website said it would arrive by yesterday.",
+        timestamp: "Yesterday, 3:05 PM",
         sender: "customer",
         channel: "email"
       },
-      { 
-        id: "m5", 
-        content: "I understand your concern. As a token of apology for the delay, I've applied a 10% discount to your next order. You'll receive an email with the discount code shortly.", 
-        timestamp: "Yesterday, 3:12 PM", 
-        sender: "agent", 
+      {
+        id: "m5",
+        content: "I understand your concern. As a token of apology for the delay, I've applied a 10% discount to your next order. You'll receive an email with the discount code shortly.",
+        timestamp: "Yesterday, 3:12 PM",
+        sender: "agent",
         channel: "email"
       },
-      { 
-        id: "m6", 
-        content: "I've been having issues with my recent order...", 
-        timestamp: "Today, 10:42 AM", 
+      {
+        id: "m6",
+        content: "I've been having issues with my recent order...",
+        timestamp: "Today, 10:42 AM",
         sender: "customer",
         channel: "email"
       }
@@ -112,24 +112,24 @@ const mockConversations = [
     tags: ["Sales", "Product Inquiry"],
     assignedTo: null,
     history: [
-      { 
-        id: "m1", 
-        content: "Hi there! I'm interested in your upcoming product launch. When will it be available?", 
-        timestamp: "Yesterday, 11:20 AM", 
+      {
+        id: "m1",
+        content: "Hi there! I'm interested in your upcoming product launch. When will it be available?",
+        timestamp: "Yesterday, 11:20 AM",
         sender: "customer",
         channel: "web"
       },
-      { 
-        id: "m2", 
-        content: "Hello Alex! Our new product line will be launching on June 15th. Would you like to be notified when it's available?", 
-        timestamp: "Yesterday, 11:25 AM", 
+      {
+        id: "m2",
+        content: "Hello Alex! Our new product line will be launching on June 15th. Would you like to be notified when it's available?",
+        timestamp: "Yesterday, 11:25 AM",
         sender: "agent",
         channel: "web"
       },
-      { 
-        id: "m3", 
-        content: "Yes, please! Will there be any early access or pre-order options?", 
-        timestamp: "Yesterday, 11:30 AM", 
+      {
+        id: "m3",
+        content: "Yes, please! Will there be any early access or pre-order options?",
+        timestamp: "Yesterday, 11:30 AM",
         sender: "customer",
         channel: "web"
       }
@@ -150,38 +150,38 @@ const mockConversations = [
     tags: ["Support"],
     assignedTo: "Sarah Williams",
     history: [
-      { 
-        id: "m1", 
-        content: "Hello, I need help resetting my account password", 
-        timestamp: "2 days ago, 3:40 PM", 
+      {
+        id: "m1",
+        content: "Hello, I need help resetting my account password",
+        timestamp: "2 days ago, 3:40 PM",
         sender: "customer",
         channel: "whatsapp"
       },
-      { 
-        id: "m2", 
-        content: "Hi Robert, I'd be happy to help you reset your password. Please verify your account by providing the email address associated with your account.", 
-        timestamp: "2 days ago, 3:45 PM", 
+      {
+        id: "m2",
+        content: "Hi Robert, I'd be happy to help you reset your password. Please verify your account by providing the email address associated with your account.",
+        timestamp: "2 days ago, 3:45 PM",
         sender: "agent",
         channel: "whatsapp"
       },
-      { 
-        id: "m3", 
-        content: "My email is robert.j@example.com", 
-        timestamp: "2 days ago, 3:50 PM", 
+      {
+        id: "m3",
+        content: "My email is robert.j@example.com",
+        timestamp: "2 days ago, 3:50 PM",
         sender: "customer",
         channel: "whatsapp"
       },
-      { 
-        id: "m4", 
-        content: "Thank you. I've sent a password reset link to your email. Please check your inbox and follow the instructions to reset your password.", 
-        timestamp: "2 days ago, 3:55 PM", 
+      {
+        id: "m4",
+        content: "Thank you. I've sent a password reset link to your email. Please check your inbox and follow the instructions to reset your password.",
+        timestamp: "2 days ago, 3:55 PM",
         sender: "agent",
         channel: "whatsapp"
       },
-      { 
-        id: "m5", 
-        content: "Thanks for the information!", 
-        timestamp: "2 days ago, 4:10 PM", 
+      {
+        id: "m5",
+        content: "Thanks for the information!",
+        timestamp: "2 days ago, 4:10 PM",
         sender: "customer",
         channel: "whatsapp"
       }
@@ -202,38 +202,38 @@ const mockConversations = [
     tags: ["Feedback", "Feature Request"],
     assignedTo: "Michael Brown",
     history: [
-      { 
-        id: "m1", 
-        content: "Hello, I have some suggestions for your app.", 
-        timestamp: "3 days ago, 10:15 AM", 
+      {
+        id: "m1",
+        content: "Hello, I have some suggestions for your app.",
+        timestamp: "3 days ago, 10:15 AM",
         sender: "customer",
         channel: "facebook"
       },
-      { 
-        id: "m2", 
-        content: "Hi Emily! We always appreciate feedback. Please share your suggestions, and I'll make sure they're passed along to our product team.", 
-        timestamp: "3 days ago, 10:30 AM", 
+      {
+        id: "m2",
+        content: "Hi Emily! We always appreciate feedback. Please share your suggestions, and I'll make sure they're passed along to our product team.",
+        timestamp: "3 days ago, 10:30 AM",
         sender: "agent",
         channel: "facebook"
       },
-      { 
-        id: "m3", 
-        content: "I think it would be great if you could add a dark mode and improve the search functionality.", 
-        timestamp: "3 days ago, 10:45 AM", 
+      {
+        id: "m3",
+        content: "I think it would be great if you could add a dark mode and improve the search functionality.",
+        timestamp: "3 days ago, 10:45 AM",
         sender: "customer",
         channel: "facebook"
       },
-      { 
-        id: "m4", 
-        content: "Those are excellent suggestions! I've noted them and will share them with our development team. Actually, we're already working on a dark mode feature that should be released in our next update.", 
-        timestamp: "3 days ago, 11:00 AM", 
+      {
+        id: "m4",
+        content: "Those are excellent suggestions! I've noted them and will share them with our development team. Actually, we're already working on a dark mode feature that should be released in our next update.",
+        timestamp: "3 days ago, 11:00 AM",
         sender: "agent",
         channel: "facebook"
       },
-      { 
-        id: "m5", 
-        content: "I'll check out the new features. Thanks!", 
-        timestamp: "3 days ago, 11:15 AM", 
+      {
+        id: "m5",
+        content: "I'll check out the new features. Thanks!",
+        timestamp: "3 days ago, 11:15 AM",
         sender: "customer",
         channel: "facebook"
       }
@@ -254,45 +254,45 @@ const mockConversations = [
     tags: ["Support", "Account Issue"],
     assignedTo: null,
     history: [
-      { 
-        id: "m1", 
-        content: "Hi, I can't log in to my account", 
-        timestamp: "4 days ago, 9:00 AM", 
+      {
+        id: "m1",
+        content: "Hi, I can't log in to my account",
+        timestamp: "4 days ago, 9:00 AM",
         sender: "customer",
         channel: "sms"
       },
-      { 
-        id: "m2", 
-        content: "Hello David, I'm sorry to hear you're having trouble logging in. Have you tried resetting your password?", 
-        timestamp: "4 days ago, 9:05 AM", 
+      {
+        id: "m2",
+        content: "Hello David, I'm sorry to hear you're having trouble logging in. Have you tried resetting your password?",
+        timestamp: "4 days ago, 9:05 AM",
         sender: "agent",
         channel: "sms"
       },
-      { 
-        id: "m3", 
-        content: "Yes, but I didn't receive any reset email", 
-        timestamp: "4 days ago, 9:15 AM", 
+      {
+        id: "m3",
+        content: "Yes, but I didn't receive any reset email",
+        timestamp: "4 days ago, 9:15 AM",
         sender: "customer",
         channel: "sms"
       },
-      { 
-        id: "m4", 
-        content: "Let me help you with that. Please confirm the email address associated with your account so I can check if there are any issues.", 
-        timestamp: "4 days ago, 9:20 AM", 
+      {
+        id: "m4",
+        content: "Let me help you with that. Please confirm the email address associated with your account so I can check if there are any issues.",
+        timestamp: "4 days ago, 9:20 AM",
         sender: "agent",
         channel: "sms"
       },
-      { 
-        id: "m5", 
-        content: "david.wilson@example.com", 
-        timestamp: "4 days ago, 9:25 AM", 
+      {
+        id: "m5",
+        content: "david.wilson@example.com",
+        timestamp: "4 days ago, 9:25 AM",
         sender: "customer",
         channel: "sms"
       },
-      { 
-        id: "m6", 
-        content: "Can you send me a link to reset my password?", 
-        timestamp: "3 days ago, 10:30 AM", 
+      {
+        id: "m6",
+        content: "Can you send me a link to reset my password?",
+        timestamp: "3 days ago, 10:30 AM",
         sender: "customer",
         channel: "sms"
       }
@@ -320,10 +320,10 @@ function getChannelIcon(channel: string | undefined | null) {
 function getContactInfo(contact: any, channel: string) {
   switch (channel.toLowerCase()) {
     case 'email': return contact.email;
-    case 'sms': 
+    case 'sms':
     case 'whatsapp': return contact.phone;
     case 'facebook': return '@' + contact.name.toLowerCase().replace(' ', '.');
-    case 'web': 
+    case 'web':
     case 'chat': return 'Web Visitor';
     default: return contact.name;
   }
@@ -337,18 +337,18 @@ export default function ConversationsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Animation setup
   const { initAnimations } = useAnimations();
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: false, amount: 0.1 });
-  
+
   useEffect(() => {
     if (containerRef.current && isInView) {
       initAnimations();
     }
   }, [isInView, initAnimations]);
-  
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -368,12 +368,12 @@ export default function ConversationsPage() {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         // Import the API client
         const api = (await import('@/lib/api')).default;
-        
+
         const response = await api.listConversations();
-        
+
         if (response.success) {
           setConversations(response.data || []);
         } else {
@@ -393,25 +393,25 @@ export default function ConversationsPage() {
         setIsLoading(false);
       }
     };
-    
+
     fetchConversations();
   }, []);
-  
+
   // Filter conversations based on search and active filter
   useEffect(() => {
     let result = conversations;
-    
+
     // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(conv => {
         const contactName = conv.contact_info?.name || '';
-        return contactName.toLowerCase().includes(query) || 
+        return contactName.toLowerCase().includes(query) ||
           (conv.last_message || '').toLowerCase().includes(query) ||
           (conv.tags && conv.tags.some((tag: string) => tag.toLowerCase().includes(query)));
       });
     }
-    
+
     // Apply status filter
     if (activeFilter !== "all") {
       if (activeFilter === "unread") {
@@ -427,7 +427,7 @@ export default function ConversationsPage() {
         result = result.filter(conv => conv.channel_type === activeFilter);
       }
     }
-    
+
     setFilteredConversations(result);
   }, [searchQuery, activeFilter, conversations]);
 
@@ -446,7 +446,7 @@ export default function ConversationsPage() {
   };
 
   return (
-    <motion.div 
+    <motion.div
       ref={containerRef}
       className="flex flex-col h-[calc(100vh-4rem)] gap-6 pb-6"
       variants={containerVariants}
@@ -455,106 +455,127 @@ export default function ConversationsPage() {
       data-scroll-section
     >
       {/* Header Section */}
-      <motion.div 
-        className="flex flex-col gap-3"
+      <motion.div
+        className="flex flex-col gap-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="flex items-baseline justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent pb-1">Conversations</h1>
-            <p className="text-muted-foreground">
+            <motion.h1
+              className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent mb-2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              Conversations 💬
+            </motion.h1>
+            <motion.p
+              className="text-slate-600 text-lg"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
               Manage and respond to customer conversations across all channels
-            </p>
+            </motion.p>
           </div>
-          <div className="flex gap-3">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="gap-1.5 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Refresh
-            </Button>
-            <Button 
-              className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200" 
-              asChild
-            >
-              <Link href="/dashboard/conversations/new">
-                <Plus className="h-4 w-4" />
-                New Conversation
-              </Link>
-            </Button>
-          </div>
+          <motion.div
+            className="flex gap-3"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white hover:border-indigo-200 hover:text-indigo-600 shadow-lg shadow-black/5 rounded-2xl"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl"
+                asChild
+              >
+                <Link href="/dashboard/conversations/new">
+                  <Plus className="h-4 w-4" />
+                  New Conversation
+                </Link>
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
       </motion.div>
 
-      <div className="bg-card/90 rounded-xl border border-primary/10 shadow-lg flex flex-1 overflow-hidden backdrop-blur-[2px]">
+      <div className="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl shadow-black/5 flex flex-1 overflow-hidden">
         {/* Conversation List */}
         <div className="w-1/3 border-r border-primary/10 flex flex-col">
           <div className="p-4 border-b border-primary/10 space-y-3 bg-gradient-to-r from-card/95 via-card/90 to-card/95">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input 
-                placeholder="Search conversations..." 
+              <Input
+                placeholder="Search conversations..."
                 className="pl-9 bg-background/80 focus-visible:bg-background border-primary/10 focus-visible:ring-1 focus-visible:ring-primary/30"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            
+
             <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-primary/10 scrollbar-track-transparent">
-              <Button 
-                variant={activeFilter === "all" ? "default" : "outline"} 
+              <Button
+                variant={activeFilter === "all" ? "default" : "outline"}
                 size="sm"
                 className={activeFilter === "all" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("all")}
               >
                 All
               </Button>
-              <Button 
-                variant={activeFilter === "unread" ? "default" : "outline"} 
+              <Button
+                variant={activeFilter === "unread" ? "default" : "outline"}
                 size="sm"
                 className={activeFilter === "unread" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("unread")}
               >
                 Unread
               </Button>
-              <Button 
-                variant={activeFilter === "email" ? "default" : "outline"} 
+              <Button
+                variant={activeFilter === "email" ? "default" : "outline"}
                 size="sm"
                 className={activeFilter === "email" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("email")}
               >
                 <Mail className="h-3 w-3 mr-1" /> Email
               </Button>
-              <Button 
-                variant={activeFilter === "web" ? "default" : "outline"} 
+              <Button
+                variant={activeFilter === "web" ? "default" : "outline"}
                 size="sm"
                 className={activeFilter === "web" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("web")}
               >
                 <Globe className="h-3 w-3 mr-1" /> Web
               </Button>
-              <Button 
-                variant={activeFilter === "facebook" ? "default" : "outline"} 
+              <Button
+                variant={activeFilter === "facebook" ? "default" : "outline"}
                 size="sm"
                 className={activeFilter === "facebook" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("facebook")}
               >
                 <Facebook className="h-3 w-3 mr-1" /> Facebook
               </Button>
-              <Button 
-                variant={activeFilter === "whatsapp" ? "default" : "outline"} 
+              <Button
+                variant={activeFilter === "whatsapp" ? "default" : "outline"}
                 size="sm"
                 className={activeFilter === "whatsapp" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("whatsapp")}
               >
                 <MessageSquare className="h-3 w-3 mr-1" /> WhatsApp
               </Button>
-              <Button 
-                variant={activeFilter === "sms" ? "default" : "outline"} 
+              <Button
+                variant={activeFilter === "sms" ? "default" : "outline"}
                 size="sm"
                 className={activeFilter === "sms" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("sms")}
@@ -563,7 +584,7 @@ export default function ConversationsPage() {
               </Button>
             </div>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto divide-y divide-primary/5">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center h-full p-6">
@@ -599,7 +620,7 @@ export default function ConversationsPage() {
             ) : (
               <AnimatePresence>
                 {filteredConversations.map((conversation, index) => (
-                  <div 
+                  <div
                     key={conversation.id || `conversation-${index}`}
                     className={selectedConversation?.id === conversation.id ? 'bg-primary/5 border-l-2 border-primary' : ''}
                   >
@@ -620,7 +641,7 @@ export default function ConversationsPage() {
             )}
           </div>
         </div>
-        
+
         {/* Conversation Detail */}
         <div className="flex-1 flex flex-col">
           {selectedConversation ? (
@@ -652,46 +673,44 @@ export default function ConversationsPage() {
                   </Button>
                 </div>
               </div>
-              
+
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {selectedConversation.history && Array.isArray(selectedConversation.history) ? (
                   selectedConversation.history.map((message: any, index: number) => {
                     // Generate a reliably unique key for each message
                     const messageKey = message.id ? `msg-${message.id}` : `msg-${selectedConversation.id}-${index}`;
-                    
+
                     return (
-                    <div 
-                      key={messageKey} 
-                      className={`flex ${message.sender === 'agent' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className={`max-w-[80%] p-3 rounded-lg ${
-                          message.sender === 'agent' 
-                            ? 'bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md rounded-tr-none' 
-                            : 'bg-accent/80 backdrop-blur-[1px] shadow-sm rounded-tl-none'
-                        }`}
+                      <div
+                        key={messageKey}
+                        className={`flex ${message.sender === 'agent' ? 'justify-end' : 'justify-start'}`}
                       >
-                        <div className="text-sm">{message.content || 'No content'}</div>
-                        <div className="text-xs mt-1.5 flex items-center gap-1.5 opacity-80">
-                          <Badge 
-                            variant="outline" 
-                            className={`h-4 px-1 py-0 text-[10px] font-normal ${
-                              message.sender === 'agent'
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                          className={`max-w-[80%] p-3 rounded-lg ${message.sender === 'agent'
+                            ? 'bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md rounded-tr-none'
+                            : 'bg-accent/80 backdrop-blur-[1px] shadow-sm rounded-tl-none'
+                            }`}
+                        >
+                          <div className="text-sm">{message.content || 'No content'}</div>
+                          <div className="text-xs mt-1.5 flex items-center gap-1.5 opacity-80">
+                            <Badge
+                              variant="outline"
+                              className={`h-4 px-1 py-0 text-[10px] font-normal ${message.sender === 'agent'
                                 ? 'border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground/90'
                                 : 'border-foreground/10 bg-foreground/5 text-foreground/70'
-                            }`}
-                          >
-                            {message.channel || 'chat'}
-                          </Badge>
-                          <span>{message.timestamp || new Date().toLocaleTimeString()}</span>
-                          {message.sender === 'agent' && <Check className="h-3 w-3" />}
-                        </div>
-                      </motion.div>
-                    </div>
-                  );
+                                }`}
+                            >
+                              {message.channel || 'chat'}
+                            </Badge>
+                            <span>{message.timestamp || new Date().toLocaleTimeString()}</span>
+                            {message.sender === 'agent' && <Check className="h-3 w-3" />}
+                          </div>
+                        </motion.div>
+                      </div>
+                    );
                   })
                 ) : (
                   <div className="p-8 text-center text-muted-foreground">
@@ -701,10 +720,10 @@ export default function ConversationsPage() {
                   </div>
                 )}
               </div>
-              
+
               <div className="mt-auto p-4 border-t border-primary/10 bg-gradient-to-r from-card/95 to-card/90">
                 <div className="relative rounded-lg overflow-hidden shadow-sm border border-primary/10">
-                  <Input 
+                  <Input
                     placeholder="Type your message..."
                     className="pr-24 bg-background/80 backdrop-blur-[1px] focus-visible:bg-background focus-visible:ring-1 focus-visible:ring-primary/30 border-transparent"
                   />
@@ -740,14 +759,14 @@ export default function ConversationsPage() {
             </div>
           )}
         </div>
-        
+
         {/* Customer Details Sidebar */}
         {selectedConversation && (
           <div className="w-1/4 border-l flex flex-col">
             <div className="p-4 border-b">
               <h3 className="font-medium">Customer Details</h3>
             </div>
-            
+
             <div className="p-4 overflow-y-auto flex-1">
               <div className="flex flex-col items-center text-center mb-6">
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
@@ -756,7 +775,7 @@ export default function ConversationsPage() {
                 <h3 className="font-medium">{selectedConversation.contact.name}</h3>
                 <p className="text-sm text-muted-foreground">{getContactInfo(selectedConversation.contact, selectedConversation.channel)}</p>
               </div>
-              
+
               <div className="space-y-4">
                 <div>
                   <h4 className="text-sm font-medium mb-2">Contact Information</h4>
@@ -771,7 +790,7 @@ export default function ConversationsPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="text-sm font-medium mb-2">Conversation</h4>
                   <div className="space-y-2">
@@ -792,7 +811,7 @@ export default function ConversationsPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="text-sm font-medium mb-2">Tags</h4>
                   <div className="flex flex-wrap gap-1">
@@ -810,7 +829,7 @@ export default function ConversationsPage() {
                     </Button>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="text-sm font-medium mb-2">Assignment</h4>
                   <Select defaultValue={selectedConversation.assignedTo || "unassigned"}>
@@ -825,7 +844,7 @@ export default function ConversationsPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <h4 className="text-sm font-medium mb-2">Notes</h4>
                   <textarea
@@ -835,7 +854,7 @@ export default function ConversationsPage() {
                 </div>
               </div>
             </div>
-            
+
             <div className="p-4 border-t">
               <Button variant="outline" className="w-full">
                 <FileText className="h-4 w-4 mr-2" />

@@ -291,56 +291,83 @@ export default function ChannelsPage() {
     >
       {/* Header Section */}
       <motion.div 
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="flex items-baseline justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent pb-1">Communication Channels</h1>
-            <p className="text-muted-foreground">
+            <motion.h1 
+              className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent mb-2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              Communication Channels 📡
+            </motion.h1>
+            <motion.p 
+              className="text-slate-600 text-lg"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
               Connect and manage all your communication channels
-            </p>
+            </motion.p>
           </div>
-          <div className="flex gap-3">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="gap-1.5 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"
-              onClick={() => window.location.reload()}
-            >
-              <RefreshCw className="h-4 w-4" />
-              Refresh
-            </Button>
-            <Button 
-              className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200" 
-              asChild
-            >
-              <Link href="/dashboard/channels/connect">
-                <Plus className="h-4 w-4" />
-                Add Channel
-              </Link>
-            </Button>
-          </div>
+          <motion.div 
+            className="flex gap-3"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2 bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white hover:border-indigo-200 hover:text-indigo-600 shadow-lg shadow-black/5 rounded-2xl"
+                onClick={() => window.location.reload()}
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button 
+                className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl" 
+                asChild
+              >
+                <Link href="/dashboard/channels/connect">
+                  <Plus className="h-4 w-4" />
+                  Add Channel
+                </Link>
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
       </motion.div>
       
       <Tabs defaultValue="connected" value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 mb-6 bg-accent/20 p-1 rounded-lg">
-          <TabsTrigger 
-            value="connected" 
-            className="text-center data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200"
-          >
-            Connected Channels
-          </TabsTrigger>
-          <TabsTrigger 
-            value="available" 
-            className="text-center data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-200"
-          >
-            Available Channels
-          </TabsTrigger>
-        </TabsList>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.4 }}
+        >
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/80 backdrop-blur-sm p-1.5 rounded-2xl shadow-lg shadow-black/5 border border-white/20">
+            <TabsTrigger 
+              value="connected" 
+              className="text-center data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 rounded-xl font-semibold"
+            >
+              Connected Channels
+            </TabsTrigger>
+            <TabsTrigger 
+              value="available" 
+              className="text-center data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 rounded-xl font-semibold"
+            >
+              Available Channels
+            </TabsTrigger>
+          </TabsList>
+        </motion.div>
         
         {/* Connected Channels Tab */}
         <TabsContent value="connected" className="mt-6">
@@ -382,36 +409,42 @@ export default function ChannelsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05, duration: 0.3 }}
                   >
-                    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md border-primary/10 hover:border-primary/20 h-full backdrop-blur-[2px]">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/5 flex items-center justify-center shadow-sm text-primary/80">
+                    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-black/10 border-white/20 hover:border-white/40 h-full bg-white/80 backdrop-blur-sm hover:-translate-y-2">
+                      <CardHeader className="pb-4 relative">
+                        {/* Background Gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        <div className="relative z-10 flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <motion.div 
+                              className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg text-white group-hover:shadow-xl transition-all duration-300"
+                              whileHover={{ rotate: 5, scale: 1.1 }}
+                            >
                               {channel.icon}
-                            </div>
+                            </motion.div>
                             <div>
-                              <CardTitle className="text-lg">{channel.name}</CardTitle>
-                              <p className="text-xs text-muted-foreground">{channel.identifier}</p>
+                              <CardTitle className="text-lg font-bold text-slate-900 group-hover:text-slate-800 transition-colors">{channel.name}</CardTitle>
+                              <p className="text-sm text-slate-600 font-medium">{channel.identifier}</p>
                             </div>
                           </div>
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <div>
+                                <motion.div whileHover={{ scale: 1.05 }}>
                                   {channel.health === "healthy" ? (
-                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-200 flex items-center gap-1">
+                                    <Badge variant="outline" className="bg-green-100/80 text-green-700 hover:bg-green-200/80 border-green-300 flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold">
                                       <CheckCircle2 className="h-3 w-3" />
                                       Healthy
                                     </Badge>
                                   ) : (
-                                    <Badge variant="outline" className="bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 border-amber-200 flex items-center gap-1">
+                                    <Badge variant="outline" className="bg-amber-100/80 text-amber-700 hover:bg-amber-200/80 border-amber-300 flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold">
                                       <AlertTriangle className="h-3 w-3" />
                                       Issues
                                     </Badge>
                                   )}
-                                </div>
+                                </motion.div>
                               </TooltipTrigger>
-                              <TooltipContent>
+                              <TooltipContent className="bg-white/95 backdrop-blur-sm border-white/20">
                                 {channel.health === "healthy" 
                                   ? "This channel is working properly" 
                                   : "This channel is experiencing some issues"}
@@ -420,77 +453,97 @@ export default function ChannelsPage() {
                           </TooltipProvider>
                         </div>
                       </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/5 rounded-lg p-3 text-center shadow-sm">
-                              <p className="text-xs text-muted-foreground">Messages Received</p>
-                              <p className="text-lg font-bold text-primary">{channel.messagesReceived}</p>
-                            </div>
-                            <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/5 rounded-lg p-3 text-center shadow-sm">
-                              <p className="text-xs text-muted-foreground">Messages Sent</p>
-                              <p className="text-lg font-bold text-primary">{channel.messagesSent}</p>
-                            </div>
+                      <CardContent className="relative z-10">
+                        <div className="space-y-5">
+                          <div className="grid grid-cols-2 gap-4">
+                            <motion.div 
+                              className="bg-gradient-to-br from-green-100/80 to-emerald-100/80 border border-green-200/50 rounded-2xl p-4 text-center shadow-sm group-hover:shadow-md transition-all duration-300"
+                              whileHover={{ scale: 1.02 }}
+                            >
+                              <p className="text-xs font-semibold text-green-700 mb-1">Messages Received</p>
+                              <p className="text-2xl font-bold text-green-800">{channel.messagesReceived}</p>
+                            </motion.div>
+                            <motion.div 
+                              className="bg-gradient-to-br from-blue-100/80 to-indigo-100/80 border border-blue-200/50 rounded-2xl p-4 text-center shadow-sm group-hover:shadow-md transition-all duration-300"
+                              whileHover={{ scale: 1.02 }}
+                            >
+                              <p className="text-xs font-semibold text-blue-700 mb-1">Messages Sent</p>
+                              <p className="text-2xl font-bold text-blue-800">{channel.messagesSent}</p>
+                            </motion.div>
                           </div>
 
                           {/* Webhook URL */}
-                          <div className="p-3 bg-blue-50/50 dark:bg-blue-950/20 rounded-lg border border-blue-100 dark:border-blue-900/20 shadow-sm">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="text-sm font-medium text-blue-700 dark:text-blue-400">Webhook URL</h4>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                className="h-7 px-2 text-xs hover:bg-blue-100/50 hover:text-blue-700 transition-colors duration-200" 
-                                onClick={() => {
-                                  navigator.clipboard.writeText(channel.webhookUrl);
-                                  setCopied(true);
-                                  setTimeout(() => setCopied(false), 2000);
-                                }}
-                              >
-                                {copied ? <CheckCircle2 className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
-                                {copied ? "Copied!" : "Copy"}
-                              </Button>
+                          <motion.div 
+                            className="p-4 bg-gradient-to-br from-slate-50/80 to-gray-50/80 rounded-2xl border border-slate-200/50 shadow-sm group-hover:shadow-md transition-all duration-300"
+                            whileHover={{ scale: 1.01 }}
+                          >
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="text-sm font-bold text-slate-700 flex items-center gap-2">
+                                <Globe className="h-4 w-4" />
+                                Webhook URL
+                              </h4>
+                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="h-8 px-3 text-xs bg-white/80 hover:bg-white hover:text-slate-700 transition-all duration-200 rounded-xl font-semibold shadow-sm" 
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(channel.webhookUrl);
+                                    setCopied(true);
+                                    setTimeout(() => setCopied(false), 2000);
+                                  }}
+                                >
+                                  {copied ? <CheckCircle2 className="h-3 w-3 mr-1.5" /> : <Copy className="h-3 w-3 mr-1.5" />}
+                                  {copied ? "Copied!" : "Copy"}
+                                </Button>
+                              </motion.div>
                             </div>
-                            <div className="text-xs font-mono bg-blue-50/80 dark:bg-blue-900/20 p-2 rounded overflow-x-auto border border-blue-100/50 dark:border-blue-800/20">
+                            <div className="text-xs font-mono bg-white/80 p-3 rounded-xl overflow-x-auto border border-slate-200/50 text-slate-600">
                               {channel.webhookUrl}
                             </div>
-                          </div>
+                          </motion.div>
                         </div>
                       </CardContent>
-                      <CardFooter className="flex flex-col gap-2 pt-2 border-t border-primary/10">
-                        <div className="flex w-full justify-between gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="w-1/2 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-colors duration-200" 
-                            asChild
-                          >
-                            <Link href={`/dashboard/channels/${channel.id}/settings`}>
-                              <Settings className="h-4 w-4 mr-2" />
-                              Settings
-                            </Link>
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="w-1/2 border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-colors duration-200" 
-                            asChild
-                          >
-                            <Link href={`/dashboard/channels/${channel.id}/messages`}>
-                              <MessageSquare className="h-4 w-4 mr-2" />
-                              Messages
-                            </Link>
-                          </Button>
+                      <CardFooter className="relative z-10 flex flex-col gap-3 pt-4 border-t border-white/30">
+                        <div className="flex w-full justify-between gap-3">
+                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="w-full bg-white/60 border-white/40 hover:bg-white hover:border-indigo-200 hover:text-indigo-600 transition-all duration-200 rounded-xl font-semibold shadow-sm" 
+                              asChild
+                            >
+                              <Link href={`/dashboard/channels/${channel.id}/settings`}>
+                                <Settings className="h-4 w-4 mr-2" />
+                                Settings
+                              </Link>
+                            </Button>
+                          </motion.div>
+                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="w-full bg-white/60 border-white/40 hover:bg-white hover:border-indigo-200 hover:text-indigo-600 transition-all duration-200 rounded-xl font-semibold shadow-sm" 
+                              asChild
+                            >
+                              <Link href={`/dashboard/channels/${channel.id}/messages`}>
+                                <MessageSquare className="h-4 w-4 mr-2" />
+                                Messages
+                              </Link>
+                            </Button>
+                          </motion.div>
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="text-red-500 hover:text-red-600 hover:bg-red-50/50 dark:hover:bg-red-950/20 mt-1 transition-colors duration-200" 
-                          onClick={() => removeChannel(channel.id)}
-                        >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Remove Channel
-                        </Button>
+                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="w-full text-red-500 hover:text-red-600 hover:bg-red-50/80 transition-all duration-200 rounded-xl font-semibold" 
+                            onClick={() => removeChannel(channel.id)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Remove Channel
+                          </Button>
+                        </motion.div>
                       </CardFooter>
                     </Card>
                   </motion.div>

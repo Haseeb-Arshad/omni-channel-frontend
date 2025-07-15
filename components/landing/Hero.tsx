@@ -104,17 +104,26 @@ const Hero: React.FC = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-            <Link href="/dashboard" passHref>
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 min-w-[180px] h-14 text-lg text-white border-0">
-                Go to Dashboard
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 min-w-[180px] h-14 text-lg text-white border-0"
+              asChild
+            >
+              <Link href="/dashboard" className="flex items-center justify-center">
+                <span>Go to Dashboard</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href="#features" passHref>
-              <Button variant="outline" size="lg" className="border-slate-400 text-white hover:bg-slate-700 hover:text-white min-w-[180px] h-14 text-lg">
+              </Link>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="border-slate-400 text-white hover:bg-slate-700 hover:text-white min-w-[180px] h-14 text-lg"
+              asChild
+            >
+              <Link href="#features" className="flex items-center justify-center">
                 Learn More
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </motion.div>
         

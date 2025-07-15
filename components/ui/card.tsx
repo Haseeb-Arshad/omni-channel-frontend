@@ -1,8 +1,26 @@
 "use client"
 
 import * as React from "react"
-
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
+
+// Card Skeleton Loading Component
+const CardSkeleton = () => (
+  <div className="animate-pulse space-y-4">
+    <div className="flex items-center space-x-4">
+      <div className="w-12 h-12 bg-charcoal-200 dark:bg-charcoal-700 rounded-lg"></div>
+      <div className="flex-1 space-y-2">
+        <div className="h-4 bg-charcoal-200 dark:bg-charcoal-700 rounded w-3/4"></div>
+        <div className="h-3 bg-charcoal-200 dark:bg-charcoal-700 rounded w-1/2"></div>
+      </div>
+    </div>
+    <div className="space-y-2">
+      <div className="h-3 bg-charcoal-200 dark:bg-charcoal-700 rounded"></div>
+      <div className="h-3 bg-charcoal-200 dark:bg-charcoal-700 rounded w-5/6"></div>
+      <div className="h-3 bg-charcoal-200 dark:bg-charcoal-700 rounded w-4/6"></div>
+    </div>
+  </div>
+)
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -11,23 +29,90 @@ const Card = React.forwardRef<
     glass?: boolean
     hover?: boolean
     interactive?: boolean
+    elevation?: "none" | "sm" | "md" | "lg" | "xl"
+    loading?: boolean
   }
->(({ className, gradient, glass, hover, interactive, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground",
-      "transition-all duration-200 ease-in-out",
-      !glass && "shadow-sm hover:shadow-md",
-      hover && "hover:border-primary/20 hover:bg-accent/50",
-      interactive && "cursor-pointer hover:-translate-y-0.5 hover:shadow-md active:translate-y-0",
-      gradient && "gradient-border",
-      glass && "glass-morphism border-0 backdrop-blur-sm bg-background/70",
-      className
-    )}
-    {...props}
-  />
-))
+>(({ 
+  className, 
+  gradient, 
+  glass, 
+  hover, 
+  interactive, 
+  elevation = "sm",
+  loading = false,
+  children,
+  ...props 
+}, ref) => {
+  const elevationClasses = {
+    none: "",
+    sm: "shadow-sm hover:shadow-md",
+    md: "shadow-md hover:shadow-lg",
+    lg: "shadow-lg hover:shadow-xl",
+    xl: "shadow-xl hover:shadow-2xl"
+  }
+
+  if (loading) {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "rounded-xl border-2 bg-card text-card-foreground p-6",
+          "border-charcoal-200 dark:border-charcoal-700",
+          elevationClasses[elevation],
+          className
+        )}
+        {...props}
+      >
+        <CardSkeleton />
+      </div>
+    )
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      className={cn(
+        // Base styles with charcoal theming
+        "rounded-xl border-2 bg-card text-card-foreground",
+        "border-charcoal-200 dark:border-charcoal-700",
+        "transition-all duration-normal ease-out",
+        // Elevation effects
+        !glass && elevationClasses[elevation],
+        // Hover effects
+        hover && [
+          "hover:border-charcoal-300 dark:hover:border-charcoal-600",
+          "hover:bg-charcoal-50/50 dark:hover:bg-charcoal-800/50"
+        ],
+        // Interactive effects
+        interactive && [
+          "cursor-pointer",
+          "hover:-translate-y-1 hover:scale-[1.02]",
+          "active:translate-y-0 active:scale-100"
+        ],
+        // Special effects
+        gradient && "gradient-border",
+        glass && [
+          "glass-morphism border-0 backdrop-blur-sm",
+          "bg-charcoal-50/80 dark:bg-charcoal-900/80"
+        ],
+        className
+      )}
+      whileHover={interactive ? {
+        y: -4,
+        scale: 1.02,
+        transition: { duration: 0.2, ease: "easeOut" }
+      } : {}}
+      whileTap={interactive ? {
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.1, ease: "easeIn" }
+      } : {}}
+      {...props}
+    >
+      {children}
+    </motion.div>
+  )
+})
 Card.displayName = "Card"
 
 const CardHeader = React.forwardRef<

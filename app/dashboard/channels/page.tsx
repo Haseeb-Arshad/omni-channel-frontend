@@ -337,9 +337,9 @@ export default function ChannelsPage() {
                 className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl" 
                 asChild
               >
-                <Link href="/dashboard/channels/connect">
+                <Link href="/dashboard/channels/connect" className="flex items-center gap-2">
                   <Plus className="h-4 w-4" />
-                  Add Channel
+                  <span>Add Channel</span>
                 </Link>
               </Button>
             </motion.div>
@@ -513,9 +513,9 @@ export default function ChannelsPage() {
                               className="w-full bg-white/60 border-white/40 hover:bg-white hover:border-indigo-200 hover:text-indigo-600 transition-all duration-200 rounded-xl font-semibold shadow-sm" 
                               asChild
                             >
-                              <Link href={`/dashboard/channels/${channel.id}/settings`}>
-                                <Settings className="h-4 w-4 mr-2" />
-                                Settings
+                              <Link href={`/dashboard/channels/${channel.id}/settings`} className="flex items-center gap-2">
+                                <Settings className="h-4 w-4" />
+                                <span>Settings</span>
                               </Link>
                             </Button>
                           </motion.div>
@@ -526,9 +526,9 @@ export default function ChannelsPage() {
                               className="w-full bg-white/60 border-white/40 hover:bg-white hover:border-indigo-200 hover:text-indigo-600 transition-all duration-200 rounded-xl font-semibold shadow-sm" 
                               asChild
                             >
-                              <Link href={`/dashboard/channels/${channel.id}/messages`}>
-                                <MessageSquare className="h-4 w-4 mr-2" />
-                                Messages
+                              <Link href={`/dashboard/channels/${channel.id}/messages`} className="flex items-center gap-2">
+                                <MessageSquare className="h-4 w-4" />
+                                <span>Messages</span>
                               </Link>
                             </Button>
                           </motion.div>
@@ -560,7 +560,9 @@ export default function ChannelsPage() {
                     Connect your first communication channel to start engaging with your customers through AI-powered conversations.
                   </p>
                   <Button asChild>
-                    <Link href="/dashboard/channels/connect">Connect Your First Channel</Link>
+                    <Link href="/dashboard/channels/connect" className="flex items-center gap-2">
+                      <span>Connect Your First Channel</span>
+                    </Link>
                   </Button>
                 </div>
               </Card>
@@ -611,7 +613,7 @@ export default function ChannelsPage() {
                     <CardFooter>
                       <Button asChild className="w-full group" disabled={!channel.available}>
                         {channel.available ? (
-                          <Link href={`/dashboard/channels/connect?type=${channel.id}`}>
+                          <Link href={`/dashboard/channels/connect?type=${channel.id}`} className="flex items-center gap-2">
                             <span>Connect</span>
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                           </Link>

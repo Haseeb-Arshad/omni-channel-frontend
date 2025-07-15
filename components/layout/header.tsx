@@ -28,7 +28,7 @@ export function Header() {
       opacity: 1, 
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 300,
         damping: 24
       }
@@ -41,7 +41,7 @@ export function Header() {
       height: 0,
       transition: {
         duration: 0.3,
-        when: "afterChildren",
+        when: "afterChildren" as const,
         staggerChildren: 0.05,
         staggerDirection: -1
       }
@@ -51,7 +51,7 @@ export function Header() {
       height: "auto",
       transition: {
         duration: 0.3,
-        when: "beforeChildren",
+        when: "beforeChildren" as const,
         staggerChildren: 0.05,
         delayChildren: 0.1
       }
@@ -127,11 +127,11 @@ export function Header() {
             <ThemeToggle />
             
             <Button variant="ghost" asChild className="hover:bg-primary/5">
-              <Link href="/auth">Sign in</Link>
+              <Link href="/auth" className="flex items-center justify-center">Sign in</Link>
             </Button>
             
             <Button asChild className="bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0">
-              <Link href="/auth">Get Started</Link>
+              <Link href="/auth" className="flex items-center justify-center">Get Started</Link>
             </Button>
           </motion.div>
         </div>

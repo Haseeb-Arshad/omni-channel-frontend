@@ -1,74 +1,119 @@
 :root {
-  /* Custom color palette based on design image */
-  --background: 0 0% 98%;
-  --foreground: 220 12% 28%;
-  --primary: 220 15% 15%;
-  --secondary: 213 8% 36%;
-  --accent: 217 53% 60%;
-  --muted: 217 12% 85%;
-  --border: 0 0% 84%;
-  --input: 0 0% 84%;
-  --background: 210 40% 98%; /* Soft, light blue-gray */
-  --foreground: 222 47% 11%;
+  /* Charcoal Color Palette */
+  --charcoal-50: 0 0% 97%;    /* #f8f9fa */
+  --charcoal-100: 0 0% 95%;   /* #f1f3f4 */
+  --charcoal-200: 0 0% 91%;   /* #e8eaed */
+  --charcoal-300: 0 0% 85%;   /* #dadce0 */
+  --charcoal-400: 0 0% 74%;   /* #bdc1c6 */
+  --charcoal-500: 0 0% 62%;   /* #9aa0a6 */
+  --charcoal-600: 0 0% 53%;   /* #80868b */
+  --charcoal-700: 0 0% 39%;   /* #5f6368 */
+  --charcoal-800: 0 0% 26%;   /* #3c4043 */
+  --charcoal-900: 0 0% 13%;   /* #202124 */
+  --charcoal-950: 0 0% 9%;    /* #171717 */
+
+  /* Accent Colors */
+  --accent-blue: 221 83% 53%;     /* #1a73e8 */
+  --accent-green: 142 71% 45%;    /* #34a853 */
+  --accent-orange: 45 97% 54%;    /* #fbbc04 */
+  --accent-red: 4 90% 58%;        /* #ea4335 */
+  --accent-purple: 291 64% 42%;   /* #9c27b0 */
+
+  /* Semantic Colors */
+  --success: 142 76% 36%;         /* #10b981 */
+  --warning: 38 92% 50%;          /* #f59e0b */
+  --error: 0 84% 60%;             /* #ef4444 */
+  --info: 221 91% 61%;            /* #3b82f6 */
+
+  /* Light Theme Variables */
+  --background: var(--charcoal-50);
+  --foreground: var(--charcoal-900);
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: var(--charcoal-900);
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --primary: 225 65% 45%; /* Royal blue #2a52be */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 225 40% 92%;
-  --secondary-foreground: 225 65% 35%;
-  --muted: 225 30% 96%;
-  --muted-foreground: 225 20% 45%;
-  --accent: 225 65% 55%; /* Slightly lighter royal blue */
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 225 30% 92%;
-  --input: 225 30% 92%;
-  --ring: 225 65% 45%;
-  
-  /* Enhanced UI variables */
-  --radius: 0.75rem; /* Slightly larger radius for softer look */
-  --font-sans: 'var(--font-geist-sans)';
-  --font-mono: 'var(--font-geist-mono)';
-  
-  /* Shadow variables */
-  --shadow-sm: 0px 1px 2px rgba(16, 24, 40, 0.05);
-  --shadow-md: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06);
-  --shadow-lg: 0px 12px 16px -4px rgba(16, 24, 40, 0.08), 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
-  --shadow-xl: 0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03);
-  
-  /* Animation variables */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.25s ease;
-  --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --popover-foreground: var(--charcoal-900);
+  --primary: var(--charcoal-900);
+  --primary-foreground: var(--charcoal-50);
+  --secondary: var(--charcoal-100);
+  --secondary-foreground: var(--charcoal-900);
+  --muted: var(--charcoal-100);
+  --muted-foreground: var(--charcoal-500);
+  --accent: var(--accent-blue);
+  --accent-foreground: var(--charcoal-50);
+  --destructive: var(--error);
+  --destructive-foreground: var(--charcoal-50);
+  --border: var(--charcoal-200);
+  --input: var(--charcoal-200);
+  --ring: var(--charcoal-900);
+
+  /* Typography Scale */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;     /* 4px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-4: 1rem;        /* 16px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-8: 2rem;        /* 32px */
+  --space-12: 3rem;       /* 48px */
+  --space-16: 4rem;       /* 64px */
+
+  /* Layout and Radius */
+  --radius: 0.75rem;
+  --container-max-width: 1400px;
+
+  /* Font Families */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+
+  /* Animation Configuration */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+
+  /* Easing Functions */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Shadow System */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 .dark {
-  --background: 225 40% 11%; /* Royal blue dark background */
-  --foreground: 0 0% 95%;
-  --card: 225 40% 14%; /* Slightly lighter than background for depth */
-  --card-foreground: 0 0% 95%;
-  --popover: 225 40% 14%;
-  --popover-foreground: 0 0% 95%;
-  --primary: 225 65% 55%; /* Brighter royal blue in dark mode */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 225 40% 18%;
-  --secondary-foreground: 0 0% 95%;
-  --muted: 225 40% 20%;
-  --muted-foreground: 225 20% 75%;
-  --accent: 225 65% 65%; /* Vibrant royal blue */
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 225 30% 20%;
-  --input: 225 30% 20%;
-  --ring: 225 65% 55%;
+  /* Dark Theme with Charcoal Palette */
+  --background: var(--charcoal-950);
+  --foreground: var(--charcoal-50);
+  --card: var(--charcoal-900);
+  --card-foreground: var(--charcoal-50);
+  --popover: var(--charcoal-900);
+  --popover-foreground: var(--charcoal-50);
+  --primary: var(--charcoal-50);
+  --primary-foreground: var(--charcoal-900);
+  --secondary: var(--charcoal-800);
+  --secondary-foreground: var(--charcoal-50);
+  --muted: var(--charcoal-800);
+  --muted-foreground: var(--charcoal-400);
+  --accent: var(--accent-blue);
+  --accent-foreground: var(--charcoal-50);
+  --destructive: var(--error);
+  --destructive-foreground: var(--charcoal-50);
+  --border: var(--charcoal-800);
+  --input: var(--charcoal-800);
+  --ring: var(--charcoal-300);
 }
 
 @tailwind base;
@@ -142,11 +187,11 @@ html.has-scroll-dragging {
 
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-border;
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -154,13 +199,13 @@ html.has-scroll-dragging {
   
   /* Form elements styling */
   input, textarea, select {
-    @apply bg-white border-gray-300 rounded-md px-3 py-2 text-sm outline-none transition-colors;
-    @apply focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus-visible:outline-none;
+    @apply bg-card border-input rounded-md px-3 py-2 text-sm outline-none transition-colors;
+    @apply focus:ring-2 focus:ring-ring/20 focus:border-ring focus-visible:outline-none;
   }
   
   /* Typography enhancements */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+    @apply font-semibold tracking-tight text-foreground;
   }
   
   h1 {
@@ -254,35 +299,35 @@ html.has-scroll-dragging {
 
 /* Multiple animation options for entrances */
 .animate-in {
-  animation: animate-in var(--transition-normal) forwards;
+  animation: animate-in var(--duration-normal) forwards;
 }
 
 .animate-fade-in {
-  animation: fade-in var(--transition-normal) forwards;
+  animation: fade-in var(--duration-normal) forwards;
 }
 
 .animate-slide-up {
-  animation: slide-up var(--transition-normal) forwards;
+  animation: slide-up var(--duration-normal) forwards;
 }
 
 .animate-slide-down {
-  animation: slide-down var(--transition-normal) forwards;
+  animation: slide-down var(--duration-normal) forwards;
 }
 
 .animate-slide-left {
-  animation: slide-left var(--transition-normal) forwards;
+  animation: slide-left var(--duration-normal) forwards;
 }
 
 .animate-slide-right {
-  animation: slide-right var(--transition-normal) forwards;
+  animation: slide-right var(--duration-normal) forwards;
 }
 
 .animate-scale {
-  animation: scale var(--transition-normal) forwards;
+  animation: scale var(--duration-normal) forwards;
 }
 
 .animate-out {
-  animation: animate-out var(--transition-normal) forwards;
+  animation: animate-out var(--duration-normal) forwards;
 }
 
 .animate-stagger-fade > * {
@@ -290,14 +335,14 @@ html.has-scroll-dragging {
 }
 
 /* Optimized staggered animations - reduce time between animations for faster perceived loading */
-.animate-stagger-fade.animate-visible > *:nth-child(1) { animation: fadeIn 0.3s var(--ease-out-quart) forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(2) { animation: fadeIn 0.3s var(--ease-out-quart) 0.05s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(3) { animation: fadeIn 0.3s var(--ease-out-quart) 0.1s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(4) { animation: fadeIn 0.3s var(--ease-out-quart) 0.15s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(5) { animation: fadeIn 0.3s var(--ease-out-quart) 0.2s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(6) { animation: fadeIn 0.3s var(--ease-out-quart) 0.25s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(7) { animation: fadeIn 0.3s var(--ease-out-quart) 0.3s forwards; }
-.animate-stagger-fade.animate-visible > *:nth-child(8) { animation: fadeIn 0.3s var(--ease-out-quart) 0.35s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(1) { animation: fadeIn 0.3s var(--ease-out) forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(2) { animation: fadeIn 0.3s var(--ease-out) 0.05s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(3) { animation: fadeIn 0.3s var(--ease-out) 0.1s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(4) { animation: fadeIn 0.3s var(--ease-out) 0.15s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(5) { animation: fadeIn 0.3s var(--ease-out) 0.2s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(6) { animation: fadeIn 0.3s var(--ease-out) 0.25s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(7) { animation: fadeIn 0.3s var(--ease-out) 0.3s forwards; }
+.animate-stagger-fade.animate-visible > *:nth-child(8) { animation: fadeIn 0.3s var(--ease-out) 0.35s forwards; }
 
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -581,7 +626,7 @@ html.has-scroll-dragging {
 
 /* Modern card styles */
 .card-hover-effect {
-  transition: transform 0.3s var(--ease-out-quart), box-shadow 0.3s var(--ease-out-quart);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
 }
 
 .card-hover-effect:hover {

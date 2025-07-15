@@ -790,7 +790,10 @@ export default function PersonaPage() {
             )}
           </CardFooter>
         </Card>
-      </div>
+      </motion.div>
+
     </div>
+    </motion.div>
+
   );
 }

@@ -353,7 +353,7 @@ export default function ConnectChannelPage() {
     <div className="container py-6 space-y-6 max-w-5xl bg-white dark:bg-background">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" asChild>
-          <Link href="/dashboard/channels">
+          <Link href="/dashboard/channels" className="flex items-center justify-center">
             <ArrowLeft className="h-4 w-4" />
           </Link>
         </Button>

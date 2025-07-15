@@ -54,8 +54,8 @@ export function DashboardSection({
           
           {action && (
             <Button variant="outline" size="sm" className="h-8 gap-1" asChild>
-              <Link href={action.href}>
-                <span>{action.label}</span>
+              <Link href={action.href} className="flex items-center gap-1">
+                {action.label}
                 {action.icon || <ArrowUpRight className="h-3.5 w-3.5" />}
               </Link>
             </Button>

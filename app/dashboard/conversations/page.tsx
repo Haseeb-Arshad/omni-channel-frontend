@@ -356,8 +356,21 @@ export default function ConversationsPage() {
       opacity: 1,
       transition: {
         staggerChildren: 0.05,
-        ease: [0.22, 1, 0.36, 1],
+        ease: "easeOut",
         duration: 0.5
+      }
+    }
+  };
+
+  const listItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        type: "spring",
+        stiffness: 300,
+        damping: 24
       }
     }
   };
@@ -438,13 +451,6 @@ export default function ConversationsPage() {
     }
   }, [filteredConversations]);
 
-  // Animation variants
-  const listItemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-    exit: { opacity: 0, x: -20, transition: { duration: 0.2 } }
-  };
-
   return (
     <motion.div
       ref={containerRef}
@@ -480,7 +486,7 @@ export default function ConversationsPage() {
               Manage and respond to customer conversations across all channels
             </motion.p>
           </div>
-          <motion.div
+          <motion.div 
             className="flex gap-3"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -491,21 +497,19 @@ export default function ConversationsPage() {
                 variant="outline"
                 size="sm"
                 className="gap-2 bg-white/80 backdrop-blur-sm border-white/30 hover:bg-white hover:border-indigo-200 hover:text-indigo-600 shadow-lg shadow-black/5 rounded-2xl"
+                onClick={() => window.location.reload()}
               >
                 <RefreshCw className="h-4 w-4" />
                 Refresh
               </Button>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl"
-                asChild
-              >
-                <Link href="/dashboard/conversations/new">
+              <Link href="/dashboard/conversations/new">
+                <Button className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-2xl">
                   <Plus className="h-4 w-4" />
-                  New Conversation
-                </Link>
-              </Button>
+                  <span>New Conversation</span>
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
         </div>
@@ -527,7 +531,7 @@ export default function ConversationsPage() {
 
             <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-primary/10 scrollbar-track-transparent">
               <Button
-                variant={activeFilter === "all" ? "default" : "outline"}
+                variant={activeFilter === "all" ? "primary" : "outline"}
                 size="sm"
                 className={activeFilter === "all" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("all")}
@@ -535,7 +539,7 @@ export default function ConversationsPage() {
                 All
               </Button>
               <Button
-                variant={activeFilter === "unread" ? "default" : "outline"}
+                variant={activeFilter === "unread" ? "primary" : "outline"}
                 size="sm"
                 className={activeFilter === "unread" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("unread")}
@@ -543,7 +547,7 @@ export default function ConversationsPage() {
                 Unread
               </Button>
               <Button
-                variant={activeFilter === "email" ? "default" : "outline"}
+                variant={activeFilter === "email" ? "primary" : "outline"}
                 size="sm"
                 className={activeFilter === "email" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("email")}
@@ -551,7 +555,7 @@ export default function ConversationsPage() {
                 <Mail className="h-3 w-3 mr-1" /> Email
               </Button>
               <Button
-                variant={activeFilter === "web" ? "default" : "outline"}
+                variant={activeFilter === "web" ? "primary" : "outline"}
                 size="sm"
                 className={activeFilter === "web" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("web")}
@@ -559,7 +563,7 @@ export default function ConversationsPage() {
                 <Globe className="h-3 w-3 mr-1" /> Web
               </Button>
               <Button
-                variant={activeFilter === "facebook" ? "default" : "outline"}
+                variant={activeFilter === "facebook" ? "primary" : "outline"}
                 size="sm"
                 className={activeFilter === "facebook" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("facebook")}
@@ -567,7 +571,7 @@ export default function ConversationsPage() {
                 <Facebook className="h-3 w-3 mr-1" /> Facebook
               </Button>
               <Button
-                variant={activeFilter === "whatsapp" ? "default" : "outline"}
+                variant={activeFilter === "whatsapp" ? "primary" : "outline"}
                 size="sm"
                 className={activeFilter === "whatsapp" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("whatsapp")}
@@ -575,7 +579,7 @@ export default function ConversationsPage() {
                 <MessageSquare className="h-3 w-3 mr-1" /> WhatsApp
               </Button>
               <Button
-                variant={activeFilter === "sms" ? "default" : "outline"}
+                variant={activeFilter === "sms" ? "primary" : "outline"}
                 size="sm"
                 className={activeFilter === "sms" ? "bg-primary text-white" : "border-primary/20 hover:bg-primary/5 hover:text-primary hover:border-primary/30"}
                 onClick={() => setActiveFilter("sms")}
@@ -610,12 +614,12 @@ export default function ConversationsPage() {
                 <p className="text-sm text-muted-foreground text-center">
                   {searchQuery ? `No results for "${searchQuery}"` : "Try different filters or start a conversation"}
                 </p>
-                <Button className="mt-4 gap-1.5 bg-gradient-to-r from-primary to-primary/80 text-white" asChild>
-                  <Link href="/dashboard/conversations/new">
+                <Link href="/dashboard/conversations/new">
+                  <Button className="mt-4 gap-1.5 bg-gradient-to-r from-primary to-primary/80 text-white">
                     <Plus className="h-3.5 w-3.5" />
                     New Conversation
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </div>
             ) : (
               <AnimatePresence>
@@ -750,10 +754,13 @@ export default function ConversationsPage() {
               <p className="text-muted-foreground max-w-sm mb-6">
                 Select a conversation from the list or start a new one to begin messaging
               </p>
-              <Button className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200" asChild>
-                <Link href="/dashboard/conversations/new">
+              <Button 
+                className="gap-2 bg-gradient-to-r from-primary to-primary/80 text-white shadow-sm hover:shadow-md transition-all duration-200"
+                asChild
+              >
+                <Link href="/dashboard/conversations/new" className="flex items-center gap-2">
                   <Plus className="h-4 w-4" />
-                  New Conversation
+                  <span>New Conversation</span>
                 </Link>
               </Button>
             </div>

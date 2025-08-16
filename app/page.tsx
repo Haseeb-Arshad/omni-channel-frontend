@@ -10,6 +10,8 @@ import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
 import Channels from "@/components/landing/Channels";
 import Stats from "@/components/landing/Stats";
+import Testimonials from "@/components/landing/Testimonials";
+import Pricing from "@/components/landing/Pricing";
 import CTA from "@/components/landing/CTA";
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { gsap } from 'gsap';
@@ -124,6 +126,12 @@ export default function Home() {
                 
                 {/* Channels section */}
                 <Channels />
+                
+                {/* Testimonials section */}
+                <Testimonials />
+                
+                {/* Pricing section */}
+                <Pricing />
                 
                 {/* Call to action section */}
                 <CTA />

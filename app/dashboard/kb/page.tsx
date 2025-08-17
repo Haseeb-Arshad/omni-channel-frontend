@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { EditorialHeader } from "@/components/ui/editorial";
 import api from "@/lib/api";
 
 // API Document interface - what comes from the backend API
@@ -350,51 +351,49 @@ export default function KnowledgeBasePage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Knowledge Base</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage articles, FAQs, and guides for customers and agents.
-          </p>
-        </div>
-        <div className="flex gap-2 mb-6">
-          <Button
-            onClick={() => router.push("/dashboard/kb/editor")}
-            className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            New Article
-          </Button>
-          <div className="relative">
-            <input 
-              type="file" 
-              id="document-upload" 
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
-              onChange={handleFileUpload}
-              accept=".pdf,.doc,.docx,.txt,.csv,.md,.ppt,.pptx,.xls,.xlsx,.json,.html"
-              disabled={isUploading}
-            />
+      <EditorialHeader
+        title="Knowledge Base"
+        subtitle="Manage articles, FAQs, and guides for customers and agents."
+        actions={
+          <div className="flex gap-2">
             <Button
-              variant="outline"
-              className={`border-dashed border-gray-400 flex items-center gap-2 ${isUploading ? 'opacity-70 cursor-not-allowed' : ''}`}
-              disabled={isUploading}
+              onClick={() => router.push("/dashboard/kb/editor")}
+              className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
             >
-              {isUploading ? (
-                <>
-                  <span className="animate-pulse">Uploading... {uploadProgress}%</span>
-                </>
-              ) : (
-                <>
-                  <FileText className="h-4 w-4" />
-                  Upload Document
-                </>
-              )}
+              <Plus className="h-4 w-4" />
+              New Article
             </Button>
+            <div className="relative">
+              <input 
+                type="file" 
+                id="document-upload" 
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                onChange={handleFileUpload}
+                accept=".pdf,.doc,.docx,.txt,.csv,.md,.ppt,.pptx,.xls,.xlsx,.json,.html"
+                disabled={isUploading}
+              />
+              <Button
+                variant="outline"
+                className={`border-dashed border-gray-400 flex items-center gap-2 ${isUploading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                disabled={isUploading}
+              >
+                {isUploading ? (
+                  <>
+                    <span className="animate-pulse">Uploading... {uploadProgress}%</span>
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-4 w-4" />
+                    Upload Document
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
-        </div>
-      </div>
+        }
+      />
 
-      <div className="flex flex-col space-y-4">
+      <div className="editorial-container editorial-section flex flex-col space-y-4">
         <div className="flex justify-between items-center">
           <div className="relative w-full max-w-sm">
             <input
@@ -525,7 +524,7 @@ export default function KnowledgeBasePage() {
         )}
         
         {viewType === "table" ? (
-          <div className="rounded-md border">
+          <div className="editorial-panel">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>

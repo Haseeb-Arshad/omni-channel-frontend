@@ -4,6 +4,7 @@ import React, { ReactNode, useEffect } from "react"
 import { Sidebar } from "@/components/layout/sidebar"
 import { motion } from "framer-motion"
 import "@/app/elevenlabs-theme.css" // Import the Eleven Labs theme
+import "@/app/editorial-theme.css" // Editorial minimal theme
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -25,16 +26,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     },
   };
 
-  // Add the Eleven Labs theme class to the document body
+  // Add the Eleven Labs and Editorial theme classes to the document body
   useEffect(() => {
     document.body.classList.add('eleven-labs-theme');
-    
+    document.documentElement.classList.add('editorial-theme');
+
     // Apply background color
     document.documentElement.style.setProperty('--background', 'var(--white-pure)');
-    
+
     // Cleanup function to remove the class when component unmounts
     return () => {
       document.body.classList.remove('eleven-labs-theme');
+      document.documentElement.classList.remove('editorial-theme');
       document.documentElement.style.removeProperty('--background');
     };
   }, []);

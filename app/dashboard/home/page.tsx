@@ -12,7 +12,8 @@ import {
   Activity
 } from "lucide-react";
 
-import { PageHeader, StatCard, NotificationBanner } from "@/components/dashboard";
+import { NotificationBanner } from "@/components/dashboard";
+import { EditorialHeader, EditorialStatTile, EditorialPanel } from "@/components/ui/editorial";
 
 // Stats for dashboard overview
 const dashboardStats = [
@@ -63,9 +64,9 @@ export default function HomePage() {
       transition={{ duration: 0.6 }}
     >
       {/* Header */}
-      <PageHeader
-        title="Dashboard Overview"
-        subtitle="Monitor your omni-channel customer support performance and AI agent activity."
+      <EditorialHeader
+        title="Overview"
+        subtitle="Monitor omni-channel performance and AI agent activity"
       />
 
       {/* AI Performance Banner */}
@@ -81,16 +82,18 @@ export default function HomePage() {
       />
 
       {/* Stats Grid */}
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.6 }}
-      >
-        {dashboardStats.map((stat, index) => (
-          <StatCard key={index} {...stat} />
-        ))}
-      </motion.div>
+      <section className="editorial-container editorial-section">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {dashboardStats.map((stat, index) => (
+            <EditorialStatTile
+              key={index}
+              label={stat.title}
+              value={stat.value}
+              meta={`${stat.change} vs last period`}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* Quick Actions Grid */}
       <motion.div 
@@ -100,7 +103,7 @@ export default function HomePage() {
         transition={{ delay: 0.6, duration: 0.6 }}
       >
         {/* Recent Activity Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-black/5 border border-white/20">
+        <div className="editorial-panel p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
             <Activity className="h-5 w-5 text-gray-400" />
@@ -122,7 +125,7 @@ export default function HomePage() {
         </div>
 
         {/* Performance Trends Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-black/5 border border-white/20">
+        <div className="editorial-panel p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Performance Trends</h3>
             <TrendingUp className="h-5 w-5 text-green-500" />
@@ -144,7 +147,7 @@ export default function HomePage() {
         </div>
 
         {/* Team Performance Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-black/5 border border-white/20">
+        <div className="editorial-panel p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">Team Performance</h3>
             <Users className="h-5 w-5 text-gray-400" />

@@ -243,6 +243,8 @@ const ChannelPerformanceCard = ({ channel, stats, delay = 0 }: {
   </motion.div>
 )
 
+import { EditorialHeader, EditorialPanel, EditorialStatTile } from "@/components/ui/editorial"
+
 export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState('7d')
   const [selectedMetric, setSelectedMetric] = useState('conversations')
@@ -360,16 +362,10 @@ export default function AnalyticsPage() {
       transition={{ duration: 0.6 }}
     >
       {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">Analytics Dashboard</h1>
-            <p className="text-gray-600">Monitor performance across all channels and agents</p>
-          </div>
+      <EditorialHeader
+        title="Analytics"
+        subtitle="Performance across channels and agents"
+        actions={
           <div className="flex items-center space-x-3">
             <select
               value={timeRange}
@@ -398,35 +394,23 @@ export default function AnalyticsPage() {
               <span>Export</span>
             </motion.button>
           </div>
-        </div>
-      </motion.div>
+        }
+      />
 
       {/* Overview Stats */}
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-      >
-        {overviewStats.map((stat, index) => (
-          <StatCard
-            key={index}
-            title={stat.title}
-            value={stat.value}
-            change={stat.change}
-            icon={stat.icon}
-            gradient={stat.gradient}
-            subtitle={stat.subtitle}
-            delay={0.3 + index * 0.1}
-          />
-        ))}
-      </motion.div>
+      <section className="editorial-container editorial-section">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {overviewStats.map((s, i) => (
+            <EditorialStatTile key={i} label={s.title} value={s.value} meta={`${s.change} • ${s.subtitle}`} />
+          ))}
+        </div>
+      </section>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Conversation Trends */}
         <ChartCard title="Conversation Trends" delay={0.7}>
-          <div className="h-64 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
+          <div className="h-64 flex items-center justify-center editorial-panel-alt rounded-2xl">
             <div className="text-center">
               <LineChart className="h-12 w-12 text-blue-500 mx-auto mb-4" />
               <p className="text-gray-600">Interactive chart showing conversation trends over time</p>
@@ -437,7 +421,7 @@ export default function AnalyticsPage() {
 
         {/* Channel Distribution */}
         <ChartCard title="Channel Distribution" delay={0.8}>
-          <div className="h-64 flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl">
+          <div className="h-64 flex items-center justify-center editorial-panel-alt rounded-2xl">
             <div className="text-center">
               <PieChart className="h-12 w-12 text-purple-500 mx-auto mb-4" />
               <p className="text-gray-600">Distribution of conversations across channels</p>

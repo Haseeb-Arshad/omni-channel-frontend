@@ -137,38 +137,37 @@ export default function ConversationsPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)]">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-2xl font-bold">Conversations</h1>
-          <p className="text-muted-foreground">
-            Manage and respond to customer conversations across all channels
+          <h1 className="text-lg font-semibold text-gray-900">Chats</h1>
+          <p className="text-xs text-gray-500">
+            All conversations
           </p>
         </div>
         <div className="flex gap-2">
           <Button 
-            variant="outline" 
+            variant="ghost" 
             size="sm" 
-            className="gap-1"
+            className="gap-1 h-8 px-3 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             onClick={handleRefresh}
             disabled={isLoading}
           >
-            <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
-            Refresh
+            <RefreshCw className={`h-3 w-3 ${isLoading ? "animate-spin" : ""}`} />
           </Button>
           <Button 
             size="sm" 
-            className="gap-1"
+            className="gap-1 h-8 px-3 bg-blue-600 hover:bg-blue-700 text-white"
             onClick={handleNewConversation}
           >
-            <MessageSquare className="h-4 w-4" />
-            New Conversation
+            <MessageSquare className="h-3 w-3" />
+            New
           </Button>
         </div>
       </div>
 
-      <div className="bg-card rounded-xl border shadow-sm flex flex-1 overflow-hidden">
+      <div className="bg-white rounded-lg border border-gray-200 flex flex-1 overflow-hidden">
         {/* Conversation List */}
-        <div className={`${isDesktop ? 'w-1/3' : selectedConversation ? 'hidden' : 'w-full'} border-r flex flex-col`}>
+        <div className={`${isDesktop ? 'w-80' : selectedConversation ? 'hidden' : 'w-full'} border-r border-gray-200 flex flex-col bg-white`}>
           <ConversationFilters
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
@@ -178,19 +177,22 @@ export default function ConversationsPage() {
             onRefresh={handleRefresh}
           />
           
-          <ConversationList
-            conversations={filteredConversations}
-            selectedConversationId={selectedConversation?.id || null}
-            onSelectConversation={setSelectedConversation}
-            searchQuery={searchQuery}
-            activeFilter={activeFilter}
-            isLoading={isLoading}
-          />
-        </div>
+          	<ConversationList
+            	conversations={filteredConversations as any}
+            	selectedConversation={selectedConversation as any}
+            	onConversationSelect={setSelectedConversation as any}
+            	searchQuery={searchQuery}
+            	activeFilters={[activeFilter]}
+            	onClearSearch={() => setSearchQuery("")}
+            	onClearFilters={() => setActiveFilter("all")}
+            	onStartNewConversation={handleNewConversation}
+            	onConnectChannels={handleRefresh}
+          	/>
+        	</div>
 
-        {/* Conversation View */}
+          {/* Conversation View */}
         {selectedConversation && (
-          <div className={`${isDesktop ? (showCustomerDetails ? 'w-1/2' : 'w-2/3') : 'w-full'} flex flex-col border-r`}>
+          <div className={`${isDesktop ? (showCustomerDetails ? 'flex-1' : 'flex-1') : 'w-full'} flex flex-col border-r border-gray-200 bg-white`}>
             <ConversationView
               conversation={selectedConversation}
               onSendMessage={handleSendMessage}
@@ -203,7 +205,7 @@ export default function ConversationsPage() {
 
         {/* Customer Details */}
         {isDesktop && selectedConversation && showCustomerDetails && (
-          <div className="w-1/6 border-l">
+          <div className="w-80 border-l border-gray-200 bg-white">
             <CustomerDetails
               conversation={selectedConversation}
               onClose={toggleCustomerDetails}

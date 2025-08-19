@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { EditorialHeader } from '@/components/ui/editorial/editorial-header'
+import { EditorialStatTile } from '@/components/ui/editorial/editorial-stat-tile'
 import { 
   Bot, 
   Plus, 
@@ -218,76 +220,6 @@ const PersonaCard = ({ persona, delay = 0, onEdit, onDuplicate, onDelete }: {
   </motion.div>
 )
 
-const StatCard = ({ title, value, change, icon: Icon, trend = 'up', gradient, delay = 0 }: {
-  title: string
-  value: string
-  change: string
-  icon: any
-  trend?: 'up' | 'down'
-  gradient: string
-  delay?: number
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30, scale: 0.9 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ 
-      duration: 0.6, 
-      delay,
-      ease: [0.22, 1, 0.36, 1]
-    }}
-    whileHover={{ 
-      y: -8, 
-      scale: 1.02,
-      transition: { duration: 0.2 }
-    }}
-    className="group relative bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg shadow-black/5 border border-white/20 hover:shadow-2xl hover:shadow-black/10 transition-all duration-300 overflow-hidden"
-  >
-    {/* Background Gradient */}
-    <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-    
-    <div className="relative z-10 flex items-start justify-between">
-      <div className="flex-1">
-        <p className="text-sm font-medium text-slate-600 mb-2">{title}</p>
-        <motion.p 
-          className="text-3xl font-bold text-slate-900 mb-3"
-          initial={{ scale: 0.5 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: delay + 0.2, duration: 0.4, ease: "backOut" }}
-        >
-          {value}
-        </motion.p>
-        <div className="flex items-center">
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: delay + 0.4, duration: 0.3 }}
-            className={`flex items-center px-2 py-1 rounded-full text-xs font-semibold ${
-              trend === 'up' 
-                ? 'bg-green-100 text-green-700' 
-                : 'bg-red-100 text-red-700'
-            }`}
-          >
-            {trend === 'up' ? (
-              <ArrowUp className="h-3 w-3 mr-1" />
-            ) : (
-              <ArrowDown className="h-3 w-3 mr-1" />
-            )}
-            {change}
-          </motion.div>
-          <span className="text-xs text-slate-500 ml-2">vs last week</span>
-        </div>
-      </div>
-      
-      <motion.div 
-        className={`w-14 h-14 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300`}
-        whileHover={{ rotate: 5, scale: 1.1 }}
-        transition={{ duration: 0.2 }}
-      >
-        <Icon className="h-7 w-7 text-white" />
-      </motion.div>
-    </div>
-  </motion.div>
-)
 
 export default function PersonaPage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -461,131 +393,98 @@ export default function PersonaPage() {
   })
 
   return (
-    <motion.div 
-      className="space-y-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">AI Personas</h1>
-        <p className="text-gray-600">Create and manage AI personalities for different use cases</p>
-      </motion.div>
+    <div className="editorial-container">
+      <div className="editorial-panel">
+        <EditorialHeader
+          title="AI Personas"
+          description="Create and manage AI personalities for different use cases"
+        />
 
-      {/* Stats Grid */}
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-      >
-        {stats.map((stat, index) => (
-          <StatCard
-            key={index}
-            title={stat.title}
-            value={stat.value}
-            change={stat.change}
-            icon={stat.icon}
-            gradient={stat.gradient}
-            delay={0.3 + index * 0.1}
-          />
-        ))}
-      </motion.div>
-
-      {/* Controls */}
-      <motion.div 
-        className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-      >
-        <div className="flex flex-col sm:flex-row gap-3 flex-1">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <input
-              type="text"
-              placeholder="Search personas..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <EditorialStatTile
+              key={index}
+              title={stat.title}
+              value={stat.value}
+              change={stat.change}
+              trend={stat.change.startsWith('+') ? 'up' : 'down'}
+              icon={stat.icon}
             />
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Filter className="h-4 w-4 text-gray-500" />
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
-            >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="draft">Draft</option>
-            </select>
-          </div>
+          ))}
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleCreateNew}
-          className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 py-2 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 flex items-center space-x-2"
-        >
-          <Plus className="h-4 w-4" />
-          <span>Create Persona</span>
-        </motion.button>
-      </motion.div>
+        {/* Controls */}
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row gap-3 flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <input
+                type="text"
+                placeholder="Search personas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              />
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <Filter className="h-4 w-4 text-gray-500" />
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="px-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+          </div>
 
-      {/* Personas Grid */}
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
-      >
-        {filteredPersonas.map((persona, index) => (
-          <PersonaCard
-            key={persona.id}
-            persona={persona}
-            delay={0.9 + index * 0.1}
-            onEdit={handleEdit}
-            onDuplicate={handleDuplicate}
-            onDelete={handleDelete}
-          />
-        ))}
-      </motion.div>
-
-      {filteredPersonas.length === 0 && (
-        <motion.div 
-          className="text-center py-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-        >
-          <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No personas found</h3>
-          <p className="text-gray-600 mb-4">
-            {searchQuery || filterStatus !== 'all' 
-              ? 'Try adjusting your search or filter criteria' 
-              : 'Create your first AI persona to get started'}
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={handleCreateNew}
-            className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 py-2 rounded-xl font-semibold hover:shadow-lg transition-all duration-200 flex items-center space-x-2 mx-auto"
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2"
           >
             <Plus className="h-4 w-4" />
-            <span>Create Your First Persona</span>
-          </motion.button>
-        </motion.div>
-      )}
-    </motion.div>
+            <span>Create Persona</span>
+          </button>
+        </div>
+
+        {/* Personas Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPersonas.map((persona, index) => (
+            <PersonaCard
+              key={persona.id}
+              persona={persona}
+              delay={0.9 + index * 0.1}
+              onEdit={handleEdit}
+              onDuplicate={handleDuplicate}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+
+        {filteredPersonas.length === 0 && (
+          <div className="text-center py-12">
+            <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No personas found</h3>
+            <p className="text-gray-600 mb-4">
+              {searchQuery || filterStatus !== 'all' 
+                ? 'Try adjusting your search or filter criteria' 
+                : 'Create your first AI persona to get started'}
+            </p>
+            <button
+              onClick={handleCreateNew}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2 mx-auto"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Create Your First Persona</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }

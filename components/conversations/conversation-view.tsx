@@ -97,7 +97,7 @@ export function ConversationView({
             <div>
               <h2 className="font-medium">{conversation.contact.name}</h2>
               <div className="flex items-center text-xs text-muted-foreground">
-                {getChannelIcon(conversation.channel)}
+                {(() => { const Icon = getChannelIcon(conversation.channel); return <Icon className="h-3.5 w-3.5" />; })()}
                 <span className="ml-1">
                   {conversation.channel.charAt(0).toUpperCase() + conversation.channel.slice(1)}
                 </span>

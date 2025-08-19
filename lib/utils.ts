@@ -1,5 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import type { ComponentType } from "react"
+import { Mail, Globe, Phone, MessageSquare, Facebook, Headphones } from "lucide-react"
  
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -39,3 +41,25 @@ export function getInitials(name: string) {
     .toUpperCase()
     .substring(0, 2);
 }
+
+// Returns an icon Component for a given channel. Consumers should render it as <Icon className="..." />
+export function getChannelIcon(channel: string): ComponentType<{ className?: string }> {
+  switch ((channel || '').toLowerCase()) {
+    case 'email':
+      return Mail
+    case 'web':
+      return Globe
+    case 'whatsapp':
+      return MessageSquare
+    case 'facebook':
+      return Facebook
+    case 'sms':
+      return Phone
+    case 'voice':
+      return Headphones
+    default:
+      return MessageSquare
+  }
+}
+
+export const DUMMY_EXPORT = 'dummy';

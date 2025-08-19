@@ -181,7 +181,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <motion.aside
         initial={{ x: -280 }}
         animate={{ x: 0 }}
-        className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm"
+        className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm h-screen overflow-y-auto flex-none"
       >
         {/* Logo & Search */}
         <div className="p-4 border-b border-gray-100">

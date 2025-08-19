@@ -4,9 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Globe, Plus, Activity, MessageSquare, Clock, CheckCircle } from "lucide-react";
 
-import { PageHeader } from "@/components/dashboard/page-header";
-import { StatCard } from "@/components/dashboard/stat-card";
 import { NotificationBanner } from "@/components/dashboard/notification-banner";
+import { EditorialHeader, EditorialStatTile } from "@/components/ui/editorial";
 import { ChannelsGrid } from "@/components/channels/channels-grid";
 import { Button } from "@/components/ui/button";
 
@@ -121,18 +120,19 @@ export default function ChannelsPage() {
       transition={{ duration: 0.6 }}
     >
       {/* Header */}
-      <PageHeader
+      <EditorialHeader
         title="Communication Channels"
-        subtitle="Connect and manage all your customer communication channels in one place."
-      >
-        <Button
-          onClick={handleAddChannel}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Channel
-        </Button>
-      </PageHeader>
+        subtitle="Connect and manage all your customer communication channels in one place"
+        actions={
+          <Button
+            onClick={handleAddChannel}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Channel
+          </Button>
+        }
+      />
 
       {/* Channel Status Banner */}
       <NotificationBanner
@@ -143,16 +143,18 @@ export default function ChannelsPage() {
       />
 
       {/* Stats Grid */}
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.6 }}
-      >
-        {channelStats.map((stat, index) => (
-          <StatCard key={index} {...stat} />
-        ))}
-      </motion.div>
+      <section className="editorial-container editorial-section">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {channelStats.map((stat, index) => (
+            <EditorialStatTile
+              key={index}
+              label={stat.title}
+              value={stat.value}
+              meta={`${stat.change} vs last period`}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* Channels Grid */}
       <motion.div

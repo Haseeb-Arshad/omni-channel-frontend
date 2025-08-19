@@ -22,42 +22,42 @@ interface MessageBubbleProps {
 
 export const MessageBubble = ({ message, isAgent }: MessageBubbleProps) => (
   <motion.div
-    initial={{ opacity: 0, y: 10 }}
+    initial={{ opacity: 0, y: 6 }}
     animate={{ opacity: 1, y: 0 }}
-    className={`flex ${isAgent ? 'justify-end' : 'justify-start'} mb-4`}
+    className={`flex ${isAgent ? 'justify-end' : 'justify-start'} mb-2.5`}
   >
-    <div className={`max-w-[70%] ${isAgent ? 'order-2' : 'order-1'}`}>
+    <div className={`max-w-[72%] ${isAgent ? 'order-2' : 'order-1'}`}>
       {message.type === 'voice' ? (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center space-x-3 mb-2">
-            <Button size="sm" variant="outline" className="h-8 w-8 p-0">
-              <Play className="h-4 w-4" />
+        <div className="rounded-2xl border border-gray-200 bg-white p-3">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Button size="sm" variant="outline" className="h-7 w-7 p-0 rounded-full">
+              <Play className="h-3.5 w-3.5" />
             </Button>
             <div className="flex-1">
-              <div className="h-6 w-full bg-blue-200 rounded-full flex items-center px-2">
-                <div className="h-1 bg-blue-500 rounded-full" style={{ width: '60%' }}></div>
+              <div className="h-5 w-full bg-gray-100 rounded-full flex items-center px-2">
+                <div className="h-1 bg-gray-400 rounded-full" style={{ width: '50%' }}></div>
               </div>
             </div>
-            <span className="text-sm text-gray-600">{message.duration}</span>
+            <span className="text-[11px] text-gray-500">{message.duration}</span>
           </div>
           {message.transcript && (
-            <Button variant="ghost" size="sm" className="text-xs">
+            <Button variant="ghost" size="sm" className="h-7 px-2 text-[11px]">
               <FileText className="h-3 w-3 mr-1" />
-              View Transcript & AI Analysis
+              View Transcript
             </Button>
           )}
         </div>
       ) : (
-        <div className={`rounded-lg p-3 ${
+        <div className={`px-3 py-2 text-[13px] leading-5 rounded-2xl ${
           isAgent 
-            ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' 
-            : 'bg-gray-100 text-gray-900'
+            ? 'bg-green-600 text-white rounded-tr-md' 
+            : 'bg-gray-700 text-white rounded-tl-md'
         }`}>
-          <p className="text-sm">{message.content}</p>
+          <p className="whitespace-pre-wrap">{message.content}</p>
         </div>
       )}
-      <div className={`flex items-center mt-1 space-x-2 ${isAgent ? 'justify-end' : 'justify-start'}`}>
-        <span className="text-xs text-gray-500">{message.timestamp}</span>
+      <div className={`flex items-center mt-1 gap-1.5 ${isAgent ? 'justify-end' : 'justify-start'}`}>
+        <span className="text-[11px] text-gray-400">{message.timestamp}</span>
         {isAgent && <Check className="h-3 w-3 text-gray-400" />}
       </div>
     </div>

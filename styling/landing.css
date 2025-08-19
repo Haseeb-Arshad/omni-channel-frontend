@@ -1,0 +1,215 @@
+/* Landing page custom CSS (no Tailwind utilities) */
+
+:root {
+  --bg: #0b0c0f;
+  --text: #e6e8eb;
+  --muted: #9aa2ac;
+  --border: #24272c;
+  --primary: #4c8bf5;
+  --primary-foreground: #ffffff;
+
+  --container-max: 1120px;
+  --radius: 12px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --text-5xl: 42px;
+}
+
+/* Root wrapper */
+.landing {
+  position: relative;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* Constrain width */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* Typography */
+.h-eyebrow {
+  display: inline-block;
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.h1 {
+  margin-top: var(--space-4);
+  font-size: clamp(28px, 6vw, var(--text-5xl));
+  line-height: 1.1;
+  font-weight: 650;
+}
+
+.p-lead {
+  margin-top: var(--space-4);
+  font-size: clamp(var(--text-base), 2.2vw, var(--text-xl));
+  color: var(--muted);
+}
+
+.small-note {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+/* Buttons */
+.btn-row {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .btn-row { flex-direction: row; justify-content: center; }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity .15s ease, background-color .15s ease, border-color .15s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn-primary:hover { opacity: .9; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.03); }
+
+/* Sections */
+.section {
+  padding-top: clamp(48px, 7vw, 96px);
+  padding-bottom: clamp(32px, 6vw, 80px);
+}
+
+.hero {
+  text-align: center;
+}
+
+.social-proof .logos {
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: center;
+  opacity: .8;
+}
+
+@media (min-width: 768px) {
+  .social-proof .logos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.logo-img {
+  height: 24px;
+  display: block;
+  margin: 0 auto;
+  filter: grayscale(100%);
+  opacity: .9;
+}
+
+.value-props .grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .value-props .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.value-props h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.value-props p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.story .quote {
+  margin-top: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.story .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+}
+
+.cta {
+  display: flex;
+  justify-content: center;
+}
+
+.cta-card {
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-8);
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: saturate(120%) blur(0px);
+}
+
+.cta-card h3 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+}
+
+.cta-card p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+

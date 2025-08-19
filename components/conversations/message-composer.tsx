@@ -31,77 +31,42 @@ export const MessageComposer = ({ onSendMessage, disabled = false }: MessageComp
   };
 
   return (
-    <div className="p-6 border-t border-gray-200 bg-white">
-      <div className="flex items-center space-x-2 mb-3">
+    <div className="p-4 border-t border-gray-700 bg-gray-900">
+      <div className="flex items-end gap-2">
         <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setIsInternalNote(!isInternalNote)}
-          className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
-            isInternalNote 
-              ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
-              : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
-          }`}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="p-2 text-gray-400 hover:text-gray-300 hover:bg-gray-700 rounded-full transition-colors"
+          disabled={disabled}
         >
-          <StickyNote className="h-3 w-3 mr-1 inline" />
-          Internal Note
+          <Paperclip className="h-4 w-4" />
         </motion.button>
-      </div>
-      
-      <div className="flex items-end space-x-3">
+        
         <div className="flex-1">
           <Textarea
-            placeholder={isInternalNote ? "Add an internal note..." : "Type your message..."}
+            placeholder="Type a message..."
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
             onKeyPress={handleKeyPress}
-            className={`min-h-[60px] max-h-32 resize-none rounded-xl border-2 transition-all duration-200 ${
-              isInternalNote 
-                ? 'border-yellow-200 bg-yellow-50/50 focus:border-yellow-400' 
-                : 'border-gray-200 focus:border-purple-400'
-            }`}
+            className="min-h-[40px] max-h-24 resize-none rounded-2xl border-0 bg-gray-700 text-white text-sm placeholder-gray-400 focus:ring-1 focus:ring-gray-600 focus:bg-gray-600"
             disabled={disabled}
           />
         </div>
         
-        <div className="flex items-center space-x-2">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
-            disabled={disabled}
-          >
-            <Paperclip className="h-5 w-5" />
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleSend}
-            disabled={!messageText.trim() || disabled}
-            className={`p-3 rounded-xl font-medium transition-all duration-200 ${
-              messageText.trim() && !disabled
-                ? isInternalNote
-                  ? 'bg-yellow-500 hover:bg-yellow-600 text-white shadow-lg'
-                  : 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-          >
-            <Send className="h-5 w-5" />
-          </motion.button>
-        </div>
-      </div>
-      
-      {isInternalNote && (
-        <motion.p
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-xs text-yellow-700 mt-2 flex items-center"
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleSend}
+          disabled={!messageText.trim() || disabled}
+          className={`p-2 rounded-full transition-all duration-200 ${
+            messageText.trim() && !disabled
+              ? 'bg-green-600 hover:bg-green-700 text-white'
+              : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+          }`}
         >
-          <StickyNote className="h-3 w-3 mr-1" />
-          This note will only be visible to your team
-        </motion.p>
-      )}
+          <Send className="h-4 w-4" />
+        </motion.button>
+      </div>
     </div>
   );
 };

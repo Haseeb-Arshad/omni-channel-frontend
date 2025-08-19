@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { EditorialHeader } from "@/components/ui/editorial";
 
 // Mock data for demonstration
 const mockConversations = [
@@ -187,14 +188,22 @@ export default function InboxPage() {
 
   return (
     <motion.div 
-      className="h-full flex flex-col"
+      className="space-y-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex-1 flex overflow-hidden">
-        {/* Conversation List - Left Pane */}
-        <div className="w-80 border-r flex flex-col bg-white overflow-hidden">
+      {/* Header */}
+      <EditorialHeader
+        title="Inbox"
+        subtitle="Manage all customer messages and conversations in real-time"
+      />
+
+      <div className="editorial-container editorial-section">
+        <div className="editorial-panel overflow-hidden">
+          <div className="h-[calc(100vh-12rem)] flex">
+            {/* Conversation List - Left Pane */}
+            <div className="w-80 border-r flex flex-col bg-white overflow-hidden">
           <div className="p-4 border-b">
             <div className="relative">
               <input
@@ -325,10 +334,10 @@ export default function InboxPage() {
               </div>
             ))}
           </div>
-        </div>
-        
-        {/* Message Thread - Center Pane */}
-        <div className="flex-1 flex flex-col bg-white/60 overflow-hidden">
+            </div>
+            
+            {/* Message Thread - Center Pane */}
+            <div className="flex-1 flex flex-col bg-white/60 overflow-hidden">
           {activeConversation ? (
             <>
               <div className="p-4 border-b flex justify-between items-center">
@@ -441,10 +450,10 @@ export default function InboxPage() {
               </p>
             </div>
           )}
-        </div>
-        
-        {/* Context Panel - Right Pane */}
-        <div className="w-80 border-l flex flex-col bg-white overflow-hidden">
+            </div>
+            
+            {/* Context Panel - Right Pane */}
+            <div className="w-80 border-l flex flex-col bg-white overflow-hidden">
           {activeConversation ? (
             <>
               <div className="p-4 border-b">
@@ -605,6 +614,8 @@ export default function InboxPage() {
               </p>
             </div>
           )}
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>

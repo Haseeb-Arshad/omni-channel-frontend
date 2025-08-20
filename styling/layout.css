@@ -1,0 +1,17 @@
+/* Global layout base styles to reduce Tailwind reliance */
+:root {
+  --app-bg: #0b0c0f;
+  --app-fg: #e6e8eb;
+}
+
+.app-body {
+  background: var(--app-bg);
+  color: var(--app-fg);
+  margin: 0;
+}
+
+.app-root {
+  min-height: 100vh;
+  position: relative;
+}
+

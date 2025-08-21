@@ -125,6 +125,7 @@ module.exports = {
         "ease-in": "var(--ease-in)",
         "ease-spring": "var(--ease-spring)",
         "ease-bounce": "var(--ease-bounce)",
+        "ease-smooth": "var(--ease-smooth)",
       },
       // Box Shadows
       boxShadow: {

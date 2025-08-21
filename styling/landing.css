@@ -1,47 +1,16 @@
 /* Landing page custom CSS (no Tailwind utilities) */
 
-:root {
-  --bg: #0b0c0f;
-  --text: #e6e8eb;
-  --muted: #9aa2ac;
-  --border: #24272c;
-  --primary: #4c8bf5;
-  --primary-foreground: #ffffff;
-
-  --container-max: 1120px;
-  --radius: 12px;
-
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-12: 48px;
-  --space-16: 64px;
-
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 16px;
-  --text-lg: 18px;
-  --text-xl: 20px;
-  --text-2xl: 24px;
-  --text-3xl: 30px;
-  --text-4xl: 36px;
-  --text-5xl: 42px;
-}
-
 /* Root wrapper */
 .landing {
   position: relative;
-  color: var(--text);
-  background: var(--bg);
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
 }
 
 /* Constrain width */
 .container {
   width: 100%;
-  max-width: var(--container-max);
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding-left: 24px;
   padding-right: 24px;
@@ -53,7 +22,7 @@
   font-size: var(--text-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: hsl(var(--muted-foreground));
   font-weight: 600;
 }
 
@@ -67,13 +36,13 @@
 .p-lead {
   margin-top: var(--space-4);
   font-size: clamp(var(--text-base), 2.2vw, var(--text-xl));
-  color: var(--muted);
+  color: hsl(var(--muted-foreground));
 }
 
 .small-note {
   margin-top: var(--space-2);
   font-size: var(--text-xs);
-  color: var(--muted);
+  color: hsl(var(--muted-foreground));
 }
 
 /* Buttons */
@@ -95,25 +64,30 @@
   justify-content: center;
   height: 44px;
   padding: 0 20px;
-  border-radius: 10px;
+  border-radius: var(--radius);
   border: 1px solid transparent;
   font-size: var(--text-sm);
   font-weight: 600;
   text-decoration: none;
-  transition: opacity .15s ease, background-color .15s ease, border-color .15s ease;
+  transition: transform var(--duration-long) var(--ease-smooth), opacity .2s ease, background-color .2s ease, border-color .2s ease;
+  will-change: transform;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
 }
 
 .btn-primary {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
 .btn-primary:hover { opacity: .9; }
 
 .btn-ghost {
   background: transparent;
-  color: var(--text);
-  border-color: var(--border);
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
 }
 
 .btn-ghost:hover { background: rgba(255, 255, 255, 0.03); }
@@ -147,6 +121,13 @@
   margin: 0 auto;
   filter: grayscale(100%);
   opacity: .9;
+  transition: transform var(--duration-long) var(--ease-smooth), opacity .3s ease;
+  will-change: transform;
+}
+
+.logo-img:hover {
+  transform: scale(1.03);
+  opacity: 1;
 }
 
 .value-props .grid {
@@ -166,7 +147,7 @@
 
 .value-props p {
   margin-top: 8px;
-  color: var(--muted);
+  color: hsl(var(--muted-foreground));
   font-size: var(--text-sm);
 }
 
@@ -175,7 +156,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  color: var(--muted);
+  color: hsl(var(--muted-foreground));
   font-size: var(--text-sm);
 }
 
@@ -183,7 +164,7 @@
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.08);
+  background: color-mix(in hsl, hsl(var(--foreground)) 10%, transparent);
 }
 
 .cta {
@@ -195,11 +176,18 @@
   width: 100%;
   max-width: 640px;
   text-align: center;
-  border: 1px solid var(--border);
+  border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   padding: var(--space-8);
-  background: rgba(255,255,255,0.02);
+  background: color-mix(in hsl, hsl(var(--card)) 2%, transparent);
   backdrop-filter: saturate(120%) blur(0px);
+  transition: transform var(--duration-long) var(--ease-smooth), box-shadow .3s var(--ease-out);
+  will-change: transform;
+}
+
+.cta-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
 }
 
 .cta-card h3 {

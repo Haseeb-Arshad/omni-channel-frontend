@@ -84,6 +84,10 @@
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  /* Smooth transform easing (site-wide) */
+  --ease-smooth: cubic-bezier(0.77, 0, 0.175, 1);
+  /* Longer duration for pronounced transitions */
+  --duration-long: 800ms;
 
   /* Shadow System */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -196,6 +200,11 @@ html.has-scroll-dragging {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Site-wide smooth transform transition for interactive elements */
+  a, button, [role="button"], [data-interactive], .btn, .card {
+    transition: transform var(--duration-long) var(--ease-smooth);
+  }
   
   /* Form elements styling */
   input, textarea, select {
@@ -300,6 +309,13 @@ html.has-scroll-dragging {
 /* Multiple animation options for entrances */
 .animate-in {
   animation: animate-in var(--duration-normal) forwards;
+}
+
+@layer utilities {
+  /* Reusable smooth transform transition utility */
+  .transition-smooth-transform {
+    transition: transform var(--duration-long) var(--ease-smooth);
+  }
 }
 
 .animate-fade-in {

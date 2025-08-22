@@ -9,7 +9,7 @@ export default function Home() {
 
       <main>
         {/* Hero */}
-        <section className="section hero">
+        <section id="home" className="section hero">
           <div className="container" style={{ maxWidth: "720px" }}>
             <span className="h-eyebrow">OmniChannel AI</span>
             <h1 className="h1">One place to talk to your customers everywhere</h1>
@@ -18,14 +18,14 @@ export default function Home() {
             </p>
             <div className="btn-row">
               <a href="/signup" className="btn btn-primary">Start free</a>
-              <a href="/demo" className="btn btn-ghost">See a quick demo</a>
+              <a href="#demo" className="btn btn-ghost">See a quick demo</a>
             </div>
             <p className="small-note">No credit card required</p>
           </div>
         </section>
 
         {/* Social proof */}
-        <section className="section social-proof">
+        <section id="logos" className="section social-proof">
           <div className="container" style={{ maxWidth: "880px" }}>
             <p className="h-eyebrow" style={{ display: "block", textAlign: "center" }}>Trusted by teams who value clarity</p>
             <div className="logos">
@@ -38,7 +38,7 @@ export default function Home() {
         </section>
 
         {/* Value props */}
-        <section className="section value-props">
+        <section id="features" className="section value-props">
           <div className="container" style={{ maxWidth: "960px" }}>
             <div className="grid">
               <div>
@@ -58,7 +58,7 @@ export default function Home() {
         </section>
 
         {/* Story/narrative */}
-        <section className="section story">
+        <section id="story" className="section story">
           <div className="container" style={{ maxWidth: "720px" }}>
             <h2 className="h1" style={{ fontSize: "clamp(22px, 4vw, 32px)" }}>From scattered pings to one clear conversation</h2>
             <p className="p-lead" style={{ fontSize: "var(--text-base)" }}>
@@ -67,7 +67,9 @@ export default function Home() {
             <div className="quote">
               <div className="avatar" />
               <div>
-                <p style={{ color: "var(--text)", fontWeight: 500 }}>“We closed tickets 2x faster in our first week.”</p>
+                <p style={{ color: "hsl(var(--foreground))", fontWeight: 500 }}>
+                  “We closed tickets 2x faster in our first week.”
+                </p>
                 <p className="small-note">Head of Support, Early Startup</p>
               </div>
             </div>
@@ -75,7 +77,7 @@ export default function Home() {
         </section>
 
         {/* CTA */}
-        <section className="section cta">
+        <section id="cta" className="section cta">
           <div className="container">
             <div className="cta-card">
               <h3>Make every conversation effortless</h3>

@@ -67,7 +67,7 @@ export function Header() {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'bg-slate-900/95 backdrop-blur-xl shadow-2xl border-b border-slate-800/50 py-3' 
+          ? 'bg-slate-950/90 backdrop-blur-xl shadow-2xl border-b border-slate-800/60 py-3' 
           : 'bg-transparent py-6'
       }`}
     >
@@ -81,15 +81,15 @@ export function Header() {
         >
           <Link href="/" className="flex items-center gap-3 group">
             <motion.div 
-              className="relative h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl overflow-hidden flex items-center justify-center shadow-lg"
-              whileHover={{ scale: 1.05, rotate: 5 }}
+              className="relative h-10 w-10 rounded-xl overflow-hidden flex items-center justify-center shadow-lg bg-slate-800 border border-slate-700"
+              whileHover={{ scale: 1.05, rotate: 2 }}
               transition={{ duration: 0.2 }}
             >
-              <MessageSquare className="w-5 h-5 text-white" />
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-500/20 rounded-xl" />
+              <MessageSquare className="w-5 h-5 text-slate-200" />
+              <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/5" />
             </motion.div>
             <div className="flex flex-col">
-              <span className="font-bold text-xl text-white group-hover:text-blue-100 transition-colors duration-300">
+              <span className="font-bold text-xl text-white group-hover:text-slate-200 transition-colors duration-300">
                 OmniChannel
               </span>
               <span className="text-xs text-slate-400 -mt-1">Communication Hub</span>
@@ -113,15 +113,15 @@ export function Header() {
             }}
           >
             {[
+              { href: "#home", label: "Home" },
               { href: "#features", label: "Features" },
-              { href: "#pricing", label: "Pricing" },
-              { href: "#testimonials", label: "Reviews" },
-              { href: "/docs", label: "Docs" },
+              { href: "#story", label: "Story" },
+              { href: "#cta", label: "Get Started" },
             ].map((item, index) => (
               <motion.div key={item.href} variants={navItemVariants}>
                 <Link
                   href={item.href}
-                  className="px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all duration-300 flex items-center font-medium backdrop-blur-sm"
+                  className="px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all duration-300 flex items-center font-medium backdrop-blur-sm"
                 >
                   {item.label}
                 </Link>
@@ -150,10 +150,10 @@ export function Header() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button 
                 asChild 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 transition-all duration-300 group"
+                className="bg-slate-800 hover:bg-slate-700 text-white shadow-lg shadow-black/20 border border-slate-700 transition-all duration-300 group"
               >
                 <Link href="/auth/register" className="flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                  <Sparkles className="w-4 h-4 mr-2 text-slate-300 group-hover:rotate-12 transition-transform duration-300" />
                   Get Started Free
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
@@ -200,7 +200,7 @@ export function Header() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="lg:hidden overflow-hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/50"
+            className="lg:hidden overflow-hidden bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/60"
             initial="closed"
             animate="open"
             exit="closed"
@@ -209,10 +209,10 @@ export function Header() {
             <div className="container px-4 py-6">
               <nav className="flex flex-col space-y-2 mb-8">
                 {[
+                  { href: "#home", label: "Home", desc: "Back to top" },
                   { href: "#features", label: "Features", desc: "Explore our powerful tools" },
-                  { href: "#pricing", label: "Pricing", desc: "Simple, transparent plans" },
-                  { href: "#testimonials", label: "Reviews", desc: "What customers say" },
-                  { href: "/docs", label: "Documentation", desc: "Get started quickly" },
+                  { href: "#story", label: "Story", desc: "How it helps" },
+                  { href: "#cta", label: "Get Started", desc: "Begin now" },
                 ].map((item) => (
                   <motion.div key={item.href} variants={mobileNavItemVariants}>
                     <Link
@@ -222,7 +222,7 @@ export function Header() {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="font-medium text-white group-hover:text-blue-100 transition-colors duration-300">
+                          <div className="font-medium text-white group-hover:text-slate-200 transition-colors duration-300">
                             {item.label}
                           </div>
                           <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
@@ -241,7 +241,7 @@ export function Header() {
                 variants={mobileNavItemVariants}
               >
                 <Button 
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 h-12 text-lg group" 
+                  className="w-full bg-slate-800 hover:bg-slate-700 text-white shadow-lg shadow-black/20 h-12 text-lg group border border-slate-700" 
                   asChild
                 >
                   <Link href="/auth/register" onClick={() => setIsMenuOpen(false)}>
@@ -256,7 +256,7 @@ export function Header() {
                     Already have an account?{' '}
                     <Link 
                       href="/auth/login" 
-                      className="text-blue-400 hover:text-blue-300 transition-colors duration-300"
+                      className="text-slate-300 hover:text-white transition-colors duration-300"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Sign in here

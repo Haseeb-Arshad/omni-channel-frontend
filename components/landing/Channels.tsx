@@ -23,10 +23,10 @@ const ChannelCard: React.FC<ChannelCardProps> = ({ icon, color, title, descripti
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.6, delay: delay * 0.1, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className={`channel-card relative rounded-lg overflow-hidden transition-all duration-300 border border-slate-700 bg-slate-800 shadow-lg hover:border-${color.replace('bg-', '')}/40`}>
+      <div className={`channel-card relative rounded-lg overflow-hidden transition-all duration-300 border border-slate-700 bg-slate-800 shadow-lg hover:border-slate-500/40`}>
         <div className="relative p-6 flex flex-col">
           {/* Channel Icon */}
-          <div className={`w-12 h-12 rounded-lg ${color}/20 text-${color.replace('bg-', '')} flex items-center justify-center mb-4`}>
+          <div className={`w-12 h-12 rounded-lg bg-slate-700/20 text-slate-300 flex items-center justify-center mb-4`}>
             {icon}
           </div>
           
@@ -38,7 +38,7 @@ const ChannelCard: React.FC<ChannelCardProps> = ({ icon, color, title, descripti
       
       {/* Bottom accent line - colored version */}
       <motion.div 
-        className={`h-0.5 ${color} rounded-b-lg`}
+        className={`h-0.5 bg-slate-500 rounded-b-lg`}
         initial={{ width: "0%" }}
         whileInView={{ width: "100%" }}
         transition={{ duration: 0.8, ease: "easeOut", delay: delay * 0.1 + 0.3 }}
@@ -91,8 +91,8 @@ const Channels: React.FC = () => {
     >
       {/* Subtle decorative elements */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 right-1/3 w-64 h-64 rounded-full bg-blue-600 opacity-[0.07] blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-teal-500 opacity-[0.06] blur-3xl" />
+        <div className="absolute top-1/4 right-1/3 w-64 h-64 rounded-full bg-slate-600 opacity-[0.07] blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-slate-500 opacity-[0.06] blur-3xl" />
       </div>
       
       <div className="minimalist-container px-4 mx-auto relative z-10">
@@ -143,14 +143,14 @@ const Channels: React.FC = () => {
             >
               <svg viewBox="0 0 700 400" className="w-full" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <linearGradient id="channel-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="rgba(124, 58, 237, 0.2)" />
-                    <stop offset="100%" stopColor="rgba(59, 130, 246, 0.2)" />
+                    <linearGradient id="channel-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="rgba(100, 116, 139, 0.2)" />
+                    <stop offset="100%" stopColor="rgba(100, 116, 139, 0.2)" />
                   </linearGradient>
                 </defs>
                 
                 {/* Center Hub */}
-                <circle cx="350" cy="200" r="60" fill="url(#channel-gradient)" stroke="#7c3aed" strokeWidth="2" />
+                <circle cx="350" cy="200" r="60" fill="url(#channel-gradient)" stroke="#64748b" strokeWidth="2" />
                 <text x="350" y="205" textAnchor="middle" fill="#fff" fontWeight="bold" fontSize="18">OmniChannel</text>
                 
                 {/* Connection Lines */}
@@ -159,10 +159,10 @@ const Channels: React.FC = () => {
                   whileInView={{ pathLength: 1, opacity: 1 }}
                   transition={{ duration: 1.5, ease: "easeInOut" }}
                 >
-                  <path d="M350,140 L350,50" stroke="#7c3aed" strokeWidth="2" fill="none" strokeDasharray="3,3" />
-                  <path d="M350,260 L350,350" stroke="#3b82f6" strokeWidth="2" fill="none" strokeDasharray="3,3" />
-                  <path d="M290,200 L150,200" stroke="#10b981" strokeWidth="2" fill="none" strokeDasharray="3,3" />
-                  <path d="M410,200 L550,200" stroke="#f59e0b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                  <path d="M350,140 L350,50" stroke="#64748b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                  <path d="M350,260 L350,350" stroke="#64748b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                  <path d="M290,200 L150,200" stroke="#64748b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
+                  <path d="M410,200 L550,200" stroke="#64748b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
                 </motion.g>
                 
                 {/* Channel Nodes */}
@@ -171,10 +171,10 @@ const Channels: React.FC = () => {
                   whileInView={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
                 >
-                  <circle cx="350" cy="50" r="30" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6" strokeWidth="2" />
-                  <circle cx="350" cy="350" r="30" fill="rgba(59, 130, 246, 0.1)" stroke="#3b82f6" strokeWidth="2" />
-                  <circle cx="150" cy="200" r="30" fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" strokeWidth="2" />
-                  <circle cx="550" cy="200" r="30" fill="rgba(245, 158, 11, 0.1)" stroke="#f59e0b" strokeWidth="2" />
+                  <circle cx="350" cy="50" r="30" fill="rgba(100, 116, 139, 0.1)" stroke="#64748b" strokeWidth="2" />
+                  <circle cx="350" cy="350" r="30" fill="rgba(100, 116, 139, 0.1)" stroke="#64748b" strokeWidth="2" />
+                  <circle cx="150" cy="200" r="30" fill="rgba(100, 116, 139, 0.1)" stroke="#64748b" strokeWidth="2" />
+                  <circle cx="550" cy="200" r="30" fill="rgba(100, 116, 139, 0.1)" stroke="#64748b" strokeWidth="2" />
                 </motion.g>
                 
                 {/* Channel Icons */}
@@ -183,10 +183,10 @@ const Channels: React.FC = () => {
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 1 }}
                 >
-                  <text x="350" y="55" textAnchor="middle" fill="#8b5cf6" fontWeight="500" fontSize="12">Email</text>
-                  <text x="350" y="355" textAnchor="middle" fill="#3b82f6" fontWeight="500" fontSize="12">SMS</text>
-                  <text x="150" y="205" textAnchor="middle" fill="#10b981" fontWeight="500" fontSize="12">WhatsApp</text>
-                  <text x="550" y="205" textAnchor="middle" fill="#f59e0b" fontWeight="500" fontSize="12">Web Chat</text>
+                  <text x="350" y="55" textAnchor="middle" fill="#94a3b8" fontWeight="500" fontSize="12">Email</text>
+                  <text x="350" y="355" textAnchor="middle" fill="#94a3b8" fontWeight="500" fontSize="12">SMS</text>
+                  <text x="150" y="205" textAnchor="middle" fill="#94a3b8" fontWeight="500" fontSize="12">WhatsApp</text>
+                  <text x="550" y="205" textAnchor="middle" fill="#94a3b8" fontWeight="500" fontSize="12">Web Chat</text>
                 </motion.g>
               </svg>
             </motion.div>

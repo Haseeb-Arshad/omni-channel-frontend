@@ -37,9 +37,9 @@ const PricingCard: React.FC<PricingCardProps> = ({
       ref={cardRef}
       className={`group relative rounded-3xl p-8 backdrop-blur-sm shadow-2xl overflow-hidden transition-all duration-300 ${
         popular 
-          ? 'bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500/50 scale-105' 
+          ? 'bg-gradient-to-br from-slate-900/30 to-slate-900/30 border-2 border-slate-600/50 scale-105' 
           : enterprise
-          ? 'bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-500/30'
+          ? 'bg-gradient-to-br from-slate-900/30 to-slate-900/30 border border-slate-600/50'
           : 'bg-gradient-to-br from-slate-800/30 to-slate-900/30 border border-slate-700/30'
       } hover:border-slate-600/50`}
       initial={{ y: 60, opacity: 0, scale: 0.9 }}
@@ -53,14 +53,14 @@ const PricingCard: React.FC<PricingCardProps> = ({
     >
       {/* Popular badge */}
       {popular && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium rounded-full shadow-lg">
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-slate-700 text-white text-sm font-medium rounded-full shadow-lg">
           Most Popular
         </div>
       )}
       
       {/* Enterprise badge */}
       {enterprise && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium rounded-full shadow-lg">
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-slate-700 text-white text-sm font-medium rounded-full shadow-lg">
           Enterprise
         </div>
       )}
@@ -72,14 +72,14 @@ const PricingCard: React.FC<PricingCardProps> = ({
         {/* Header */}
         <div className="text-center mb-8">
           <motion.div 
-            className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${gradient} text-white mb-4 shadow-lg`}
+            className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${gradient} text-white mb-4 shadow-lg border border-slate-600`}
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ duration: 0.2 }}
           >
             {icon}
           </motion.div>
           
-          <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-100 transition-colors duration-300">
+          <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-slate-200 transition-colors duration-300">
             {name}
           </h3>
           
@@ -91,7 +91,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
         {/* Price */}
         <div className="text-center mb-8">
           <div className="flex items-baseline justify-center">
-            <span className="text-5xl font-bold text-white group-hover:text-blue-100 transition-colors duration-300">
+            <span className="text-5xl font-bold text-white group-hover:text-slate-200 transition-colors duration-300">
               {price}
             </span>
             {period && (
@@ -112,7 +112,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ duration: 0.5, delay: delay * 0.1 + 0.3 + index * 0.1 }}
             >
-              <div className={`flex-shrink-0 w-5 h-5 rounded-full ${gradient} flex items-center justify-center`}>
+              <div className={`flex-shrink-0 w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center`}>
                 <Check className="w-3 h-3 text-white" />
               </div>
               <span className="text-slate-300 group-hover:text-slate-200 transition-colors duration-300">
@@ -129,13 +129,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
         >
           <Link href={enterprise ? "/contact" : "/auth/register"}>
             <Button 
-              className={`w-full h-12 text-lg rounded-xl font-medium transition-all duration-300 ${
-                popular 
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25' 
-                  : enterprise
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg shadow-purple-500/25'
-                  : 'bg-slate-700 hover:bg-slate-600 text-white border border-slate-600 hover:border-slate-500'
-              }`}
+              className={`w-full h-12 text-lg rounded-xl font-medium transition-all duration-300 bg-slate-700 hover:bg-slate-600 text-white border border-slate-600 hover:border-slate-500`}
             >
               {enterprise ? 'Contact Sales' : 'Get Started'}
             </Button>
@@ -144,8 +138,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
       </div>
       
       {/* Decorative elements */}
-      <div className="absolute top-4 right-4 w-2 h-2 bg-blue-400 rounded-full opacity-20 group-hover:opacity-60 transition-opacity duration-300" />
-      <div className="absolute bottom-4 left-4 w-1 h-1 bg-purple-400 rounded-full opacity-20 group-hover:opacity-60 transition-opacity duration-300" />
+      <div className="absolute top-4 right-4 w-2 h-2 bg-slate-500 rounded-full opacity-20 group-hover:opacity-60 transition-opacity duration-300" />
+      <div className="absolute bottom-4 left-4 w-1 h-1 bg-slate-500 rounded-full opacity-20 group-hover:opacity-60 transition-opacity duration-300" />
     </motion.div>
   );
 };
@@ -170,7 +164,7 @@ const Pricing: React.FC = () => {
         "Standard integrations",
         "Basic analytics"
       ],
-      gradient: "bg-gradient-to-br from-green-500 to-emerald-500",
+      gradient: "bg-slate-700",
       icon: <Zap className="w-7 h-7" />
     },
     {
@@ -189,7 +183,7 @@ const Pricing: React.FC = () => {
         "Custom workflows"
       ],
       popular: true,
-      gradient: "bg-gradient-to-br from-blue-500 to-purple-500",
+      gradient: "bg-slate-700",
       icon: <Star className="w-7 h-7" />
     },
     {
@@ -208,7 +202,7 @@ const Pricing: React.FC = () => {
         "SLA guarantees"
       ],
       enterprise: true,
-      gradient: "bg-gradient-to-br from-purple-500 to-pink-500",
+      gradient: "bg-slate-700",
       icon: <Crown className="w-7 h-7" />
     }
   ];
@@ -222,7 +216,7 @@ const Pricing: React.FC = () => {
       {/* Enhanced background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
-          className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full filter blur-[120px] opacity-[0.08]"
+          className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-slate-700 to-slate-600 rounded-full filter blur-[120px] opacity-[0.08]"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.08, 0.12, 0.08]
@@ -234,7 +228,7 @@ const Pricing: React.FC = () => {
           }}
         />
         <motion.div 
-          className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-gradient-to-br from-purple-500 to-pink-500 rounded-full filter blur-[150px] opacity-[0.06]"
+          className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-gradient-to-br from-slate-600 to-slate-500 rounded-full filter blur-[150px] opacity-[0.06]"
           animate={{ 
             scale: [1, 1.1, 1],
             opacity: [0.06, 0.1, 0.06]
@@ -258,7 +252,7 @@ const Pricing: React.FC = () => {
           className="max-w-4xl mx-auto text-center mb-20"
         >
           <motion.div 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 text-blue-300 text-sm font-medium mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 text-slate-300 text-sm font-medium mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -274,7 +268,7 @@ const Pricing: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
             Choose Your{' '}
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-teal-400 bg-clip-text text-transparent">
+            <span className="text-slate-100">
               Perfect Plan
             </span>
           </motion.h2>
@@ -304,7 +298,7 @@ const Pricing: React.FC = () => {
               whileTap={{ scale: 0.95 }}
             >
               <motion.div
-                className="w-5 h-5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg"
+                className="w-5 h-5 bg-slate-500 rounded-full shadow-lg"
                 animate={{ x: isAnnual ? 28 : 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               />
@@ -313,7 +307,7 @@ const Pricing: React.FC = () => {
               Annual
             </span>
             {isAnnual && (
-              <span className="text-xs bg-gradient-to-r from-green-500 to-emerald-500 text-white px-2 py-1 rounded-full">
+              <span className="text-xs bg-slate-700 text-white px-2 py-1 rounded-full">
                 Save 30%
               </span>
             )}
@@ -351,15 +345,15 @@ const Pricing: React.FC = () => {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-8 text-slate-400 text-sm">
             <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-400" />
+              <Check className="w-4 h-4 text-slate-400" />
               <span>Cancel anytime</span>
             </div>
             <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-400" />
+              <Check className="w-4 h-4 text-slate-400" />
               <span>No setup fees</span>
             </div>
             <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-400" />
+              <Check className="w-4 h-4 text-slate-400" />
               <span>24/7 support</span>
             </div>
           </div>

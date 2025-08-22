@@ -75,7 +75,7 @@ export function Footer() {
       {/* Enhanced background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
-          className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-br from-blue-600/10 to-purple-600/10 rounded-full filter blur-[100px]"
+          className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-br from-slate-500/10 to-slate-700/10 rounded-full filter blur-[100px]"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.1, 0.15, 0.1]
@@ -87,7 +87,7 @@ export function Footer() {
           }}
         />
         <motion.div 
-          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-teal-500/10 to-cyan-500/10 rounded-full filter blur-[120px]"
+          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-slate-600/10 to-slate-800/10 rounded-full filter blur-[120px]"
           animate={{ 
             scale: [1, 1.1, 1],
             opacity: [0.08, 0.12, 0.08]
@@ -115,7 +115,7 @@ export function Footer() {
         >
           <div className="max-w-4xl mx-auto text-center">
             <motion.div variants={itemVariants}>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 text-blue-300 text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/60 text-slate-300 text-sm font-medium mb-6">
                 <Sparkles className="w-4 h-4" />
                 <span>Stay Updated</span>
               </div>
@@ -132,10 +132,10 @@ export function Footer() {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/50 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700/60 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500/50 focus:border-slate-500/50 transition-all duration-300"
                 />
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 group whitespace-nowrap">
+                  <Button className="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 group whitespace-nowrap border border-slate-700 shadow-lg shadow-black/20">
                     Subscribe
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                   </Button>
@@ -158,15 +158,15 @@ export function Footer() {
             <motion.div variants={itemVariants} className="lg:col-span-2">
               <Link href="/" className="flex items-center gap-3 w-fit group mb-6">
                 <motion.div 
-                  className="relative h-12 w-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl overflow-hidden flex items-center justify-center shadow-lg"
-                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  className="relative h-12 w-12 bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center shadow-lg border border-slate-700"
+                  whileHover={{ scale: 1.05, rotate: 2 }}
                   transition={{ duration: 0.2 }}
                 >
                   <MessageSquare className="w-6 h-6 text-white" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-500/20 rounded-xl" />
+                  <div className="absolute inset-0 bg-slate-700/20 rounded-xl" />
                 </motion.div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-2xl text-white group-hover:text-blue-100 transition-colors duration-300">
+                  <span className="font-bold text-2xl text-white group-hover:text-slate-200 transition-colors duration-300">
                     OmniChannel
                   </span>
                   <span className="text-sm text-slate-400 -mt-1">Communication Hub</span>
@@ -297,7 +297,7 @@ export function Footer() {
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
               >
-                <Heart className="w-4 h-4 text-red-400 fill-current" />
+                <Heart className="w-4 h-4 text-slate-400" />
               </motion.div>
               <span>for better communication.</span>
             </motion.div>

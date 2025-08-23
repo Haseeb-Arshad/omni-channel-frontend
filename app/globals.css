@@ -1,3 +1,93 @@
+/* Load TimesNow serif family from public folder */
+/* Local Canela Display (if files exist in /public/fonts/canela) */
+@font-face {
+  font-family: 'Canela Display';
+  src:
+    url('/fonts/canela/CanelaDisplay-Regular.woff2') format('woff2'),
+    url('/fonts/canela/CanelaDisplay-Regular.woff') format('woff'),
+    url('/canela/CanelaDisplay-Regular.woff2') format('woff2'),
+    url('/canela/CanelaDisplay-Regular.woff') format('woff'),
+    url('/CanelaDisplay-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Canela Display';
+  src:
+    url('/fonts/canela/CanelaDisplay-Bold.woff2') format('woff2'),
+    url('/fonts/canela/CanelaDisplay-Bold.woff') format('woff'),
+    url('/canela/CanelaDisplay-Bold.woff2') format('woff2'),
+    url('/canela/CanelaDisplay-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Local Switzer family for subheads, UI, and buttons */
+@font-face {
+  font-family: 'Switzer';
+  src: url('/switzer/Switzer-Regular.woff2') format('woff2'), url('/switzer/Switzer-Regular.woff') format('woff');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/switzer/Switzer-Medium.woff2') format('woff2'), url('/switzer/Switzer-Medium.woff') format('woff');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/switzer/Switzer-Semibold.woff2') format('woff2'), url('/switzer/Switzer-Semibold.woff') format('woff');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/switzer/Switzer-Bold.woff2') format('woff2'), url('/switzer/Switzer-Bold.woff') format('woff');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* Local TimesNow as tertiary fallback */
+@font-face {
+  font-family: 'TimesNow';
+  src: url('/times-font/TimesNow-Light.woff2') format('woff2'),
+       url('/times-font/TimesNow-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TimesNow';
+  src: url('/times-font/TimesNow-SemiLight.woff2') format('woff2'),
+       url('/times-font/TimesNow-SemiLight.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TimesNow';
+  src: url('/times-font/TimesNow-SemiBold.woff2') format('woff2'),
+       url('/times-font/TimesNow-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TimesNow';
+  src: url('/times-font/TimesNow-Bold.woff2') format('woff2'),
+       url('/times-font/TimesNow-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TimesNow';
+  src: url('/times-font/TimesNow-ExtraBold.woff2') format('woff2'),
+       url('/times-font/TimesNow-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Charcoal Color Palette */
   --charcoal-50: 0 0% 97%;    /* #f8f9fa */
@@ -70,9 +160,10 @@
   --radius: 0.75rem;
   --container-max-width: 1400px;
 
-  /* Font Families */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  /* Font Families: use only serif site-wide, prefer Canela then Playfair */
+  --font-serif: 'Canela Display', 'Playfair Display', 'TimesNow', 'Times New Roman', Times, serif;
+  --font-sans: 'Switzer', 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-mono: var(--font-serif);
 
   /* Animation Configuration */
   --duration-fast: 150ms;
@@ -196,6 +287,7 @@ html.has-scroll-dragging {
   
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-serif);
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -203,7 +295,7 @@ html.has-scroll-dragging {
 
   /* Site-wide smooth transform transition for interactive elements */
   a, button, [role="button"], [data-interactive], .btn, .card {
-    transition: transform var(--duration-long) var(--ease-smooth);
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
   }
   
   /* Form elements styling */
@@ -215,6 +307,8 @@ html.has-scroll-dragging {
   /* Typography enhancements */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight text-foreground;
+    font-family: var(--font-serif);
+    letter-spacing: -0.01em;
   }
   
   h1 {
@@ -314,7 +408,7 @@ html.has-scroll-dragging {
 @layer utilities {
   /* Reusable smooth transform transition utility */
   .transition-smooth-transform {
-    transition: transform var(--duration-long) var(--ease-smooth);
+    transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
   }
 }
 

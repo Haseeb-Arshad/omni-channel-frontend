@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -7,16 +6,13 @@ import RouteGuard from "@/components/auth/RouteGuard";
 import "./globals.css";
 import "../styling/layout.css";
 import { PerformanceMonitor } from '@/components/performance-monitor';
+import { Playfair_Display } from "next/font/google";
 
-const inter = Inter({
-  variable: "--font-sans",
+// Self-host Playfair Display via next/font for broad serif coverage (fallback when Canela isn't available)
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
+  weight: ["400","500","600","700","800","900"],
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -32,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} app-body`}>
+      <body className={`${playfair.variable} app-body`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             <RouteGuard>

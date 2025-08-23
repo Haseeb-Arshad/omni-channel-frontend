@@ -3,15 +3,13 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { MessageSquare, Menu, X, ArrowRight, Sparkles, ChevronDown } from "lucide-react"
+import { MessageSquare, Menu, X, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  // Handle scroll event to change header appearance
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
@@ -20,250 +18,137 @@ export function Header() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-  
-  // Animation variants
-  const navItemVariants = {
-    hidden: { opacity: 0, y: -10 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 24
-      }
-    }
-  }
-
-  const mobileMenuVariants = {
-    closed: { 
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.3,
-        when: "afterChildren" as const,
-        staggerChildren: 0.05,
-        staggerDirection: -1
-      }
-    },
-    open: { 
-      opacity: 1,
-      height: "auto",
-      transition: {
-        duration: 0.3,
-        when: "beforeChildren" as const,
-        staggerChildren: 0.05,
-        delayChildren: 0.1
-      }
-    }
-  }
-
-  const mobileNavItemVariants = {
-    closed: { opacity: 0, x: -20 },
-    open: { opacity: 1, x: 0 }
-  }
 
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'bg-slate-950/90 backdrop-blur-xl shadow-2xl border-b border-slate-800/60 py-3' 
-          : 'bg-transparent py-6'
+          ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-200/50 py-3' 
+          : 'bg-white/80 backdrop-blur-sm py-6'
       }`}
     >
       <div className="container px-4 mx-auto flex items-center justify-between">
-        {/* Enhanced Logo */}
+        {/* Logo */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex items-center"
         >
           <Link href="/" className="flex items-center gap-3 group">
-            <motion.div 
-              className="relative h-10 w-10 rounded-xl overflow-hidden flex items-center justify-center shadow-lg bg-slate-800 border border-slate-700"
-              whileHover={{ scale: 1.05, rotate: 2 }}
-              transition={{ duration: 0.2 }}
-            >
-              <MessageSquare className="w-5 h-5 text-slate-200" />
-              <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/5" />
-            </motion.div>
+            <div className="relative h-10 w-10 rounded-xl bg-gray-900 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+              <MessageSquare className="w-5 h-5 text-white" />
+            </div>
             <div className="flex flex-col">
-              <span className="font-bold text-xl text-white group-hover:text-slate-200 transition-colors duration-300">
+              <span className="font-bold text-xl text-gray-900 group-hover:text-gray-700 transition-colors duration-300">
                 OmniChannel
               </span>
-              <span className="text-xs text-slate-400 -mt-1">Communication Hub</span>
+              <span className="text-xs text-gray-500 -mt-1">Communication Hub</span>
             </div>
           </Link>
         </motion.div>
 
-        {/* Enhanced Desktop Navigation */}
+        {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center space-x-2">
-          <motion.nav 
-            className="flex items-center mr-6 space-x-2"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: {
-                transition: {
-                  staggerChildren: 0.1,
-                  delayChildren: 0.3
-                }
-              }
-            }}
-          >
+          <nav className="flex items-center mr-6 space-x-2">
             {[
-              { href: "#home", label: "Home" },
               { href: "#features", label: "Features" },
-              { href: "#story", label: "Story" },
-              { href: "#cta", label: "Get Started" },
-            ].map((item, index) => (
-              <motion.div key={item.href} variants={navItemVariants}>
-                <Link
-                  href={item.href}
-                  className="px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all duration-300 flex items-center font-medium backdrop-blur-sm"
-                >
-                  {item.label}
-                </Link>
-              </motion.div>
+              { href: "#testimonials", label: "Stories" },
+              { href: "#pricing", label: "Pricing" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300 font-medium"
+              >
+                {item.label}
+              </Link>
             ))}
-          </motion.nav>
+          </nav>
 
-          <motion.div 
-            className="flex items-center gap-4"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6, duration: 0.6, ease: "easeOut" }}
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button 
-                variant="ghost" 
-                asChild 
-                className="text-slate-300 hover:text-white hover:bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300"
-              >
-                <Link href="/auth/login" className="flex items-center justify-center">
-                  Sign In
-                </Link>
-              </Button>
-            </motion.div>
-            
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button 
-                asChild 
-                className="bg-slate-800 hover:bg-slate-700 text-white shadow-lg shadow-black/20 border border-slate-700 transition-all duration-300 group"
-              >
-                <Link href="/auth/register" className="flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 mr-2 text-slate-300 group-hover:rotate-12 transition-transform duration-300" />
-                  Get Started Free
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                </Link>
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Enhanced Mobile Menu Button */}
-        <div className="lg:hidden flex items-center gap-3">
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <div className="flex items-center gap-3">
             <Button 
               variant="ghost" 
-              size="sm"
               asChild 
-              className="text-slate-300 hover:text-white hover:bg-slate-800/50 backdrop-blur-sm border border-slate-700/50"
+              className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             >
-              <Link href="/auth/login">Sign In</Link>
+              <Link href="/auth/login">
+                Sign In
+              </Link>
             </Button>
-          </motion.div>
-          
-          <motion.button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 rounded-xl hover:bg-slate-800/50 transition-all duration-300 border border-slate-700/50 backdrop-blur-sm"
-            aria-label="Toggle menu"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <motion.div
-              animate={{ rotate: isMenuOpen ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
+            
+            <Button 
+              asChild 
+              className="bg-gray-900 hover:bg-gray-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 group"
             >
-              {isMenuOpen ? (
-                <X className="h-5 w-5 text-white" />
-              ) : (
-                <Menu className="h-5 w-5 text-slate-300" />
-              )}
-            </motion.div>
-          </motion.button>
+              <Link href="/auth/register" className="flex items-center">
+                Get Started Free
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="lg:hidden flex items-center gap-3">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            asChild 
+            className="text-gray-600 hover:text-gray-900"
+          >
+            <Link href="/auth/login">Sign In</Link>
+          </Button>
+          
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-all duration-300"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5 text-gray-900" />
+            ) : (
+              <Menu className="h-5 w-5 text-gray-600" />
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Enhanced Mobile Navigation */}
+      {/* Mobile Navigation */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="lg:hidden overflow-hidden bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/60"
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={mobileMenuVariants}
+            className="lg:hidden bg-white border-b border-gray-200"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="container px-4 py-6">
-              <nav className="flex flex-col space-y-2 mb-8">
+              <nav className="flex flex-col space-y-4 mb-6">
                 {[
-                  { href: "#home", label: "Home", desc: "Back to top" },
-                  { href: "#features", label: "Features", desc: "Explore our powerful tools" },
-                  { href: "#story", label: "Story", desc: "How it helps" },
-                  { href: "#cta", label: "Get Started", desc: "Begin now" },
+                  { href: "#features", label: "Features" },
+                  { href: "#testimonials", label: "Stories" },
+                  { href: "#pricing", label: "Pricing" },
                 ].map((item) => (
-                  <motion.div key={item.href} variants={mobileNavItemVariants}>
-                    <Link
-                      href={item.href}
-                      className="block py-4 px-4 rounded-xl hover:bg-slate-800/50 transition-all duration-300 border border-transparent hover:border-slate-700/50 backdrop-blur-sm group"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium text-white group-hover:text-slate-200 transition-colors duration-300">
-                            {item.label}
-                          </div>
-                          <div className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
-                            {item.desc}
-                          </div>
-                        </div>
-                        <ChevronDown className="w-4 h-4 text-slate-400 rotate-[-90deg] group-hover:translate-x-1 transition-transform duration-300" />
-                      </div>
-                    </Link>
-                  </motion.div>
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="py-2 text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
                 ))}
               </nav>
               
-              <motion.div 
-                className="space-y-3"
-                variants={mobileNavItemVariants}
+              <Button 
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white" 
+                asChild
               >
-                <Button 
-                  className="w-full bg-slate-800 hover:bg-slate-700 text-white shadow-lg shadow-black/20 h-12 text-lg group border border-slate-700" 
-                  asChild
-                >
-                  <Link href="/auth/register" onClick={() => setIsMenuOpen(false)}>
-                    <Sparkles className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                    Get Started Free
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                  </Link>
-                </Button>
-                
-                <div className="text-center">
-                  <p className="text-xs text-slate-400">
-                    Already have an account?{' '}
-                    <Link 
-                      href="/auth/login" 
-                      className="text-slate-300 hover:text-white transition-colors duration-300"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Sign in here
-                    </Link>
-                  </p>
-                </div>
-              </motion.div>
+                <Link href="/auth/register" onClick={() => setIsMenuOpen(false)}>
+                  Get Started Free
+                </Link>
+              </Button>
             </div>
           </motion.div>
         )}

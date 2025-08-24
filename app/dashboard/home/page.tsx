@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./home.module.css";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   CheckCircle2,
   ChevronDown,
@@ -38,6 +40,7 @@ function useCountUp(target: number, duration = 1200) {
 }
 
 export default function DashboardHome() {
+  const router = useRouter();
   // Top bar filters
   const [range, setRange] = useState("Today");
   const [channel, setChannel] = useState("All channels");
@@ -52,9 +55,105 @@ export default function DashboardHome() {
   const [retainTranscripts, setRetainTranscripts] = useState(false);
   const [useForImprovements, setUseForImprovements] = useState(false);
 
+  // Quick test state
+  const [testTab, setTestTab] = useState<'chat' | 'voice'>('chat');
+  const [input, setInput] = useState("");
+  const [chat, setChat] = useState<{ author: 'you' | 'agent'; text: string }[]>([
+    { author: 'you', text: '"Can you check my order status?"' },
+    { author: 'agent', text: "Sure—what's your order ID?" },
+  ]);
+  const [isRecording, setIsRecording] = useState(false);
+
+  // Entities that need local state for actions
+  type Agent = { id: string; name: string; persona: string; langs: string; chans: string[]; live: boolean };
+  const [agents, setAgents] = useState<Agent[]>([
+    { id: 'a1', name: 'Support', persona: 'Warm, practical helper', langs: 'EN, ES', chans: ['Email', 'Chat'], live: false },
+    { id: 'a2', name: 'Sales', persona: 'Concise booking assistant', langs: 'EN', chans: ['WhatsApp', 'Web'], live: true },
+    { id: 'a3', name: 'Booking', persona: 'Schedules and reminders', langs: 'EN, DE', chans: ['Voice'], live: true },
+  ]);
+
+  const channels = [
+    { name: 'WhatsApp', status: 'Connected', last: '2m ago', icon: <Phone size={16} /> },
+    { name: 'Email', status: 'Connected', last: 'Yesterday', icon: <MessageSquareText size={16} /> },
+    { name: 'Voice', status: 'Pending', last: '—', icon: <Volume2 size={16} /> },
+    { name: 'Web Chat', status: 'Connected', last: '3h ago', icon: <Wifi size={16} /> },
+  ];
+
   const messages = useCountUp(1250, 1000);
   const minutes = useCountUp(87, 1000);
   const storage = useCountUp(4, 1000);
+
+  // Handlers
+  const onSend = () => {
+    const text = input.trim();
+    if (!text) return;
+    setChat((c) => [...c, { author: 'you', text }]);
+    setInput("");
+    toast.success('Message sent');
+    setTimeout(() => {
+      setChat((c) => [...c, { author: 'agent', text: 'Thanks! In Sandbox we simulate responses instantly.' }]);
+    }, 600);
+  };
+
+  const onPreset = (text: string) => {
+    setInput(text);
+    onSend();
+  };
+
+  const onSavePlaybook = () => {
+    toast.success('Saved as Playbook');
+    router.push('/dashboard/playground');
+  };
+
+  const onAgentAction = (id: string, action: 'edit' | 'preview' | 'live-toggle') => {
+    if (action === 'edit') router.push('/dashboard/agents');
+    if (action === 'preview') router.push('/dashboard/playground');
+    if (action === 'live-toggle') {
+      setAgents((arr) => arr.map((a) => (a.id === id ? { ...a, live: !a.live } : a)));
+      const nowLive = agents.find((a) => a.id === id)?.live === false;
+      toast.success(nowLive ? 'Agent is live' : 'Agent taken offline');
+    }
+  };
+
+  const onConfigureChannel = (name: string) => router.push(`/dashboard/channels?channel=${encodeURIComponent(name)}`);
+  const onBuyNumber = () => router.push('/dashboard/voice?buy=1');
+
+  const onKnowledge = (what: 'add' | 'import' | 'open') => {
+    if (what === 'add') router.push('/dashboard/knowledge/upload');
+    if (what === 'import') router.push('/dashboard/knowledge?import=site');
+    if (what === 'open') router.push('/dashboard/knowledge');
+  };
+
+  const onThread = (who: string) => router.push(`/dashboard/conversations?open=${encodeURIComponent(who)}`);
+
+  const onTemplate = (key: string) => {
+    const map: Record<string, string> = {
+      returns: '/dashboard/playground?template=returns',
+      appointment: '/dashboard/agents?template=appointment',
+      shipping: '/dashboard/playground?template=shipping',
+      improve: '/dashboard/settings?tab=privacy',
+    };
+    router.push(map[key]);
+  };
+
+  const onFooter = (key: string) => {
+    const map: Record<string, string> = {
+      addChannel: '/dashboard/channels',
+      createAgent: '/dashboard/agents',
+      addKnowledge: '/dashboard/knowledge/upload',
+      playground: '/dashboard/playground',
+      buyNumber: '/dashboard/voice?buy=1',
+    };
+    router.push(map[key]);
+  };
+
+  useEffect(() => {
+    if (retainTranscripts) toast.message('Transcripts will be retained');
+  }, [retainTranscripts]);
+
+  useEffect(() => {
+    if (useForImprovements) toast.message('Using conversations to improve responses');
+  }, [useForImprovements]);
 
   return (
     <div className={styles.shell}>
@@ -73,13 +172,13 @@ export default function DashboardHome() {
           </div>
         </div>
         <div className={styles.filters}>
-          <button className={styles.filter} aria-label="Time range">
+          <button className={styles.filter} aria-label="Time range" onClick={() => setRange(range === 'Today' ? 'Last 7 days' : 'Today')}>
             {range} <ChevronDown size={14} />
           </button>
-          <button className={styles.filter} aria-label="Channel">
+          <button className={styles.filter} aria-label="Channel" onClick={() => setChannel(channel === 'All channels' ? 'WhatsApp' : 'All channels')}>
             {channel} <ChevronDown size={14} />
           </button>
-          <button className={styles.filter} aria-label="Language">
+          <button className={styles.filter} aria-label="Language" onClick={() => setLang(lang === 'All languages' ? 'EN' : 'All languages')}>
             {lang} <ChevronDown size={14} />
           </button>
           <button className={styles.filter} aria-label="Environment" onClick={() => setEnv(env === "Sandbox" ? "Live" : "Sandbox")}
@@ -134,7 +233,7 @@ export default function DashboardHome() {
 
             <div className={styles.ctaCol}>
               <p className={styles.benefit}>A few minutes to publish a helpful, compliant agent across your channels.</p>
-              <button className={styles.primary}>Continue setup</button>
+              <button className={styles.primary} onClick={() => router.push('/dashboard/channels')}>Continue setup</button>
             </div>
           </div>
         </section>
@@ -145,29 +244,42 @@ export default function DashboardHome() {
             <h2 className={styles.h2}>Quick Test</h2>
           </div>
           <div className={styles.testTabs} role="tablist" aria-label="Quick Test">
-            <button className={`${styles.tab} ${styles.tabActive}`} role="tab" aria-selected="true">
+            <button className={`${styles.tab} ${testTab === 'chat' ? styles.tabActive : ''}`} role="tab" aria-selected={testTab === 'chat'} onClick={() => setTestTab('chat')}>
               <MessageSquareText size={16} /> Chat
             </button>
-            <button className={styles.tab} role="tab" aria-selected="false">
+            <button className={`${styles.tab} ${testTab === 'voice' ? styles.tabActive : ''}`} role="tab" aria-selected={testTab === 'voice'} onClick={() => setTestTab('voice')}>
               <Mic size={16} /> Voice
             </button>
           </div>
           <div className={styles.playground}>
-            <div className={styles.promptRow}>
-              <input className={styles.input} placeholder="Try: Track my order" />
-              <button className={styles.ghost}>Send</button>
-            </div>
-            <div className={styles.presetRow}>
-              <button className={styles.preset}>Track my order</button>
-              <button className={styles.preset}>Reschedule delivery</button>
-            </div>
-            <div className={styles.convo}>
-              <div className={styles.bubbleYou}>"Can you check my order status?"</div>
-              <div className={styles.bubbleAgent}>Sure—what's your order ID?</div>
-            </div>
-            <div className={styles.playActions}>
-              <button className={styles.secondary}>Save as Playbook</button>
-            </div>
+            {testTab === 'chat' ? (
+              <>
+                <div className={styles.convo}>
+                  {chat.map((m, idx) => (
+                    <div key={idx} className={m.author === 'you' ? styles.bubbleYou : styles.bubbleAgent}>{m.text}</div>
+                  ))}
+                </div>
+                <div className={styles.promptRow}>
+                  <input className={styles.input} value={input} onChange={(e) => setInput(e.target.value)} placeholder={`Try: Track my order (${env})`} onKeyDown={(e) => e.key === 'Enter' && onSend()} />
+                  <button className={styles.ghost} onClick={onSend}>Send</button>
+                </div>
+                <div className={styles.presetRow}>
+                  <button className={styles.preset} onClick={() => onPreset('Track my order')}>Track my order</button>
+                  <button className={styles.preset} onClick={() => onPreset('Reschedule delivery')}>Reschedule delivery</button>
+                </div>
+                <div className={styles.playActions}>
+                  <button className={styles.secondary} onClick={onSavePlaybook}>Save as Playbook</button>
+                </div>
+              </>
+            ) : (
+              <div className={styles.voiceWrap}>
+                <div className={styles.voiceHint}>Environment: {env}</div>
+                <button className={styles.primaryAlt} onClick={() => { setIsRecording(!isRecording); toast.message(isRecording ? 'Voice paused' : 'Listening…'); }}>
+                  {isRecording ? <><Pause size={14} /> Pause</> : <><Mic size={14} /> Start</>}
+                </button>
+                <button className={styles.ghost} onClick={() => toast.success('Voice sample played')}><Play size={14} /> Play sample</button>
+              </div>
+            )}
           </div>
         </section>
 
@@ -177,12 +289,8 @@ export default function DashboardHome() {
             <h2 className={styles.h2}>My Agent(s)</h2>
           </div>
           <div className={styles.agentList}>
-            {[
-              { name: "Support", status: "Draft", persona: "Warm, practical helper", langs: "EN, ES", chans: ["Email", "Chat"], live: false },
-              { name: "Sales", status: "Live", persona: "Concise booking assistant", langs: "EN", chans: ["WhatsApp", "Web"], live: true },
-              { name: "Booking", status: "Live", persona: "Schedules and reminders", langs: "EN, DE", chans: ["Voice"], live: true },
-            ].map((a, idx) => (
-              <article key={idx} className={styles.agentCard}>
+            {agents.map((a) => (
+              <article key={a.id} className={styles.agentCard}>
                 <div className={styles.agentTop}>
                   <div className={styles.agentTitle}><UserSquare2 size={16} /> {a.name}</div>
                   <span className={a.live ? styles.badgeLive : styles.badgeDraft}>{a.live ? "Live" : "Draft"}</span>
@@ -195,12 +303,12 @@ export default function DashboardHome() {
                   ))}
                 </div>
                 <div className={styles.agentActions}>
-                  <button className={styles.ghost}>Edit</button>
-                  <button className={styles.ghost}>Preview</button>
+                  <button className={styles.ghost} onClick={() => onAgentAction(a.id, 'edit')}>Edit</button>
+                  <button className={styles.ghost} onClick={() => onAgentAction(a.id, 'preview')}>Preview</button>
                   {a.live ? (
-                    <button className={styles.secondary}>Take Offline</button>
+                    <button className={styles.secondary} onClick={() => onAgentAction(a.id, 'live-toggle')}>Take Offline</button>
                   ) : (
-                    <button className={styles.primaryAlt}>Go Live</button>
+                    <button className={styles.primaryAlt} onClick={() => onAgentAction(a.id, 'live-toggle')}>Go Live</button>
                   )}
                 </div>
               </article>
@@ -214,12 +322,7 @@ export default function DashboardHome() {
             <h2 className={styles.h2}>My Channels</h2>
           </div>
           <ul className={styles.channelList}>
-            {[
-              { name: "WhatsApp", status: "Connected", last: "2m ago", icon: <Phone size={16} /> },
-              { name: "Email", status: "Connected", last: "Yesterday", icon: <MessageSquareText size={16} /> },
-              { name: "Voice", status: "Pending", last: "—", icon: <Volume2 size={16} /> },
-              { name: "Web Chat", status: "Connected", last: "3h ago", icon: <Wifi size={16} /> },
-            ].map((c, i) => (
+            {channels.map((c, i) => (
               <li key={i} className={styles.channelItem}>
                 <div className={styles.channelLeft}>
                   <span className={styles.channelIcon}>{c.icon}</span>
@@ -229,14 +332,14 @@ export default function DashboardHome() {
                   </div>
                 </div>
                 <div className={styles.channelRight}>
-                  <span className={c.status === "Connected" ? styles.statusOk : styles.statusPending}>{c.status}</span>
-                  <button className={styles.ghost}>Configure</button>
+                  <span className={c.status === 'Connected' ? styles.statusOk : styles.statusPending}>{c.status}</span>
+                  <button className={styles.ghost} onClick={() => onConfigureChannel(c.name)}>Configure</button>
                 </div>
               </li>
             ))}
           </ul>
           <div className={styles.inlineTip}>
-            <button className={styles.secondary}><Phone size={14} /> Buy a number</button>
+            <button className={styles.secondary} onClick={onBuyNumber}><Phone size={14} /> Buy a number</button>
           </div>
         </section>
 
@@ -250,9 +353,9 @@ export default function DashboardHome() {
             <div className={styles.knowledgeStat}>Last sync 2 hours ago</div>
           </div>
           <div className={styles.knowledgeActions}>
-            <button className={styles.primaryAlt}>Add document</button>
-            <button className={styles.secondary}>Import site</button>
-            <button className={styles.ghost}>Open Knowledge</button>
+            <button className={styles.primaryAlt} onClick={() => onKnowledge('add')}>Add document</button>
+            <button className={styles.secondary} onClick={() => onKnowledge('import')}>Import site</button>
+            <button className={styles.ghost} onClick={() => onKnowledge('open')}>Open Knowledge</button>
           </div>
           <p className={styles.tip}><Sparkles size={14} /> Tip: Short, well-titled docs answer best.</p>
         </section>
@@ -275,7 +378,7 @@ export default function DashboardHome() {
                   <div className={styles.threadTitle}>{t.who}</div>
                   <div className={styles.threadSub}>{t.when} ago</div>
                 </div>
-                <button className={styles.ghost}>{t.action}</button>
+                <button className={styles.ghost} onClick={() => onThread(t.who)}>{t.action}</button>
               </li>
             ))}
           </ul>
@@ -288,12 +391,12 @@ export default function DashboardHome() {
           </div>
           <div className={styles.templateGrid}>
             {[
-              { title: "Return workflow", sub: "status" },
-              { title: "Appointment booking", sub: "" },
-              { title: "Shipping status", sub: "" },
-              { title: "Use conversations to improve", sub: "responses" },
+              { title: "Return workflow", sub: "status", key: 'returns' },
+              { title: "Appointment booking", sub: "", key: 'appointment' },
+              { title: "Shipping status", sub: "", key: 'shipping' },
+              { title: "Use conversations to improve", sub: "responses", key: 'improve' },
             ].map((t, i) => (
-              <button key={i} className={styles.templateCard}>
+              <button key={i} className={styles.templateCard} onClick={() => onTemplate(t.key)}>
                 <span className={styles.templateTitle}>{t.title}</span>
                 {t.sub && <span className={styles.templateSub}>{t.sub}</span>}
                 <ChevronRight size={16} className={styles.templateIcon} />
@@ -331,11 +434,11 @@ export default function DashboardHome() {
 
       {/* Footer Quick Bar */}
       <footer className={styles.quickBar}>
-        <button className={styles.ghost}><Wifi size={16} /> Add Channel</button>
-        <button className={styles.ghost}><UserSquare2 size={16} /> Create Agent</button>
-        <button className={styles.ghost}><Sparkles size={16} /> Add Knowledge</button>
-        <button className={styles.ghost}><MessageSquareText size={16} /> Open Playground</button>
-        <button className={styles.ghost}><Phone size={16} /> Buy Voice Number</button>
+        <button className={styles.ghost} onClick={() => onFooter('addChannel')}><Wifi size={16} /> Add Channel</button>
+        <button className={styles.ghost} onClick={() => onFooter('createAgent')}><UserSquare2 size={16} /> Create Agent</button>
+        <button className={styles.ghost} onClick={() => onFooter('addKnowledge')}><Sparkles size={16} /> Add Knowledge</button>
+        <button className={styles.ghost} onClick={() => onFooter('playground')}><MessageSquareText size={16} /> Open Playground</button>
+        <button className={styles.ghost} onClick={() => onFooter('buyNumber')}><Phone size={16} /> Buy Voice Number</button>
       </footer>
     </div>
   );

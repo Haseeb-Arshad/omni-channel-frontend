@@ -15,18 +15,43 @@
 }
 
 .sidebar {
-  background: linear-gradient(180deg, var(--sand), var(--bone));
+  background: radial-gradient(100% 80% at 0% 0%, rgba(180,107,77,0.06), transparent 60%),
+              radial-gradient(100% 80% at 100% 20%, rgba(124,113,96,0.08), transparent 60%),
+              linear-gradient(180deg, var(--sand), var(--bone));
   background-attachment: fixed;
   backdrop-filter: blur(8px);
 }
-.logoTile { background: linear-gradient(135deg, var(--copper-400), var(--copper)); box-shadow: 0 6px 16px rgba(168,94,62,0.25); }
+.logoTile { background: linear-gradient(135deg, var(--copper-400), var(--copper)); box-shadow: 0 6px 16px rgba(168,94,62,0.25); transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1); }
+.logoTile:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(168,94,62,0.3); }
 
 .groupLabel { color: var(--stone-500); }
 
-.navItem { color: var(--stone-700); background: rgba(255,255,255,0.45); border: 1px solid var(--hair); }
-.navItem:hover { background: rgba(255,255,255,0.6); }
-.navItemActive { color: var(--stone-900); background: var(--glass-deep); border: 1px solid var(--hair); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5); }
-.navIcon { color: var(--stone-500); }
+/* Sleek nav item: no background by default, smooth hover, copper glow bar on hover/active */
+.navItem {
+  color: var(--stone-700);
+  background: transparent;
+  border: 1px solid transparent;
+  position: relative;
+  transition: color 280ms cubic-bezier(0.22, 1, 0.36, 1), background 280ms cubic-bezier(0.22, 1, 0.36, 1), transform 280ms cubic-bezier(0.22, 1, 0.36, 1), border-color 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.navItem::before {
+  content: "";
+  position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 0; border-radius: 2px; opacity: 0;
+  background: linear-gradient(180deg, var(--copper-400), var(--copper));
+  box-shadow: 0 0 0 rgba(168,94,62,0);
+  transition: height 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.navItem:hover { background: rgba(255,255,255,0.28); transform: translateX(1px); }
+.navItem:hover .navIcon { color: var(--stone-700); }
+.navItem:hover::before { height: 60%; opacity: .5; box-shadow: 0 0 8px rgba(168,94,62,0.35); }
+.navItem:focus-visible { outline: 3px solid rgba(168,94,62,0.35); outline-offset: 2px; border-color: var(--hair); }
+
+.navItemActive { color: var(--stone-900); background: rgba(255,255,255,0.55); border: 1px solid var(--hair); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5); }
+.navItemActive .navIcon { color: var(--stone-700); }
+.navItemActive::before { height: 70%; opacity: 1; box-shadow: 0 0 10px rgba(168,94,62,0.45); }
+
+.navIcon { color: var(--stone-500); transition: color 280ms cubic-bezier(0.22, 1, 0.36, 1); }
 
 .badge { background-color: var(--copper); }
 

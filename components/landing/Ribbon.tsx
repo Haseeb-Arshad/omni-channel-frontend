@@ -353,154 +353,253 @@ export default function Ribbon() {
 
       {/* Pinned track with 10 scenes */}
       <div className="ribbon-track">
-        {/* Scene 1 */}
+        {/* Scene 1 — Start Anywhere */}
         <article className="scene s1" data-scene="1">
-          <h2 className="scene-title">The Ping</h2>
-          <div className="glass message" role="note">It begins anywhere.</div>
-          <div className="chip-row" role="list" aria-label="Channels">
-            <div className="chip" role="listitem"><MessageSquare aria-hidden className="ic" /><span>WhatsApp</span></div>
-            <div className="chip" role="listitem"><Phone aria-hidden className="ic" /><span>Voice</span></div>
-            <div className="chip" role="listitem"><MessageCircle aria-hidden className="ic" /><span>SMS</span></div>
-            <div className="chip" role="listitem"><Mail aria-hidden className="ic" /><span>Email</span></div>
-            <div className="chip" role="listitem"><MessageSquare aria-hidden className="ic" /><span>Discord</span></div>
-            <div className="chip" role="listitem"><MessageCircle aria-hidden className="ic" /><span>Messenger</span></div>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">Start anywhere. One thread, all channels.</h2>
+              <p className="copy">A quiet bubble. One line. Six stations.</p>
+            </div>
+            <div className="stage">
+              <div className="card glass s1-card" aria-label="Conversation card">
+                <div className="bubble" aria-live="polite">Hey—quick question.</div>
+                <div className="thread" aria-hidden>
+                  <div className="rail"></div>
+                  <div className="stations">
+                    <span className="station" data-label="WhatsApp"><MessageSquare className="ic" aria-hidden/></span>
+                    <span className="station" data-label="Voice"><Phone className="ic" aria-hidden/></span>
+                    <span className="station" data-label="SMS"><MessageCircle className="ic" aria-hidden/></span>
+                    <span className="station" data-label="Email"><Mail className="ic" aria-hidden/></span>
+                    <span className="station" data-label="Discord"><MessageSquare className="ic" aria-hidden/></span>
+                    <span className="station" data-label="Messenger"><MessageCircle className="ic" aria-hidden/></span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </article>
 
-        {/* Scene 2 */}
+        {/* Scene 2 — All Signals, One Person */}
         <article className="scene s2" data-scene="2">
-          <h2 className="scene-title">Identity, Unified</h2>
-          <div className="merge-area" aria-describedby="s2copy">
-            <div className="id-frag a" aria-label="Fragment A"></div>
-            <div className="id-frag b" aria-label="Fragment B"></div>
-            <div className="profile-chip" aria-hidden><span className="avatar">JP</span><span className="name">J. Patel</span></div>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">All signals, one person.</h2>
+              <p className="copy">Joined by intent and history.</p>
+            </div>
+            <div className="stage">
+              <div className="depth">
+                <div className="tile a" aria-label="Phone" />
+                <div className="tile b" aria-label="Email" />
+                <div className="tile c" aria-label="Handle" />
+              </div>
+              <div className="profile-chip">
+                <span className="avatar">JP</span>
+                <span className="meta">Confidence 92% • Last seen 2h</span>
+              </div>
+              <div className="thread into-chip" aria-hidden><div className="rail"/></div>
+            </div>
           </div>
-          <p id="s2copy" className="copy">One person, many handles—merged by intent and history.</p>
         </article>
 
-        {/* Scene 3 */}
+        {/* Scene 3 — Answers With Proof */}
         <article className="scene s3" data-scene="3">
-          <h2 className="scene-title">The Brain (Knowledge)</h2>
-          <div className="knowledge glass" role="group" aria-label="Knowledge card">
-            <div className="row">
-              <div className="fresh">Freshness <strong>97%</strong></div>
-              <div className="conflict-badge" aria-live="polite">1 conflict</div>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">Answers with proof.</h2>
+              <p className="copy">Fresh, cited, conflict‑aware.</p>
             </div>
-            <div className="source">Source: /docs/returns-policy-v3</div>
-            <button className="resolve" aria-label="Resolve conflict">Resolve</button>
+            <div className="stage">
+              <div className="knowledge glass">
+                <div className="k-top">
+                  <div className="fresh-ring" data-pct="97"><span>97%</span></div>
+                  <div className="k-meta">Sources (3)</div>
+                  <div className="conflict-pill">1 conflict</div>
+                </div>
+                <div className="drawer">
+                  <div className="src">A • Returns policy v3</div>
+                  <div className="src">B • Help center — Returns</div>
+                </div>
+                <button className="resolve" aria-label="Resolve">Resolve</button>
+                <div className="accept tiny" aria-live="polite" aria-atomic="true"></div>
+              </div>
+            </div>
           </div>
         </article>
 
-        {/* Scene 4 */}
+        {/* Scene 4 — Playbooks, Not Pings */}
         <article className="scene s4" data-scene="4">
-          <h2 className="scene-title">Orchestrate Tools</h2>
-          <div className="usecase-toggle" role="tablist" aria-label="Use-case">
-            <button role="tab" aria-pressed="true" data-case="Support">Support</button>
-            <button role="tab" aria-pressed="false" data-case="Sales">Sales</button>
-            <button role="tab" aria-pressed="false" data-case="IT">IT</button>
-          </div>
-          <div className="path-wrap" aria-label="Node path: Trigger to Handoff">
-            <svg className="path" viewBox="0 0 600 100" aria-hidden>
-              <path className="path-line" d="M20 60 C120 10, 240 110, 360 60 S 540 60, 580 60" />
-            </svg>
-            <div className="nodes">
-              <div className="node">Trigger</div>
-              <div className="node">Intent</div>
-              <div className="node">Tool</div>
-              <div className="node">Guardrail</div>
-              <div className="node">Handoff</div>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">Playbooks, not pings.</h2>
+              <p className="copy">Your stack, choreographed.</p>
+            </div>
+            <div className="stage">
+              <div className="usecase-toggle" role="tablist" aria-label="Use-case">
+                <button role="tab" aria-pressed="true" data-case="Support">Support</button>
+                <button role="tab" aria-pressed="false" data-case="Sales">Sales</button>
+                <button role="tab" aria-pressed="false" data-case="IT">IT</button>
+              </div>
+              <div className="playbook glass" aria-label="Playbook">
+                <div className="nodes">
+                  <div className="node">1 Trigger</div>
+                  <div className="node">2 Intent</div>
+                  <div className="node tool">3 Tool</div>
+                  <div className="node">4 Guardrail</div>
+                  <div className="node">5 Outcome</div>
+                </div>
+                <svg className="pb-path" viewBox="0 0 700 140" aria-hidden>
+                  <path className="pb-line" d="M20 90 C160 20, 280 160, 360 88 S 560 88, 680 88"/>
+                </svg>
+                <div className="tool-token">Calendar</div>
+              </div>
+              <div className="usecase-label">Current: <span className="usecase-value">Support</span></div>
             </div>
           </div>
-          <div className="usecase-label">Current: <span className="usecase-value">Support</span></div>
         </article>
 
-        {/* Scene 5 */}
+        {/* Scene 5 — Trust, Built-In */}
         <article className="scene s5" data-scene="5">
-          <h2 className="scene-title">Guardrails & Consent</h2>
-          <div className="transcript glass">
-            Customer: <span className="pii">4111 1111 1111 1111</span> — please confirm order.
-          </div>
-          <div className="policy-toast" role="status" aria-live="polite">
-            <ShieldCheck className="ic" aria-hidden /> Policy applied
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">Trust, built‑in.</h2>
+              <p className="copy">Policy by channel, role, and region.</p>
+            </div>
+            <div className="stage">
+              <div className="transcript glass">
+                <div className="line typed" data-text="Customer: 4111 1111 1111 1111 — please confirm order.">
+                  <span className="mask">Customer: <span className="pii">4111 1111 1111 1111</span> — please confirm order.</span>
+                </div>
+                <div className="scope">Channel: SMS • Role: Agent • Region: EU</div>
+              </div>
+              <div className="policy-toast" role="status" aria-live="polite">
+                <ShieldCheck className="ic" aria-hidden /> Policy applied
+              </div>
+            </div>
           </div>
         </article>
 
-        {/* Scene 6 */}
+        {/* Scene 6 — The Seamless Handoff */}
         <article className="scene s6" data-scene="6">
-          <h2 className="scene-title">Human Handoff & Back</h2>
-          <button className="handoff-btn" aria-label="Press and hold to handoff" title="Press and hold">
-            <span className="ring" aria-hidden></span>
-            Handoff
-          </button>
-          <div className="summary glass" aria-live="polite" data-show="false">
-            Auto-summary: "Customer asked about returns window for order #10291..."
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">The seamless handoff.</h2>
+              <p className="copy">People when it matters—context preserved.</p>
+            </div>
+            <div className="stage handoff">
+              <div className="agent glass">
+                <div className="thread rail"></div>
+                <div className="summary" aria-live="polite" data-show="false">
+                  • Order 10291 inquiry
+                  • Wants return window
+                  • Prefers SMS
+                </div>
+              </div>
+              <div className="console glass">
+                <button className="handoff-btn" aria-label="Press and hold to handoff" title="Press and hold">
+                  <span className="ring" aria-hidden></span>
+                  Accept
+                </button>
+              </div>
+            </div>
           </div>
         </article>
 
-        {/* Scene 7 */}
+        {/* Scene 7 — Remembers So You Don’t Repeat */}
         <article className="scene s7" data-scene="7">
-          <h2 className="scene-title">Memory & Preferences</h2>
-          <div className="pref-list">
-            <div className="pref-chip">Language: EN + UR</div>
-            <div className="pref-chip">Channel: SMS</div>
-            <div className="pref-chip">Hours: 9–5 PST</div>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">Remembers so you don’t repeat.</h2>
+              <p className="copy">Preferences travel across channels.</p>
+            </div>
+            <div className="stage">
+              <div className="ledger glass">
+                <div className="pref-chip">Language EN＋UR</div>
+                <div className="pref-chip">Refund policy: strict</div>
+                <div className="pref-chip">Preferred: WhatsApp</div>
+              </div>
+              <div className="moss" aria-live="polite"><Check className="moss-check" aria-hidden /> Saved</div>
+            </div>
           </div>
-          <div className="moss" aria-live="polite"><Check className="moss-check" aria-hidden /> Saved</div>
         </article>
 
-        {/* Scene 8 */}
+        {/* Scene 8 — Governed Multi-Brand */}
         <article className="scene s8" data-scene="8">
-          <h2 className="scene-title">Scale & Brands</h2>
-          <div className="brand-tabs" role="tablist" aria-label="Brands">
-            <button role="tab" aria-selected="true">A</button>
-            <button role="tab" aria-selected="false">B</button>
-            <button role="tab" aria-selected="false">C</button>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">One brain, many brands.</h2>
+              <p className="copy">Governed, audited, consistent.</p>
+            </div>
+            <div className="stage">
+              <div className="brand-tabs" role="tablist" aria-label="Brands">
+                <button role="tab" aria-selected="true">A</button>
+                <button role="tab" aria-selected="false">B</button>
+                <button role="tab" aria-selected="false">C</button>
+              </div>
+              <div className="brand-preview glass">
+                <div className="badges"><span className="badge">B2C tone</span><span className="badge">HIPAA</span><span className="badge">Custom SLA</span></div>
+                <div className="audit">Change recorded</div>
+              </div>
+            </div>
           </div>
-          <div className="brand-preview glass">One brain, many brands—governed, auditable.</div>
         </article>
 
-        {/* Scene 9 */}
+        {/* Scene 9 — Proof You Can Present */}
         <article className="scene s9" data-scene="9" aria-live="polite">
-          <h2 className="scene-title">Outcomes (Scoreboard)</h2>
-          <div className="stats-grid">
-            <div className="stat glass">
-              <div className="label">Deflection</div>
-              <div className="value">+<span data-count-to="38" data-count-dur="1.2">0</span>%</div>
-              <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 18 L20 12 L40 14 L60 8 L80 10 L100 4"/></svg>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">Proof you can present.</h2>
+              <p className="copy">Real-time impact, shareable.</p>
             </div>
-            <div className="stat glass">
-              <div className="label">CSAT</div>
-              <div className="value"><span data-count-to="4" data-count-dur="1">0</span>.<span data-count-to="7" data-count-dur="1.4">0</span>/5</div>
-              <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 14 L20 10 L40 12 L60 10 L80 6 L100 8"/></svg>
-            </div>
-            <div className="stat glass">
-              <div className="label">AHT</div>
-              <div className="value">−<span data-count-to="29" data-count-dur="1.2">0</span>%</div>
-              <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 6 L20 8 L40 10 L60 12 L80 14 L100 16"/></svg>
-            </div>
-            <div className="stat glass">
-              <div className="label">Assisted revenue</div>
-              <div className="value">+<span data-count-to="21" data-count-dur="1.2">0</span>%</div>
-              <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 16 L20 8 L40 10 L60 6 L80 8 L100 4"/></svg>
+            <div className="stage">
+              <div className="stats-grid">
+                <div className="stat glass">
+                  <div className="label">Deflection</div>
+                  <div className="value">+<span data-count-to="38" data-count-dur="1.2">0</span>%</div>
+                  <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 18 L20 12 L40 14 L60 8 L80 10 L100 4"/></svg>
+                </div>
+                <div className="stat glass">
+                  <div className="label">CSAT</div>
+                  <div className="value"><span data-count-to="4" data-count-dur="1">0</span>.<span data-count-to="7" data-count-dur="1.4">0</span>/5</div>
+                  <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 14 L20 10 L40 12 L60 10 L80 6 L100 8"/></svg>
+                </div>
+                <div className="stat glass">
+                  <div className="label">AHT</div>
+                  <div className="value">−<span data-count-to="29" data-count-dur="1.2">0</span>%</div>
+                  <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 6 L20 8 L40 10 L60 12 L80 14 L100 16"/></svg>
+                </div>
+                <div className="stat glass">
+                  <div className="label">Assisted revenue</div>
+                  <div className="value">+<span data-count-to="21" data-count-dur="1.2">0</span>%</div>
+                  <svg className="spark" viewBox="0 0 100 20" aria-hidden><path d="M0 16 L20 8 L40 10 L60 6 L80 8 L100 4"/></svg>
+                </div>
+              </div>
+              <div className="share chip">Share to Slack/Email</div>
             </div>
           </div>
         </article>
 
-        {/* Scene 10 */}
+        {/* Scene 10 — Try It in 30 Seconds */}
         <article className="scene s10" data-scene="10">
-          <h2 className="scene-title">Mini Demo & CTA</h2>
-          <div className="microflow">
-            <div className="mf-step">Message</div>
-            <ChevronRight className="arrow" aria-hidden />
-            <div className="mf-step">Intent</div>
-            <ChevronRight className="arrow" aria-hidden />
-            <div className="mf-step">Tool</div>
-            <ChevronRight className="arrow" aria-hidden />
-            <div className="mf-step">Summary</div>
-          </div>
-          <div className="cta-row">
-            <Link href="/auth/register" className="cta-primary">Start free</Link>
-            <Link href="#demo" className="cta-secondary">See live demo</Link>
+          <div className="scene-inner">
+            <div className="caption">
+              <h2 className="scene-title">Try it in 30 seconds.</h2>
+              <p className="copy">Connect a channel. Publish a path. Done.</p>
+            </div>
+            <div className="stage">
+              <div className="microflow">
+                <div className="mf-step">Message</div>
+                <ChevronRight className="arrow" aria-hidden />
+                <div className="mf-step">Intent</div>
+                <ChevronRight className="arrow" aria-hidden />
+                <div className="mf-step">Tool</div>
+                <ChevronRight className="arrow" aria-hidden />
+                <div className="mf-step">Summary</div>
+              </div>
+              <div className="cta-row">
+                <Link href="/auth/register" className="cta-primary">Start free</Link>
+                <Link href="#demo" className="cta-secondary">See live demo</Link>
+              </div>
+            </div>
           </div>
         </article>
       </div>

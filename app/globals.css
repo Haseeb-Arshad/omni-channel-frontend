@@ -762,3 +762,13 @@ html.has-scroll-dragging {
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--primary) / 0.5);
 }
+
+/* Dashboard-specific typography: force Switzer inside dashboard */
+.dashboard h1,
+.dashboard h2,
+.dashboard h3,
+.dashboard h4,
+.dashboard h5,
+.dashboard h6 {
+  font-family: var(--font-sans);
+}

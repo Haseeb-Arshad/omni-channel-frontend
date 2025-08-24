@@ -1,0 +1,36 @@
+/* Dashboard layout theme-driven custom CSS (no Tailwind color deps) */
+:root {
+  --sand: #F6F2EA;
+  --bone: #EEE8DF;
+  --stone-900: #2b2a28;
+  --stone-700: #4b4844;
+  --stone-500: #7d7871;
+  --stone-300: #d8d4cf;
+  --stone-200: #e7e4e0;
+  --glass: rgba(255,255,255,0.6);
+  --glass-deep: rgba(255,255,255,0.72);
+  --hair: rgba(0,0,0,0.08);
+  --copper: #A85E3E;
+  --copper-400: #B46B4D;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, var(--sand), var(--bone));
+  background-attachment: fixed;
+  backdrop-filter: blur(8px);
+}
+.logoTile { background: linear-gradient(135deg, var(--copper-400), var(--copper)); box-shadow: 0 6px 16px rgba(168,94,62,0.25); }
+
+.groupLabel { color: var(--stone-500); }
+
+.navItem { color: var(--stone-700); background: rgba(255,255,255,0.45); border: 1px solid var(--hair); }
+.navItem:hover { background: rgba(255,255,255,0.6); }
+.navItemActive { color: var(--stone-900); background: var(--glass-deep); border: 1px solid var(--hair); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5); }
+.navIcon { color: var(--stone-500); }
+
+.badge { background-color: var(--copper); }
+
+.topbar { background: var(--glass-deep); border-bottom: 1px solid var(--hair); backdrop-filter: blur(8px); }
+.copperBtn { background: var(--copper); }
+.copperBtn:hover { background: #9b5334; }
+

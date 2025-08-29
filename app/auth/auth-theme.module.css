@@ -1,0 +1,121 @@
+.bands {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.band {
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  width: 33%;
+  filter: blur(40px);
+  opacity: 0.55;
+}
+
+/* 3 bands per brief */
+.b1 { left: 0%; background: linear-gradient(180deg, #F5F2EE, #EAE6E0); }
+.b2 { left: 34%; background: linear-gradient(180deg, #F5F2EE, #EAE6E0); }
+.b3 { left: 67%; background: linear-gradient(180deg, #F5F2EE, #EAE6E0); }
+
+@keyframes drift {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-3%); }
+  100% { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .band { animation: drift 38s ease-in-out infinite; }
+  .b2 { animation-delay: -8s; }
+  .b3 { animation-delay: -16s; }
+}
+
+.glass {
+  /* YC-inspired: crisp card, no blur */
+  background: #FFFFFF;
+  border: 1px solid rgba(31, 29, 27, 0.08); /* hairline */
+  box-shadow: 0 6px 24px rgba(31, 29, 27, 0.06);
+}
+
+.hairline {
+  border: 1px solid rgba(34, 34, 34, 0.12);
+}
+
+.liftOnFocus:focus-within {
+  transform: translateY(-2px);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Floating label input: 48px height, underline hairline */
+/* Top-tier input design */
+.inputWrap { position: relative; }
+.inputControl {
+  height: 48px;
+  width: 100%;
+  padding: 0 12px 0 12px;
+  background: #FBF9F6; /* soft sand tint for contrast on white card */
+  border: 1px solid rgba(31,29,27,0.10);
+  border-radius: 12px;
+  outline: none;
+  font-size: 14px;
+  color: #1F1D1B;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .12s ease;
+}
+.withIcon { padding-left: 40px; }
+.withTrailing { padding-right: 40px; }
+.inputControl:focus {
+  background: #FFFFFF;
+  border-color: rgba(164,101,63,0.50); /* copper */
+  box-shadow: 0 0 0 3px rgba(164,101,63,0.14);
+  transform: translateY(-1px);
+}
+.inputLabel {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8B8580;
+  font-size: 13px;
+  padding: 0 6px;
+  transition: transform .28s cubic-bezier(0.22, 1, 0.36, 1), color .2s ease, opacity .2s ease;
+  pointer-events: none;
+}
+.labelBg { /* creates a clean notch when label floats */
+  background: #FFFFFF;
+}
+.iconSlot {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8B8580;
+}
+.trailingSlot {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8B8580;
+}
+/* float label when focused or has value */
+.inputControl:focus + .inputLabel,
+.inputControl:not(:placeholder-shown) + .inputLabel {
+  transform: translateY(-28px) scale(0.92);
+  color: #6F6964;
+}
+.hintText { margin-top: 6px; font-size: 12px; color: #6F6964; }
+.errorText { margin-top: 6px; font-size: 12px; color: #7A1E1E; }
+.error .inputControl { border-color: #E08A8A; background: #FFF9F9; box-shadow: 0 0 0 3px rgba(224,138,138,0.16); }
+.success .inputControl { border-color: #2E7D32; box-shadow: 0 0 0 3px rgba(46,125,50,0.12); }

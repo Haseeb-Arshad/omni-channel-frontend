@@ -1,0 +1,93 @@
+/* High-end input system for auth forms (no Tailwind)
+   - Outlined 12px fields, soft sand surface
+   - Floating label with notch
+   - Leading icon + trailing action slot
+   - Focus ring in copper, subtle lift
+*/
+
+.group { position: relative; margin: 0; }
+
+.control {
+  appearance: none;
+  width: 100%;
+  height: 48px;
+  padding: 0 12px;
+  border: 1px solid rgba(31, 29, 27, 0.12);
+  border-radius: 12px;
+  background: #FBF9F6; /* soft sand */
+  color: #1F1D1B;
+  font-size: 14px;
+  line-height: 1;
+  outline: none;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .12s ease;
+}
+
+.withIcon { padding-left: 40px; }
+.withTrailing { padding-right: 40px; }
+
+.control:focus {
+  background: #FFFFFF;
+  border-color: rgba(164, 101, 63, 0.5); /* copper */
+  box-shadow: 0 0 0 3px rgba(164, 101, 63, 0.14);
+  transform: translateY(-1px);
+}
+
+.label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8B8580;
+  font-size: 13px;
+  padding: 0 6px;
+  background: #FFFFFF; /* creates the notch over the border */
+  pointer-events: none;
+  transition: transform .28s cubic-bezier(0.22, 1, 0.36, 1), color .2s ease, opacity .2s ease;
+}
+
+.icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8B8580;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+.trailing {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8B8580;
+}
+
+/* Float the label when focused or when the input has value */
+.control:focus + .label,
+.control:not(:placeholder-shown) + .label {
+  transform: translateY(-28px) scale(0.92);
+  color: #6F6964;
+}
+
+.hint { margin-top: 6px; font-size: 12px; color: #6F6964; }
+.error { margin-top: 6px; font-size: 12px; color: #7A1E1E; }
+
+.invalid .control { border-color: #E08A8A; background: #FFF9F9; box-shadow: 0 0 0 3px rgba(224,138,138,0.16); }
+.valid .control { border-color: #2E7D32; box-shadow: 0 0 0 3px rgba(46,125,50,0.12); }
+
+/* Select styling to match inputs */
+.select {
+  appearance: none;
+  width: 100%;
+  height: 48px;
+  padding: 0 12px 0 40px;
+  border: 1px solid rgba(31, 29, 27, 0.12);
+  border-radius: 12px;
+  background: #FFFFFF;
+  color: #1F1D1B;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.select:focus { border-color: rgba(164, 101, 63, 0.5); box-shadow: 0 0 0 3px rgba(164, 101, 63, 0.14); }
+

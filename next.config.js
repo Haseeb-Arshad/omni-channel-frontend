@@ -1,3 +1,5 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -11,6 +13,13 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  webpack: (config) => {
+    // Disable framer-motion animations by aliasing to a no-op shim
+    config.resolve = config.resolve || {};
+    config.resolve.alias = config.resolve.alias || {};
+    config.resolve.alias['framer-motion'] = path.resolve(__dirname, 'lib/framer-motion-shim.tsx');
+    return config;
+  }
 }
 
 module.exports = nextConfig

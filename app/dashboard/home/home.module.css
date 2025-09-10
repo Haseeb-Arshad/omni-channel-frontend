@@ -31,35 +31,19 @@
   position: relative;
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(180deg, var(--sand), var(--bone));
+  background: #ffffff;
   color: var(--stone-700);
 }
 
 .bands {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: 
-    radial-gradient(60% 120% at 10% 0%, rgba(180,107,77,0.06), transparent 60%),
-    radial-gradient(60% 120% at 90% 15%, rgba(124,113,96,0.08), transparent 60%),
-    linear-gradient(90deg,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,0.6) 10%,
-      rgba(255,255,255,0.0) 20%,
-      rgba(255,255,255,0.0) 35%,
-      rgba(255,255,255,0.55) 48%,
-      rgba(255,255,255,0.0) 60%,
-      rgba(255,255,255,0.5) 75%,
-      rgba(255,255,255,0.0) 85%,
-      rgba(255,255,255,0) 100%);
-  filter: blur(30px);
+  display: none;
 }
 
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 20px; border: 1px solid var(--hair);
-  border-radius: 16px; backdrop-filter: blur(10px);
-  background: var(--glass);
+  border-radius: 16px;
+  background: var(--card);
 }
 
 .welcome { font-family: var(--font-serif, ui-serif); font-size: 24px; line-height: 1.2; }
@@ -85,8 +69,8 @@
 
 .cardWide, .cardTall {
   grid-column: span 12;
-  background: var(--glass-deep); border: 1px solid var(--hair);
-  border-radius: 18px; padding: 16px; backdrop-filter: blur(8px);
+  background: var(--card); border: 1px solid var(--hair);
+  border-radius: 18px; padding: 16px;
   transition: transform 200ms var(--ease-smooth), box-shadow 200ms var(--ease-smooth);
 }
 .cardTall:hover, .cardWide:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }

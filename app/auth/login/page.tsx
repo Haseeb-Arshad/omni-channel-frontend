@@ -101,8 +101,8 @@ export default function LoginPage() {
           {/* Left: Headline + Form */}
           <div className="lg:col-span-7 space-y-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-semibold tracking-[-0.02em] text-primary">Sign in to OmniAgent</h1>
-              <p className="mt-2 text-sm text-muted">Fast, secure access to your omni-channel workspace.</p>
+              <h1 className="text-3xl md:text-4xl font-semibold tracking-[-0.02em] text-primary font-terminal">Sign in to OmniAgent</h1>
+              <p className="mt-2 text-sm text-muted font-rubik">Fast, secure access to your omni-channel workspace.</p>
             </div>
             <section className="w-full auth-card p-6 md:p-8">
               <form onSubmit={onSubmit}>
@@ -241,18 +241,18 @@ export default function LoginPage() {
           {/* Right: Trust list (lean, no glass) */}
           <aside className="lg:col-span-5 space-y-4">
             <div className="trust-card">
-              <div className="flex items-center gap-2 text-primary"><CheckCircle2 className="h-4 w-4"/><h3 className="text-base font-medium">Why OmniAgent</h3></div>
+              <div className="flex items-center gap-2 text-primary"><CheckCircle2 className="h-4 w-4"/><h3 className="text-base font-medium font-terminal">Why OmniAgent</h3></div>
               <ul className="mt-2 text-sm list-disc pl-5 text-muted">
                 <li>Resolve faster across channels</li>
                 <li>AI assist everywhere you work</li>
               </ul>
             </div>
             <div className="trust-card">
-              <div className="flex items-center gap-2 text-primary"><ShieldCheck className="h-4 w-4"/><h3 className="text-base font-medium">Security</h3></div>
+              <div className="flex items-center gap-2 text-primary"><ShieldCheck className="h-4 w-4"/><h3 className="text-base font-medium font-terminal">Security</h3></div>
               <p className="mt-2 text-sm text-muted">SSO, least‑privilege roles, SOC 2‑aligned.</p>
             </div>
             <div className="trust-card">
-              <div className="flex items-center gap-2 text-primary"><BookOpen className="h-4 w-4"/><h3 className="text-base font-medium">Docs & Status</h3></div>
+              <div className="flex items-center gap-2 text-primary"><BookOpen className="h-4 w-4"/><h3 className="text-base font-medium font-terminal">Docs & Status</h3></div>
               <p className="mt-2 text-sm text-muted">docs.omniagent.dev • status.omniagent.dev</p>
             </div>
           </aside>

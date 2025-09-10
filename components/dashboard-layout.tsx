@@ -2,7 +2,6 @@
 
 import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageSquare,
   MessageCircle,
@@ -119,12 +118,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { icon: <Bell className="h-4 w-4" />, label: 'Notifications', href: '/dashboard/notifications', badge: '3' },
   ];
   return (
-    <div className="dashboard font-sans h-screen bg-background flex">
+    <div className="dashboard font-sans h-screen bg-white flex">
       {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -280 }}
-        animate={{ x: 0 }}
-className={`${styles.sidebar} w-64 border-r border-border flex flex-col shadow-sm h-screen overflow-y-auto flex-none`}
+      <aside
+        className={`${styles.sidebar} w-64 border-r border-border flex flex-col shadow-sm h-screen overflow-y-auto flex-none`}
       >
         {/* Logo & Search */}
         <div className="p-4 border-b border-border">
@@ -159,12 +156,7 @@ className={`${styles.sidebar} w-64 border-r border-border flex flex-col shadow-s
               : pathname.startsWith(item.href);
 
             return (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.08 }}
-              >
+              <div key={item.href}>
                 <Link
                   href={item.href}
 className={cn(
@@ -180,7 +172,7 @@ className={cn(
                   </div>
                   {item.label}
                 </Link>
-              </motion.div>
+              </div>
             );
           })}
         </nav>
@@ -190,12 +182,7 @@ className={cn(
 <div className={`${styles.groupLabel} text-xs font-medium mb-2 px-3`}>Tools & Utilities</div>
           <div className="space-y-1">
             {toolsItems.map((item, index) => (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: (navItems.length + index) * 0.08 }}
-              >
+              <div key={item.href}>
                 <Link
                   href={item.href}
 className={cn("flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group relative", styles.navItem)}
@@ -210,7 +197,7 @@ className={cn("flex items-center px-3 py-2 rounded-lg text-sm font-medium transi
                     </span>
                   )}
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -224,12 +211,12 @@ className={cn("flex items-center px-3 py-2 rounded-lg text-sm font-medium transi
               { icon: <LayoutDashboard className="h-4 w-4" />, label: 'Brands & Environments', href: '/dashboard/brands' },
               { icon: <Shield className="h-4 w-4" />, label: 'Governance & Audit', href: '/dashboard/governance' },
             ].map((item, index) => (
-              <motion.div key={item.href} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: (navItems.length + toolsItems.length + index) * 0.08 }}>
+              <div key={item.href}>
 <Link href={item.href} className={cn("flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 group border border-transparent", styles.navItem)}>
                   <div className="mr-3 text-charcoal-400 group-hover:text-charcoal-600 transition-colors">{item.icon}</div>
                   {item.label}
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -288,7 +275,7 @@ className={cn("flex items-center px-3 py-2 rounded-lg text-sm font-medium transi
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </motion.aside>
+      </aside>
 
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
@@ -298,7 +285,7 @@ className={cn("flex items-center px-3 py-2 rounded-lg text-sm font-medium transi
             onClick={toggleMobileMenu}
           />
 
-          <div className="fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border md:hidden">
+          <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-border md:hidden">
             <div className="h-16 border-b border-border px-4 flex items-center justify-between">
               <Link href="/dashboard" className="flex items-center space-x-2">
                 <div className="h-8 w-8 bg-charcoal-900 rounded-lg flex items-center justify-center">
@@ -355,74 +342,37 @@ className={cn("flex items-center px-3 py-2 rounded-lg text-sm font-medium transi
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Top Header */}
-        <motion.header
-          initial={{ y: -60 }}
-          animate={{ y: 0 }}
-className={`${styles.topbar} h-16 flex items-center justify-between px-4 md:px-6`}
-        >
+        <header className={`${styles.topbar} h-16 flex items-center justify-between px-4 md:px-6`}>
           {/* Left side - Breadcrumb */}
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={toggleMobileMenu}
-              className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
-            >
+          <div className="flex items-center gap-3">
+            <button onClick={toggleMobileMenu} className={`${styles.iconBtn} md:hidden p-2`}>
               <Menu className="h-5 w-5 text-charcoal-600" />
             </button>
-            <span className="text-sm text-charcoal-500">omni-agent.studio</span>
+            <span className="text-base font-semibold text-foreground">OmniAgent</span>
+            <span className="text-sm text-charcoal-500">Dashboard</span>
           </div>
 
           {/* Right side - User actions */}
-          <div className="flex items-center space-x-3">
-            {/* Team avatars */}
-            <div className="flex -space-x-2">
-              <Avatar className="h-8 w-8 border-2 border-white">
-                <AvatarImage src="/avatars/user1.jpg" />
-                <AvatarFallback className="bg-amber-600 text-white text-xs">JD</AvatarFallback>
-              </Avatar>
-              <Avatar className="h-8 w-8 border-2 border-white">
-                <AvatarImage src="/avatars/user2.jpg" />
-                <AvatarFallback className="bg-emerald-600 text-white text-xs">SM</AvatarFallback>
-              </Avatar>
-              <Avatar className="h-8 w-8 border-2 border-white">
-                <AvatarImage src="/avatars/user3.jpg" />
-                <AvatarFallback className="bg-stone-700 text-white text-xs">AL</AvatarFallback>
-              </Avatar>
-              <div className="h-8 w-8 border-2 border-white rounded-full bg-secondary flex items-center justify-center">
-                <span className="text-xs font-medium text-charcoal-600">+4</span>
-              </div>
-            </div>
-
-            {/* Voice Interface Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setVoiceInterfaceOpen(true)}
-            >
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="icon" className={`${styles.iconBtn} h-8 w-8`} onClick={() => setVoiceInterfaceOpen(true)}>
               <Mic className="h-4 w-4 text-charcoal-600" />
             </Button>
-
-            {/* Settings */}
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button variant="ghost" size="icon" className={`${styles.iconBtn} h-8 w-8`}>
               <Settings className="h-4 w-4 text-charcoal-600" />
             </Button>
-
-            {/* Notifications */}
-            <Button variant="ghost" size="icon" className="h-8 w-8 relative">
+            <Button variant="ghost" size="icon" className={`${styles.iconBtn} h-8 w-8 relative`}>
               <Bell className="h-4 w-4 text-charcoal-600" />
               <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full text-xs"></span>
             </Button>
-
-            {/* Create Agent Button */}
-<Button className={`${styles.copperBtn} h-8 px-4 text-sm font-medium text-white`}>
+            <Button className={`${styles.copperBtn} h-8 px-4 text-sm font-medium text-white`}>
               <Plus className="h-4 w-4 mr-1" />
               Create Agent
             </Button>
           </div>
-        </motion.header>
+        </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-background">
+        <main className="flex-1 overflow-y-auto bg-white">
           {children}
         </main>
       </div>

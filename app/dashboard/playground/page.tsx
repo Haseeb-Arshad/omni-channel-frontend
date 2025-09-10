@@ -1,31 +1,28 @@
-"use client"
+"use client";
 
-import React, { useState, useRef, useEffect } from "react"
-// Dashboard layout is provided by the parent layout.tsx
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Switch } from "@/components/ui/switch"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Slider } from "@/components/ui/slider"
-import { AlertCircle, Bot, User, ChevronDown, Settings, Trash2, Sparkles, PanelRight, FileText, Send, RotateCw, X, Download, Brain, Zap, BrainCircuit, Menu, Check, ArrowUpDown, MailQuestion, PenLine, BotMessageSquare, MessageSquare, Loader2, Eye, EyeOff, Lock } from "lucide-react"
-import { toast } from "sonner"
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { 
+  Bot, 
+  User, 
+  Send, 
+  RotateCw, 
+  Download, 
+  Brain, 
+  Zap, 
+  Loader2, 
+  Settings,
+  MessageSquare,
+  Sparkles,
+  ChevronDown,
+  Play,
+  Pause,
+  Mic,
+  Volume2
+} from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
-import { useContext, createContext } from "react" 
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { SectionHeader } from "@/components/ui/section-header";
-import LazySection from "@/components/ui/lazy-section";
-import { Textarea } from "@/components/ui/textarea"
-import ErrorBoundary from "@/components/error-boundary"
-import ProgressiveImage from "@/components/ui/progressive-image"
+import styles from "./playground.module.css";
 
-// Message interface for typing
 interface Message {
   id: string;
   role: "user" | "assistant";
@@ -37,62 +34,65 @@ interface Message {
   }[];
 }
 
-// Knowledge base interface
 interface KnowledgeBase {
   id: string;
   name: string;
   documentCount: number;
 }
 
-export default function Page() {
-  // State definitions for the playground
-  const [useKnowledgeBase, setUseKnowledgeBase] = useState<boolean>(false);
-  const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState<string>("");
-  const [temperature, setTemperature] = useState<number>(0.7);
-  const [maxTokens, setMaxTokens] = useState<number>(1000);
-  const [contextWindow, setContextWindow] = useState<number>(10);
-  const [isTyping, setIsTyping] = useState<boolean>(false);
+export default function PlaygroundPage() {
+  // Core state
   const [messages, setMessages] = useState<Message[]>([]);
-  const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
-  const [showPersonaSection, setShowPersonaSection] = useState<boolean>(true);
-  const [showSettingsSection, setShowSettingsSection] = useState<boolean>(true);
-  const [showKnowledgeSection, setShowKnowledgeSection] = useState<boolean>(true);
-  const [inputMessage, setInputMessage] = useState<string>("");
+  const [inputMessage, setInputMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   
-  // Sample data for demonstration
-  const selectedPersona = { id: "1", label: "AI Assistant" };
-  const activePersona = { id: "1", model: "gpt-4", name: "Assistant" };
-  const aiModels = [
-    { id: "gpt-4", description: "Advanced model for complex tasks" },
-    { id: "gpt-3.5-turbo", description: "Fast and efficient" }
+  // Settings state
+  const [useKnowledgeBase, setUseKnowledgeBase] = useState(false);
+  const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState("");
+  const [temperature, setTemperature] = useState(0.7);
+  const [maxTokens, setMaxTokens] = useState(1000);
+  const [contextWindow, setContextWindow] = useState(10);
+  
+  // UI state
+  const [testMode, setTestMode] = useState<'chat' | 'voice'>('chat');
+  const [isRecording, setIsRecording] = useState(false);
+  
+  // Sample data
+  const knowledgeBases: KnowledgeBase[] = [
+    { id: "kb1", name: "Product Documentation", documentCount: 24 },
+    { id: "kb2", name: "FAQ Database", documentCount: 156 },
+    { id: "kb3", name: "Support Articles", documentCount: 89 }
   ];
+  
+  const activePersona = { 
+    id: "1", 
+    model: "gpt-4", 
+    name: "Support Assistant",
+    description: "Helpful customer support agent"
+  };
 
   // Message component
-  const Message = ({ message, isLoading }: { message: Message, isLoading: boolean }) => {
+  const MessageBubble = ({ message, isLoading }: { message: Message, isLoading?: boolean }) => {
     const isUser = message.role === "user";
     
     return (
-      <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-        <div className={`flex gap-3 max-w-3xl ${isUser ? "flex-row-reverse" : "flex-row"}`}>
-          <Avatar className={`h-8 w-8 ${isUser ? "bg-primary" : "bg-secondary"}`}>
-            <AvatarFallback>{isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}</AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <div className={`rounded-2xl p-4 ${isUser ? "bg-primary text-primary-foreground" : "bg-card border border-border/40"}`}>
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Thinking...</span>
-                </div>
-              ) : (
-                <div className="prose dark:prose-invert prose-sm max-w-none">
-                  {message.content}
-                </div>
-              )}
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {new Date(message.timestamp).toLocaleTimeString()}
-            </div>
+      <div className={`${styles.messageRow} ${isUser ? styles.messageUser : styles.messageAssistant}`}>
+        <div className={styles.messageAvatar}>
+          {isUser ? <User size={16} /> : <Bot size={16} />}
+        </div>
+        <div className={styles.messageContent}>
+          <div className={`${styles.messageBubble} ${isUser ? styles.bubbleUser : styles.bubbleBot}`}>
+            {isLoading ? (
+              <div className={styles.loadingMessage}>
+                <Loader2 size={16} className={styles.spinner} />
+                <span>Thinking...</span>
+              </div>
+            ) : (
+              message.content
+            )}
+          </div>
+          <div className={styles.messageTime}>
+            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </div>
         </div>
       </div>
@@ -103,13 +103,12 @@ export default function Page() {
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || isTyping) return;
     
-    // Add user message
     const userMessage: Message = {
       id: uuidv4(),
       role: "user",
-      content: inputMessage,
+      content: inputMessage.trim(),
       timestamp: new Date()
     };
     
@@ -119,255 +118,357 @@ export default function Page() {
     
     // Simulate AI response
     setTimeout(() => {
+      const responses = [
+        "I'd be happy to help you with that! Let me check our knowledge base for the most accurate information.",
+        "That's a great question. Based on our documentation, here's what I can tell you...",
+        "I understand your concern. Let me provide you with a detailed explanation.",
+        "Thanks for reaching out! I can definitely assist you with this request."
+      ];
+      
       const aiMessage: Message = {
         id: uuidv4(),
         role: "assistant",
-        content: "This is a sample response from the AI assistant. In a real implementation, this would be replaced with an actual API call response.",
+        content: responses[Math.floor(Math.random() * responses.length)],
         timestamp: new Date()
       };
       
       setMessages(prev => [...prev, aiMessage]);
       setIsTyping(false);
-    }, 1500);
+    }, 1200 + Math.random() * 800);
+  };
+
+  // Handle preset messages
+  const handlePresetMessage = (message: string) => {
+    setInputMessage(message);
+    setTimeout(() => {
+      const event = new Event('submit') as any;
+      handleSendMessage(event);
+    }, 100);
+  };
+
+  // Reset settings to defaults
+  const resetSettings = () => {
+    setTemperature(0.7);
+    setMaxTokens(1000);
+    setContextWindow(10);
+    setUseKnowledgeBase(false);
+    setSelectedKnowledgeBase("");
+    toast.success('Settings reset to defaults');
+  };
+
+  // Export chat
+  const exportChat = () => {
+    const chatData = {
+      persona: activePersona,
+      settings: {
+        temperature,
+        maxTokens,
+        contextWindow,
+        useKnowledgeBase,
+        selectedKnowledgeBase
+      },
+      messages: messages.map(m => ({
+        role: m.role,
+        content: m.content,
+        timestamp: m.timestamp
+      }))
+    };
+    
+    const dataStr = JSON.stringify(chatData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `playground_chat_${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success('Chat exported successfully!');
   };
 
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-3xl font-bold mb-6">AI Playground</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Chat</CardTitle>
-              <CardDescription>Interact with the AI assistant</CardDescription>
-            </CardHeader>
-            <CardContent className="p-4">
-              <ErrorBoundary>
-                <section className="relative space-y-4 py-4">
-                  {messages.length === 0 ? (
-                    <div className="mx-auto max-w-2xl text-center">
-                      <h2 className="mt-2 text-xl font-semibold">
-                        {selectedPersona ? `Chat with ${selectedPersona.label}` : 'Playground'}
-                      </h2>
-                    </div>
-                  ) : null}
-
-                  <div className="space-y-4">
-                    {messages.map((message, index) => (
-                      <Message 
-                        key={message.id}
-                        message={message}
-                        isLoading={index === messages.length - 1 && isTyping}
-                      />
-                    ))}
-                  </div>
-                </section>
-              </ErrorBoundary>
-            </CardContent>
-            <CardFooter className="border-t p-4">
-              <form onSubmit={handleSendMessage} className="flex w-full gap-2">
-                <Input 
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder="Type your message..."
-                  className="flex-1"
-                />
-                <Button type="submit" disabled={!inputMessage.trim() || isTyping}>
-                  {isTyping ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
-                  Send
-                </Button>
-              </form>
-            </CardFooter>
-          </Card>
+    <div className={styles.playground}>
+      {/* Header */}
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <h1 className={styles.title}>AI Playground</h1>
+          <p className={styles.subtitle}>Test prompts, adjust settings, and explore responses with your AI assistant.</p>
         </div>
-        
-        <div className="md:col-span-1">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle>Settings</CardTitle>
-              <CardDescription>Configure your playground</CardDescription>
-            </CardHeader>
-            <CardContent className="p-4">
-              <ScrollArea className="h-[600px] pr-4">
-                <div className="space-y-6">
-                  {/* Knowledge Base Settings */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-medium flex items-center gap-2 text-foreground">
-                      <Brain className="h-4 w-4 text-primary" />
-                      Knowledge Base
-                    </Label>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="use-knowledge-base"
-                        checked={useKnowledgeBase}
-                        onCheckedChange={(checked) => setUseKnowledgeBase(checked)}
-                        aria-label="Use Knowledge Base"
-                      />
-                      <Label htmlFor="use-knowledge-base" className="text-sm text-muted-foreground cursor-pointer flex-1">
-                        Use Knowledge Base
-                      </Label>
+        <div className={styles.headerActions}>
+          <div className={styles.personaInfo}>
+            <div className={styles.personaIcon}>
+              <Bot size={16} />
+            </div>
+            <div>
+              <div className={styles.personaName}>{activePersona.name}</div>
+              <div className={styles.personaModel}>{activePersona.model}</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className={styles.container}>
+        {/* Chat Section */}
+        <div className={styles.chatSection}>
+          <div className={styles.chatHeader}>
+            <div className={styles.testTabs}>
+              <button 
+                className={`${styles.tab} ${testMode === 'chat' ? styles.tabActive : ''}`}
+                onClick={() => setTestMode('chat')}
+              >
+                <MessageSquare size={16} />
+                Chat
+              </button>
+              <button 
+                className={`${styles.tab} ${testMode === 'voice' ? styles.tabActive : ''}`}
+                onClick={() => setTestMode('voice')}
+              >
+                <Mic size={16} />
+                Voice
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.chatContent}>
+            {testMode === 'chat' ? (
+              <>
+                <div className={styles.messagesContainer}>
+                  {messages.length === 0 ? (
+                    <div className={styles.emptyState}>
+                      <div className={styles.emptyIcon}>
+                        <Sparkles size={24} />
+                      </div>
+                      <h3 className={styles.emptyTitle}>Start a conversation</h3>
+                      <p className={styles.emptyText}>Try asking a question or use one of the preset messages below.</p>
                     </div>
-                    {useKnowledgeBase && (
-                      <Select
-                        value={selectedKnowledgeBase || ''}
-                        onValueChange={(value: string) => setSelectedKnowledgeBase(value)}
-                        disabled={knowledgeBases.length === 0}
+                  ) : (
+                    <div className={styles.messages}>
+                      {messages.map((message) => (
+                        <MessageBubble key={message.id} message={message} />
+                      ))}
+                      {isTyping && (
+                        <MessageBubble 
+                          message={{
+                            id: 'typing',
+                            role: 'assistant',
+                            content: '',
+                            timestamp: new Date()
+                          }}
+                          isLoading={true}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Preset Messages */}
+                {messages.length === 0 && (
+                  <div className={styles.presets}>
+                    <div className={styles.presetsLabel}>Try these examples:</div>
+                    <div className={styles.presetButtons}>
+                      <button 
+                        className={styles.presetButton}
+                        onClick={() => handlePresetMessage("What are your business hours?")}
                       >
-                        <SelectTrigger className="w-full text-sm rounded-lg border-border focus:ring-1 focus:ring-primary">
-                          <SelectValue placeholder={knowledgeBases.length > 0 ? "Select a knowledge base" : "No knowledge bases found"} />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-lg">
-                          {knowledgeBases.length > 0 ? (
-                            knowledgeBases.map((kb) => (
-                              <SelectItem key={kb.id} value={kb.id} className="text-sm cursor-pointer">
-                                <div className="flex flex-col py-1">
-                                  <span className="font-medium">{kb.name}</span>
-                                  <span className="text-xs text-muted-foreground">
-                                    {kb.documentCount} document{kb.documentCount !== 1 ? 's' : ''}
-                                  </span>
-                                </div>
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <div className="p-2 text-sm text-muted-foreground text-center">No knowledge bases available.</div>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    )}
+                        What are your business hours?
+                      </button>
+                      <button 
+                        className={styles.presetButton}
+                        onClick={() => handlePresetMessage("How can I track my order?")}
+                      >
+                        How can I track my order?
+                      </button>
+                      <button 
+                        className={styles.presetButton}
+                        onClick={() => handlePresetMessage("I need help with a return")}
+                      >
+                        I need help with a return
+                      </button>
+                    </div>
                   </div>
+                )}
 
-                  <Separator className="my-4" />
-
-                  {/* Model Settings */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-medium flex items-center gap-2 text-foreground">
-                      <Zap className="h-4 w-4 text-primary" />
-                      Model Parameters
-                    </Label>
+                {/* Input Form */}
+                <form className={styles.inputForm} onSubmit={handleSendMessage}>
+                  <div className={styles.inputContainer}>
+                    <input
+                      type="text"
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      placeholder="Type your message..."
+                      className={styles.messageInput}
+                      disabled={isTyping}
+                    />
+                    <button
+                      type="submit"
+                      disabled={!inputMessage.trim() || isTyping}
+                      className={styles.sendButton}
+                    >
+                      {isTyping ? <Loader2 size={16} className={styles.spinner} /> : <Send size={16} />}
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <div className={styles.voiceMode}>
+                <div className={styles.voiceContent}>
+                  <div className={styles.voiceIcon}>
+                    <Volume2 size={32} />
+                  </div>
+                  <h3 className={styles.voiceTitle}>Voice Testing</h3>
+                  <p className={styles.voiceText}>Test your AI assistant with voice interactions</p>
+                  
+                  <div className={styles.voiceControls}>
+                    <button 
+                      className={`${styles.voiceButton} ${isRecording ? styles.voiceButtonActive : ''}`}
+                      onClick={() => {
+                        setIsRecording(!isRecording);
+                        toast.message(isRecording ? 'Recording stopped' : 'Recording started');
+                      }}
+                    >
+                      {isRecording ? <Pause size={20} /> : <Mic size={20} />}
+                      {isRecording ? 'Stop Recording' : 'Start Recording'}
+                    </button>
                     
-                    {/* AI Model Selection (from active persona, display only) */}
-                    <div className="space-y-1.5 p-3 rounded-lg border border-border bg-background/50">
-                      <Label htmlFor="model-display" className="text-xs text-muted-foreground">AI Model (from Persona)</Label>
-                      <Input 
-                        id="model-display" 
-                        value={`${activePersona.model.replace('gpt-','GPT ')} - ${aiModels.find(m => m.id === activePersona.model)?.description || 'Custom'}`} 
-                        readOnly 
-                        className="text-xs h-8 bg-muted/50"
-                      />
-                    </div>
-
-                    {/* Temperature Setting */}
-                    <div className="space-y-1.5 p-3 rounded-lg border border-border bg-background/50">
-                      <div className="flex justify-between items-center">
-                        <Label htmlFor="temperature-slider" className="text-xs text-muted-foreground">Temperature</Label>
-                        <span className="text-xs font-medium text-primary">{temperature.toFixed(1)}</span>
-                      </div>
-                      <Slider
-                        id="temperature-slider"
-                        min={0}
-                        max={1}
-                        step={0.1}
-                        value={[temperature]}
-                        onValueChange={(value: number[]) => setTemperature(value[0])}
-                        className="w-full"
-                      />
-                      <div className="flex justify-between text-[10px] text-muted-foreground/80">
-                        <span>Precise</span>
-                        <span>Neutral</span>
-                        <span>Creative</span>
-                      </div>
-                    </div>
-
-                    {/* Max Tokens Setting */}
-                    <div className="space-y-1.5 p-3 rounded-lg border border-border bg-background/50">
-                      <div className="flex justify-between items-center">
-                        <Label htmlFor="max-tokens-slider" className="text-xs text-muted-foreground">Max Response Length</Label>
-                        <span className="text-xs font-medium text-primary">{maxTokens} tokens</span>
-                      </div>
-                      <Slider
-                        id="max-tokens-slider"
-                        min={100}
-                        max={4000}
-                        step={100}
-                        value={[maxTokens]}
-                        onValueChange={(value: number[]) => setMaxTokens(value[0])}
-                        className="w-full"
-                      />
-                    </div>
-
-                    {/* Context Window */}
-                    <div className="space-y-1.5 p-3 rounded-lg border border-border bg-background/50">
-                      <Label htmlFor="context-window-select" className="text-xs text-muted-foreground">Context Window</Label>
-                      <Select value={String(contextWindow)} onValueChange={(val: string) => setContextWindow(parseInt(val))}>
-                        <SelectTrigger id="context-window-select" className="w-full text-xs h-8 rounded-md border-border focus:ring-1 focus:ring-primary">
-                          <SelectValue placeholder="Select context window" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-md">
-                          <SelectItem value="5" className="text-xs">Last 5 messages</SelectItem>
-                          <SelectItem value="10" className="text-xs">Last 10 messages</SelectItem>
-                          <SelectItem value="20" className="text-xs">Last 20 messages</SelectItem>
-                          <SelectItem value="100" className="text-xs">All messages (Max 100)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    <button 
+                      className={styles.voiceButtonSecondary}
+                      onClick={() => toast.success('Sample played')}
+                    >
+                      <Play size={16} />
+                      Play Sample
+                    </button>
                   </div>
                 </div>
-              </ScrollArea>
-            </CardContent>
-            <CardFooter className="p-4 border-t space-y-2 bg-card/90 backdrop-blur-sm sticky bottom-0 z-10">
-              <div className="flex gap-2 w-full">
-                <Button 
-                  variant="outline"
-                  className="flex-1 hover:bg-[#2a52be]/10 hover:text-[#2a52be] transition-colors duration-300"
-                  onClick={() => {
-                    setTemperature(0.7);
-                    setMaxTokens(1000);
-                    setContextWindow(10);
-                    toast.success('Settings reset to defaults');
-                  }}
-                >
-                  <RotateCw className="mr-2 h-4 w-4" />
-                  Reset Defaults
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  className="flex-1 hover:bg-[#2a52be]/10 hover:text-[#2a52be] transition-colors duration-300"
-                  onClick={() => {
-                    // Logic to handle chat export
-                    const chatToExport = {
-                      persona: activePersona,
-                      settings: {
-                        temperature,
-                        maxTokens,
-                        contextWindow,
-                        useKnowledgeBase,
-                        selectedKnowledgeBaseId: selectedKnowledgeBase,
-                      },
-                      messages: messages.map(m => ({ 
-                        role: m.role, 
-                        content: m.content, 
-                        timestamp: m.timestamp,
-                        sources: m.sources?.map(s => ({ title: s.title, similarity: s.similarity }))
-                      }))
-                    };
-                    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
-                      JSON.stringify(chatToExport, null, 2)
-                    )}`;
-                    const link = document.createElement("a");
-                    link.href = jsonString;
-                    link.download = `playground_chat_${activePersona.name.replace(/\s+/g, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.json`;
-                    link.click();
-                    toast.success("Chat exported successfully!");
-                  }}
-                >
-                  <Download className="mr-2 h-4 w-4" /> Export Chat
-                </Button>
               </div>
-            </CardFooter>
-          </Card>
+            )}
+          </div>
+        </div>
+
+        {/* Settings Sidebar */}
+        <div className={styles.sidebar}>
+          <div className={styles.sidebarHeader}>
+            <h2 className={styles.sidebarTitle}>Settings</h2>
+            <Settings size={16} />
+          </div>
+
+          <div className={styles.sidebarContent}>
+            {/* Knowledge Base Section */}
+            <div className={styles.settingsSection}>
+              <div className={styles.sectionHeader}>
+                <Brain size={16} />
+                <span>Knowledge Base</span>
+              </div>
+              
+              <div className={styles.settingItem}>
+                <label className={styles.switchLabel}>
+                  <input
+                    type="checkbox"
+                    checked={useKnowledgeBase}
+                    onChange={(e) => setUseKnowledgeBase(e.target.checked)}
+                    className={styles.switch}
+                  />
+                  <span className={styles.switchSlider}></span>
+                  Use Knowledge Base
+                </label>
+              </div>
+
+              {useKnowledgeBase && (
+                <div className={styles.settingItem}>
+                  <label className={styles.label}>Select Knowledge Base</label>
+                  <select
+                    value={selectedKnowledgeBase}
+                    onChange={(e) => setSelectedKnowledgeBase(e.target.value)}
+                    className={styles.select}
+                  >
+                    <option value="">Choose a knowledge base...</option>
+                    {knowledgeBases.map((kb) => (
+                      <option key={kb.id} value={kb.id}>
+                        {kb.name} ({kb.documentCount} docs)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+
+            {/* Model Parameters Section */}
+            <div className={styles.settingsSection}>
+              <div className={styles.sectionHeader}>
+                <Zap size={16} />
+                <span>Model Parameters</span>
+              </div>
+
+              <div className={styles.settingItem}>
+                <label className={styles.label}>AI Model</label>
+                <input
+                  type="text"
+                  value={`${activePersona.model.toUpperCase()} - ${activePersona.description}`}
+                  readOnly
+                  className={styles.inputReadonly}
+                />
+              </div>
+
+              <div className={styles.settingItem}>
+                <label className={styles.label}>
+                  Temperature <span className={styles.value}>{temperature.toFixed(1)}</span>
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={temperature}
+                  onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                  className={styles.slider}
+                />
+                <div className={styles.sliderLabels}>
+                  <span>Precise</span>
+                  <span>Creative</span>
+                </div>
+              </div>
+
+              <div className={styles.settingItem}>
+                <label className={styles.label}>
+                  Max Tokens <span className={styles.value}>{maxTokens}</span>
+                </label>
+                <input
+                  type="range"
+                  min="100"
+                  max="4000"
+                  step="100"
+                  value={maxTokens}
+                  onChange={(e) => setMaxTokens(parseInt(e.target.value))}
+                  className={styles.slider}
+                />
+              </div>
+
+              <div className={styles.settingItem}>
+                <label className={styles.label}>Context Window</label>
+                <select
+                  value={contextWindow}
+                  onChange={(e) => setContextWindow(parseInt(e.target.value))}
+                  className={styles.select}
+                >
+                  <option value={5}>Last 5 messages</option>
+                  <option value={10}>Last 10 messages</option>
+                  <option value={20}>Last 20 messages</option>
+                  <option value={100}>All messages</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className={styles.sidebarActions}>
+              <button className={styles.resetButton} onClick={resetSettings}>
+                <RotateCw size={16} />
+                Reset Defaults
+              </button>
+              <button className={styles.exportButton} onClick={exportChat}>
+                <Download size={16} />
+                Export Chat
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

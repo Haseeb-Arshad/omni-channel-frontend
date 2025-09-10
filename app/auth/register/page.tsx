@@ -77,7 +77,7 @@ export default function RegisterPage() {
       <div className="auth-page auth-container">
         <main className="relative z-10 grid place-items-center px-4 py-10">
           <section className="w-full max-w-2xl auth-card p-8 md:p-10">
-            <div className="flex items-center gap-3 text-primary"><CheckCircle2 className="h-5 w-5"/><h1 className="text-2xl md:text-3xl">Welcome aboard</h1></div>
+            <div className="flex items-center gap-3 text-primary"><CheckCircle2 className="h-5 w-5"/><h1 className="text-2xl md:text-3xl font-terminal">Welcome aboard</h1></div>
             <p className="mt-2 text-sm text-muted">Here's a tiny playground to try your new agent.</p>
             <div className="mt-6 rounded-xl border bg-white/80 p-4" style={{ borderColor: "rgba(31,29,27,0.12)" }}>
               <div className="text-xs mb-2 text-muted">Sample prompt</div>
@@ -115,8 +115,8 @@ export default function RegisterPage() {
           {/* Left: Headline + Form */}
           <div className="lg:col-span-7 space-y-4">
             <div>
-              <h1 className="text-3xl md:text-4xl font-semibold tracking-[-0.02em] text-primary">Create your OmniAgent account</h1>
-              <p className="mt-2 text-sm text-muted">Start free. No card required.</p>
+              <h1 className="text-3xl md:text-4xl font-semibold tracking-[-0.02em] text-primary font-terminal">Create your OmniAgent account</h1>
+              <p className="mt-2 text-sm text-muted font-rubik">Start free. No card required.</p>
             </div>
             <section className="w-full auth-card p-6 md:p-8">
               {error && (
@@ -371,18 +371,18 @@ export default function RegisterPage() {
           {/* Right: lean trust list */}
           <aside className="lg:col-span-5 space-y-4">
             <div className="trust-card">
-              <div className="flex items-center gap-2 text-primary"><CheckCircle2 className="h-4 w-4"/><h3 className="text-base font-medium">Why OmniAgent</h3></div>
+              <div className="flex items-center gap-2 text-primary"><CheckCircle2 className="h-4 w-4"/><h3 className="text-base font-medium font-terminal">Why OmniAgent</h3></div>
               <ul className="mt-2 text-sm list-disc pl-5 text-muted">
                 <li>Unified support, sales, IT</li>
                 <li>Fast setup, clear controls</li>
               </ul>
             </div>
             <div className="trust-card">
-              <div className="flex items-center gap-2 text-primary"><ShieldCheck className="h-4 w-4"/><h3 className="text-base font-medium">Security</h3></div>
+              <div className="flex items-center gap-2 text-primary"><ShieldCheck className="h-4 w-4"/><h3 className="text-base font-medium font-terminal">Security</h3></div>
               <p className="mt-2 text-sm text-muted">SSO & roles. Data stays yours.</p>
             </div>
             <div className="trust-card">
-              <div className="flex items-center gap-2 text-primary"><BookOpen className="h-4 w-4"/><h3 className="text-base font-medium">Docs & Status</h3></div>
+              <div className="flex items-center gap-2 text-primary"><BookOpen className="h-4 w-4"/><h3 className="text-base font-medium font-terminal">Docs & Status</h3></div>
               <p className="mt-2 text-sm text-muted">docs.omniagent.dev • status.omniagent.dev</p>
             </div>
           </aside>

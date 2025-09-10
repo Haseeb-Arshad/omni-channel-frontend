@@ -116,7 +116,7 @@
   --info: 221 91% 61%;            /* #3b82f6 */
 
   /* Light Theme Variables */
-  --background: var(--charcoal-50);
+  --background: 0 0% 100%;
   --foreground: var(--charcoal-900);
   --card: 0 0% 100%;
   --card-foreground: var(--charcoal-900);
@@ -772,3 +772,6 @@ html.has-scroll-dragging {
 .dashboard h6 {
   font-family: var(--font-sans);
 }
+/* Force dashboard surfaces to pure white for the light theme */
+.dashboard, .dashboard main { background: #ffffff !important; }
+.dashboard .topbar, .dashboard .sidebar { background: #ffffff !important; }

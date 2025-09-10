@@ -73,12 +73,12 @@ const Pricing: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 font-terminal">
               Simple pricing that
               <br />
               <span className="text-gray-600">grows with you</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 font-rubik">
               Start free, upgrade when you need to. No hidden fees, no surprises.
             </p>
 
@@ -132,10 +132,10 @@ const Pricing: React.FC = () => {
 
                 {/* Plan Header */}
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 font-terminal">
                     {plan.name}
                   </h3>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-gray-600 mb-6 font-rubik">
                     {plan.description}
                   </p>
                   
@@ -163,7 +163,7 @@ const Pricing: React.FC = () => {
                   {plan.features.map((feature, featureIndex) => (
                     <div key={featureIndex} className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-gray-700 font-rubik">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -194,7 +194,7 @@ const Pricing: React.FC = () => {
             viewport={{ once: true }}
             className="mt-16 text-center"
           >
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-6 font-rubik">
               All plans include a 14-day free trial. No credit card required.
             </p>
             <div className="flex flex-wrap justify-center gap-8 text-sm text-gray-500">

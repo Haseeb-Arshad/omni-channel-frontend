@@ -4,7 +4,6 @@ import { Toaster } from "sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
 import RouteGuard from "@/components/auth/RouteGuard";
 import "./globals.css";
-import "../styling/layout.css";
 import { PerformanceMonitor } from '@/components/performance-monitor';
 import { Playfair_Display } from "next/font/google";
 
@@ -28,8 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${playfair.variable} app-body`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <body className={`${playfair.variable}`}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AuthProvider>
             <RouteGuard>
               <div className="app-root">

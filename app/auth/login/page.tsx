@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, FormEvent } from "react";
+import { useEffect, useMemo, useState, FormEvent, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";

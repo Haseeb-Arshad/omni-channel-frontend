@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { 
   Search,
@@ -12,13 +13,6 @@ import {
   MoreHorizontal,
   Play,
   Pause,
-  Copy,
-  Eye,
-  ExternalLink,
-  TestTube,
-  Archive,
-  Trash2,
-  Tag,
   Users,
   Clock,
   MessageSquare,
@@ -27,19 +21,6 @@ import {
   Globe,
   Bot,
   Mic,
-  Brain,
-  Database,
-  AlertTriangle,
-  CheckCircle,
-  Circle,
-  XCircle,
-  Calendar,
-  TrendingUp,
-  Settings,
-  Download,
-  Upload,
-  Bookmark,
-  Star,
   X
 } from "lucide-react";
 import styles from "./agents.module.css";
@@ -81,10 +62,11 @@ interface FilterState {
 }
 
 export default function AgentsPage() {
+  const router = useRouter();
+  
   // View state
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   
@@ -251,7 +233,7 @@ export default function AgentsPage() {
   };
 
   const handleAgentClick = (agentId: string) => {
-    toast.success(`Opening agent workspace for ${agentId}`);
+    router.push(`/dashboard/agents/${agentId}`);
   };
 
   const handleMoreActions = (agentId: string, action: string) => {
@@ -508,6 +490,13 @@ export default function AgentsPage() {
             <option value="errors">Errors</option>
             <option value="status">Status</option>
           </select>
+          <button
+            className={styles.sortOrderButton}
+            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+            title={`Sort ${sortOrder === 'asc' ? 'descending' : 'ascending'}`}
+          >
+            {sortOrder === 'asc' ? '↑' : '↓'}
+          </button>
         </div>
       </div>
 

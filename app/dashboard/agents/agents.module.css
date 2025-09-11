@@ -186,6 +186,33 @@
   box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
 }
 
+.sortOrderButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #e8eaed;
+  background: #ffffff;
+  color: #5f6368;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.sortOrderButton:hover {
+  background: #f8f9fa;
+  color: #202124;
+  border-color: #dadce0;
+}
+
+.sortOrderButton:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+  outline: none;
+}
+
 /* Filters Panel */
 .filtersPanel {
   padding: 1.5rem 2rem;

@@ -42,8 +42,9 @@ A modern, responsive frontend for the Omni-Channel communication platform, built
 
 3. Create a `.env.local` file in the root directory and add the following environment variables:
    ```env
-   NEXT_PUBLIC_API_URL=http://localhost:3000  # Your backend API URL
-   NEXT_PUBLIC_APP_URL=http://localhost:3001   # Frontend URL
+   NEXT_PUBLIC_API_URL=http://localhost:3000      # Backend REST base (legacy)
+   NEXT_PUBLIC_BACKEND_URL=http://localhost:5000  # Backend origin for voice/token
+   NEXT_PUBLIC_APP_URL=http://localhost:3001      # Frontend URL
    ```
 
 4. Run the development server:
@@ -87,7 +88,7 @@ app/
 This frontend is designed to work with the [Omni-Channel Backend](https://github.com/Haseeb-Arshad/omni-channel). Make sure to:
 
 1. Clone and set up the backend repository
-2. Update the `NEXT_PUBLIC_API_URL` in your `.env.local` to point to your backend server
+2. Update `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_BACKEND_URL` in your `.env.local` to point to your backend server
 3. Ensure CORS is properly configured on the backend to accept requests from your frontend URL
 
 ## 🧪 Testing

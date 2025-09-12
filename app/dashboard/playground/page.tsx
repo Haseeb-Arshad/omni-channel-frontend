@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
 import styles from "./playground.module.css";
+import dynamic from "next/dynamic";
+const HumeVoicePlayground = dynamic(() => import("@/components/hume/VoicePlayground"), { ssr: false });
 
 interface Message {
   id: string;
@@ -55,7 +57,6 @@ export default function PlaygroundPage() {
   
   // UI state
   const [testMode, setTestMode] = useState<'chat' | 'voice'>('chat');
-  const [isRecording, setIsRecording] = useState(false);
   
   // Sample data
   const knowledgeBases: KnowledgeBase[] = [
@@ -311,34 +312,7 @@ export default function PlaygroundPage() {
               </>
             ) : (
               <div className={styles.voiceMode}>
-                <div className={styles.voiceContent}>
-                  <div className={styles.voiceIcon}>
-                    <Volume2 size={32} />
-                  </div>
-                  <h3 className={styles.voiceTitle}>Voice Testing</h3>
-                  <p className={styles.voiceText}>Test your AI assistant with voice interactions</p>
-                  
-                  <div className={styles.voiceControls}>
-                    <button 
-                      className={`${styles.voiceButton} ${isRecording ? styles.voiceButtonActive : ''}`}
-                      onClick={() => {
-                        setIsRecording(!isRecording);
-                        toast.message(isRecording ? 'Recording stopped' : 'Recording started');
-                      }}
-                    >
-                      {isRecording ? <Pause size={20} /> : <Mic size={20} />}
-                      {isRecording ? 'Stop Recording' : 'Start Recording'}
-                    </button>
-                    
-                    <button 
-                      className={styles.voiceButtonSecondary}
-                      onClick={() => toast.success('Sample played')}
-                    >
-                      <Play size={16} />
-                      Play Sample
-                    </button>
-                  </div>
-                </div>
+                <HumeVoicePlayground />
               </div>
             )}
           </div>

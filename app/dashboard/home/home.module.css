@@ -2,7 +2,7 @@
    Visual spec: tall blurred vertical bands in Sand/Bone with faint Amber/Copper and Stone neutrals;
    glass cards; hairline borders; editorial serif for headings; no blue. */
 
-:root {
+:global(:root) {
   --sand: #F6F2EA;
   --bone: #EEE8DF;
   --stone-050: #FAFAF9;

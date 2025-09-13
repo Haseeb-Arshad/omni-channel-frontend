@@ -1,5 +1,5 @@
 /* Dashboard layout theme-driven custom CSS (no Tailwind color deps) */
-:root {
+:global(:root) {
   --sand: #F6F2EA;
   --bone: #EEE8DF;
   --stone-900: #2b2a28;

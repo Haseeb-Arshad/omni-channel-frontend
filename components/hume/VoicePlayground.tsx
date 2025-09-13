@@ -170,7 +170,7 @@ function TranscriptPanel() {
           </div>
         )}
       </div>
-      <div className="space-y-2 max-h-48 overflow-y-auto">
+      <div className="space-y-2 max-h-64 overflow-y-auto">
         {transcript.length === 0 ? (
           <div className="text-sm text-gray-500">Say something to get started…</div>
         ) : (
@@ -180,7 +180,7 @@ function TranscriptPanel() {
                 {m.role === "user" ? "You" : "Assistant"}
                 {m.interim ? " (interim)" : ""}
               </span>
-              <span className={`inline px-1.5 py-0.5 rounded ${m.role === 'assistant' ? emotionColor(m.topEmotion) : ''}`}>
+              <span className={`inline px-1.5 py-0.5 rounded border ${m.role === 'assistant' ? emotionColor(m.topEmotion) : ''}`}>
                 {m.text || "[no transcript]"}
               </span>
             </div>
@@ -365,7 +365,7 @@ function SettingsPanel({ settings, setSettings, onEnhance }: { settings: VoiceSe
 }
 
 function VoicePicker({ value, onChange }: { value: string; onChange: (id: string, name?: string) => void }) {
-  const [provider, setProvider] = useState<'HUME_AI' | 'CUSTOM_VOICE'>('HUME_AI');
+  const [provider, setProvider] = useState<'ALL' | 'HUME_AI' | 'CUSTOM_VOICE'>('ALL');
   const [items, setItems] = useState<Array<{ id: string; name: string }>>([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -373,7 +373,8 @@ function VoicePicker({ value, onChange }: { value: string; onChange: (id: string
       setLoading(true);
       try {
         const base = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-        const res = await fetch(`${base}/voice/voices?provider=${provider}`);
+        const url = provider === 'ALL' ? `${base}/voice/voices?all=1` : `${base}/voice/voices?provider=${provider}`;
+        const res = await fetch(url);
         const data = await res.json();
         if (res.ok) setItems((data?.voices || []).filter((v: any) => v?.id && v?.name));
       } catch (_) { }
@@ -386,6 +387,7 @@ function VoicePicker({ value, onChange }: { value: string; onChange: (id: string
       <label className="block text-xs text-gray-600 mb-1">Voice</label>
       <div className="flex gap-2">
         <select className="w-40 border rounded px-2 py-1.5" value={provider} onChange={(e) => setProvider(e.target.value as any)}>
+          <option value="ALL">All</option>
           <option value="HUME_AI">Library</option>
           <option value="CUSTOM_VOICE">My Voices</option>
         </select>

@@ -1,18 +1,26 @@
 "use client"
 
 import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import Hero from "@/components/landing/Hero";
-import Ribbon from "@/components/landing/Ribbon";
+import CofounderFeatures from "@/components/landing/CofounderFeatures";
+import AnimatedDemo from "@/components/landing/AnimatedDemo";
+import AgentsShowcase from "@/components/landing/AgentsShowcase";
+import Integrations from "@/components/landing/Integrations";
+import LeftRailNav from "@/components/landing/LeftRailNav";
 
 export default function Home() {
   return (
-    <div className="min-h-screen" style={{ background: '#F6F4EF' }}>
+    <div className="min-h-screen bg-white">
+      <Header />
+      {/* Single shared left rail navigation (fixes duplicates) */}
+      <LeftRailNav />
       <main>
         <Hero />
-        <Ribbon />
+        <CofounderFeatures />
+        <AnimatedDemo />
+        <AgentsShowcase />
+        <Integrations />
       </main>
-      <Footer />
     </div>
   );
 }

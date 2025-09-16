@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { MessageSquare, Menu, X, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Menu, X } from "lucide-react"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -23,11 +22,11 @@ export function Header() {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-200/50 py-3' 
-          : 'bg-white/80 backdrop-blur-sm py-6'
+          ? 'bg-white/95 backdrop-blur-xl py-3' 
+          : 'bg-transparent py-6'
       }`}
     >
-      <div className="container px-4 mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
@@ -35,73 +34,59 @@ export function Header() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-10 w-10 rounded-xl bg-gray-900 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
-              <MessageSquare className="w-5 h-5 text-white" />
+            <div className="w-8 h-8">
+              <svg viewBox="0 0 32 32" className="w-full h-full">
+                <circle cx="16" cy="8" r="3" fill="#F59E0B" />
+                <path d="M16 12 L12 20 L20 20 Z" fill="#10B981" />
+                <path d="M16 20 L16 28" stroke="#10B981" strokeWidth="2" />
+              </svg>
             </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-xl text-gray-900 group-hover:text-gray-700 transition-colors duration-300">
-                OmniChannel
-              </span>
-              <span className="text-xs text-gray-500 -mt-1">Communication Hub</span>
-            </div>
+            <span className="text-xl font-medium text-gray-900 font-adobe-body">
+              Cofounder
+            </span>
           </Link>
         </motion.div>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center space-x-2">
-          <nav className="flex items-center mr-6 space-x-2">
-            {[
-              { href: "#features", label: "Features" },
-              { href: "#testimonials", label: "Stories" },
-              { href: "#pricing", label: "Pricing" },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300 font-medium"
-              >
-                {item.label}
-              </Link>
-            ))}
+        <div className="hidden lg:flex items-center space-x-8">
+          <nav className="flex items-center space-x-8">
+            <Link
+              href="#pricing"
+              className="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium font-adobe-body"
+            >
+              Pricing
+            </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
-            <Button 
-              variant="ghost" 
-              asChild 
-              className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+          <div className="flex items-center gap-4">
+            <Link
+              href="/auth/login"
+              className="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium font-adobe-body"
             >
-              <Link href="/auth/login">
-                Sign In
-              </Link>
-            </Button>
+              Log in
+            </Link>
             
-            <Button 
-              asChild 
-              className="bg-gray-900 hover:bg-gray-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 group"
+            <Link
+              href="/auth/register"
+              className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-all duration-200 font-medium font-adobe-body"
             >
-              <Link href="/auth/register" className="flex items-center">
-                Get Started Free
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </Button>
+              Sign up
+            </Link>
           </div>
         </div>
 
         {/* Mobile Menu Button */}
         <div className="lg:hidden flex items-center gap-3">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            asChild 
-            className="text-gray-600 hover:text-gray-900"
+          <Link
+            href="/auth/login"
+            className="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium font-adobe-body"
           >
-            <Link href="/auth/login">Sign In</Link>
-          </Button>
+            Log in
+          </Link>
           
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-all duration-300"
+            className="p-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (
@@ -123,32 +108,24 @@ export function Header() {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="container px-4 py-6">
+            <div className="px-6 py-6">
               <nav className="flex flex-col space-y-4 mb-6">
-                {[
-                  { href: "#features", label: "Features" },
-                  { href: "#testimonials", label: "Stories" },
-                  { href: "#pricing", label: "Pricing" },
-                ].map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="py-2 text-gray-600 hover:text-gray-900 transition-colors duration-300"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                <Link
+                  href="#pricing"
+                  className="py-2 text-gray-600 hover:text-gray-900 transition-colors duration-200 font-adobe-body"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Pricing
+                </Link>
               </nav>
               
-              <Button 
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white" 
-                asChild
+              <Link
+                href="/auth/register"
+                className="block w-full bg-gray-900 hover:bg-gray-800 text-white text-center px-4 py-3 rounded-lg transition-all duration-200 font-medium font-adobe-body"
+                onClick={() => setIsMenuOpen(false)}
               >
-                <Link href="/auth/register" onClick={() => setIsMenuOpen(false)}>
-                  Get Started Free
-                </Link>
-              </Button>
+                Sign up
+              </Link>
             </div>
           </motion.div>
         )}

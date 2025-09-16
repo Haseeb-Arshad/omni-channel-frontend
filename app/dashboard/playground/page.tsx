@@ -54,23 +54,62 @@ export default function PlaygroundPage() {
   const [temperature, setTemperature] = useState(0.7);
   const [maxTokens, setMaxTokens] = useState(1000);
   const [contextWindow, setContextWindow] = useState(10);
+  const [enableWebSearch, setEnableWebSearch] = useState(true);
+  const [sessionId, setSessionId] = useState<string>("");
   
   // UI state
   const [testMode, setTestMode] = useState<'chat' | 'voice'>('chat');
   
-  // Sample data
-  const knowledgeBases: KnowledgeBase[] = [
-    { id: "kb1", name: "Product Documentation", documentCount: 24 },
-    { id: "kb2", name: "FAQ Database", documentCount: 156 },
-    { id: "kb3", name: "Support Articles", documentCount: 89 }
-  ];
-  
-  const activePersona = { 
-    id: "1", 
-    model: "gpt-4", 
-    name: "Support Assistant",
-    description: "Helpful customer support agent"
-  };
+  // Data loaded from backend
+  const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
+  const [personas, setPersonas] = useState<any[]>([]);
+  const [activePersona, setActivePersona] = useState<any | null>(null);
+  const [models, setModels] = useState<string[]>(["gpt-5", "gpt-5-mini", "gpt-5-pro", "gpt-4o", "gpt-4o-mini"]);
+  const [selectedModel, setSelectedModel] = useState<string>("gpt-4o-mini");
+
+  useEffect(() => {
+    // Persist a session id for memory
+    const existing = typeof window !== 'undefined' ? localStorage.getItem('playground_session_id') : '';
+    const sid = existing || (uuidv4());
+    setSessionId(sid);
+    if (!existing && typeof window !== 'undefined') {
+      localStorage.setItem('playground_session_id', sid);
+    }
+
+    (async () => {
+      try {
+        const api = (await import('@/lib/api')).default;
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        const promises: Promise<any>[] = [
+          api.listKnowledgeBasesForPlayground(),
+          api.listModels('gpt-5')
+        ];
+        if (token) {
+          promises.push(api.listPersonas());
+          promises.push(api.getActivePersona());
+        }
+        const results = await Promise.all(promises);
+        const kbRes = results[0];
+        const modelsRes = results[1];
+        const personaRes = token ? results[2] : { success: false } as any;
+        const activeRes = token ? results[3] : { success: false } as any;
+        if (kbRes.success && (kbRes.data as any)?.knowledgeBases) setKnowledgeBases((kbRes.data as any).knowledgeBases);
+        if (token && personaRes.success && Array.isArray(personaRes.data)) setPersonas(personaRes.data);
+        if (token && activeRes.success && activeRes.data) {
+          setActivePersona(activeRes.data);
+          if (activeRes.data.model) setSelectedModel(activeRes.data.model);
+        }
+        if (modelsRes.success && modelsRes.data?.models?.length) {
+          const ids = modelsRes.data.models.map((m: any) => m.id);
+          const common = ['gpt-5', 'gpt-5-mini', 'gpt-5-pro', 'o5-mini', 'gpt-4.1', 'gpt-4o', 'gpt-4o-mini'];
+          const merged = Array.from(new Set([...ids, ...common]));
+          setModels(merged);
+        }
+      } catch (_) {
+        // ignore and keep defaults
+      }
+    })();
+  }, []);
 
   // Message component
   const MessageBubble = ({ message, isLoading }: { message: Message, isLoading?: boolean }) => {
@@ -101,7 +140,7 @@ export default function PlaygroundPage() {
   };
 
   // Handle message submission
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!inputMessage.trim() || isTyping) return;
@@ -116,26 +155,31 @@ export default function PlaygroundPage() {
     setMessages(prev => [...prev, userMessage]);
     setInputMessage("");
     setIsTyping(true);
-    
-    // Simulate AI response
-    setTimeout(() => {
-      const responses = [
-        "I'd be happy to help you with that! Let me check our knowledge base for the most accurate information.",
-        "That's a great question. Based on our documentation, here's what I can tell you...",
-        "I understand your concern. Let me provide you with a detailed explanation.",
-        "Thanks for reaching out! I can definitely assist you with this request."
-      ];
-      
-      const aiMessage: Message = {
-        id: uuidv4(),
-        role: "assistant",
-        content: responses[Math.floor(Math.random() * responses.length)],
-        timestamp: new Date()
-      };
-      
+    try {
+      const api = (await import('@/lib/api')).default;
+      const ctx = messages.slice(-contextWindow).map(m => ({ role: m.role, content: m.content }));
+      const res = await api.playgroundChat({
+        query: userMessage.content,
+        personaId: activePersona?.id,
+        model: selectedModel,
+        temperature,
+        maxTokens,
+        useKnowledgeBase,
+        knowledgeBaseId: selectedKnowledgeBase || undefined,
+        systemPrompt: activePersona?.system_prompt,
+        contextMessages: ctx,
+        sessionId,
+        enableWebSearch
+      } as any);
+      const content = res?.data?.response?.content || 'Sorry, I could not generate a response.';
+      const aiMessage: Message = { id: uuidv4(), role: 'assistant', content, timestamp: new Date() };
       setMessages(prev => [...prev, aiMessage]);
+    } catch (_) {
+      const aiMessage: Message = { id: uuidv4(), role: 'assistant', content: 'There was an error contacting the AI service.', timestamp: new Date() };
+      setMessages(prev => [...prev, aiMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1200 + Math.random() * 800);
+    }
   };
 
   // Handle preset messages
@@ -196,12 +240,10 @@ export default function PlaygroundPage() {
         </div>
         <div className={styles.headerActions}>
           <div className={styles.personaInfo}>
-            <div className={styles.personaIcon}>
-              <Bot size={16} />
-            </div>
+            <div className={styles.personaIcon}><Bot size={16} /></div>
             <div>
-              <div className={styles.personaName}>{activePersona.name}</div>
-              <div className={styles.personaModel}>{activePersona.model}</div>
+              <div className={styles.personaName}>{activePersona?.name || 'Persona'}</div>
+              <div className={styles.personaModel}>{selectedModel}</div>
             </div>
           </div>
         </div>
@@ -373,13 +415,28 @@ export default function PlaygroundPage() {
               </div>
 
               <div className={styles.settingItem}>
+                <label className={styles.label}>Persona</label>
+                <select
+                  value={activePersona?.id || ''}
+                  onChange={(e) => {
+                    const p = personas.find((x) => x.id === e.target.value);
+                    setActivePersona(p || null);
+                    if (p?.model) setSelectedModel(p.model);
+                  }}
+                  className={styles.select}
+                >
+                  <option value="">Active persona</option>
+                  {personas.map((p) => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.settingItem}>
                 <label className={styles.label}>AI Model</label>
-                <input
-                  type="text"
-                  value={`${activePersona.model.toUpperCase()} - ${activePersona.description}`}
-                  readOnly
-                  className={styles.inputReadonly}
-                />
+                <select className={styles.select} value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)}>
+                  {models.map(m => (<option key={m} value={m}>{m}</option>))}
+                </select>
               </div>
 
               <div className={styles.settingItem}>
@@ -416,19 +473,27 @@ export default function PlaygroundPage() {
                 />
               </div>
 
-              <div className={styles.settingItem}>
-                <label className={styles.label}>Context Window</label>
-                <select
-                  value={contextWindow}
-                  onChange={(e) => setContextWindow(parseInt(e.target.value))}
-                  className={styles.select}
-                >
-                  <option value={5}>Last 5 messages</option>
-                  <option value={10}>Last 10 messages</option>
-                  <option value={20}>Last 20 messages</option>
-                  <option value={100}>All messages</option>
-                </select>
-              </div>
+            <div className={styles.settingItem}>
+              <label className={styles.label}>Context Window</label>
+              <select
+                value={contextWindow}
+                onChange={(e) => setContextWindow(parseInt(e.target.value))}
+                className={styles.select}
+              >
+                <option value={5}>Last 5 messages</option>
+                <option value={10}>Last 10 messages</option>
+                <option value={20}>Last 20 messages</option>
+                <option value={100}>All messages</option>
+              </select>
+            </div>
+
+            <div className={styles.settingItem}>
+              <label className={styles.switchLabel}>
+                <input type="checkbox" className={styles.switch} checked={enableWebSearch} onChange={(e) => setEnableWebSearch(e.target.checked)} />
+                <span className={styles.switchSlider}></span>
+                Enable Web Search
+              </label>
+            </div>
             </div>
 
             {/* Actions */}

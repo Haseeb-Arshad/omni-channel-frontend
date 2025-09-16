@@ -27,6 +27,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Adobe Fonts - Replace with your actual Adobe Fonts kit ID */}
+        <link rel="preconnect" href="https://use.typekit.net" />
+        <link rel="stylesheet" href="https://use.typekit.net/abc1def.css" />
+        {/* Fallback to Google Fonts for similar Adobe-style fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;500;600;700&family=Minion+Pro:wght@400;500;600&display=swap" rel="stylesheet" />
+      </head>
       <body className={`${playfair.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AuthProvider>

@@ -123,6 +123,12 @@ export interface PlaygroundKnowledgeBase {
   documentCount: number;
 }
 
+export interface OpenAIModel {
+  id: string;
+  created?: number;
+  owned_by?: string;
+}
+
 export interface CreateKnowledgeBaseRequest {
   name: string;
   description?: string;
@@ -360,8 +366,11 @@ class ApiClient {
 
   constructor() {
     // Create axios instance
+    const baseUrl = (process.env.NEXT_PUBLIC_BACKEND_URL 
+      || process.env.NEXT_PUBLIC_API_URL 
+      || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000')) as string;
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+      baseURL: baseUrl,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -392,9 +401,17 @@ class ApiClient {
     this.client.interceptors.response.use(
       (response) => response,
       (error: AxiosError) => {
-        // Handle authentication errors
-        if (error.response?.status === 401) {
-          // Clear token and redirect to login page if on client
+        const status = error.response?.status;
+        const url = (error.config?.url || '').toString();
+
+        // Allowlist: do NOT redirect on 401 for public playground endpoints
+        const noAuthRedirect = (
+          url.includes('/api/playground/chat') ||
+          url.includes('/api/knowledge-bases') ||
+          url.includes('/api/models')
+        );
+
+        if (status === 401 && !noAuthRedirect) {
           if (typeof window !== 'undefined') {
             localStorage.removeItem('token');
             this.token = null;
@@ -403,15 +420,11 @@ class ApiClient {
         }
 
         // Show error notifications for non-auth errors
-        if (error.response?.status !== 401 && typeof window !== 'undefined') {
+        if (status !== 401 && typeof window !== 'undefined') {
           let apiMessage: string | undefined;
           const responseData: unknown = error.response?.data;
-
-          if (hasMessage(responseData)) {
-            apiMessage = responseData.message;
-          }
-          
-          const errorMessage = apiMessage || error.message || 'Something went wrong';
+          if (hasMessage(responseData)) apiMessage = responseData.message;
+          const errorMessage = apiMessage || (error as any).message || 'Something went wrong';
           toast.error(errorMessage);
         }
 
@@ -997,6 +1010,22 @@ class ApiClient {
   // Playground chat endpoint
   async playgroundChat(data: PlaygroundChatRequest): Promise<ApiResponse<PlaygroundChatResponse>> {
     return this.request<PlaygroundChatResponse>({ method: 'POST', url: '/api/playground/chat', data });
+  }
+
+  // List personas
+  async listPersonas(): Promise<ApiResponse<Persona[]>> {
+    return this.request<Persona[]>({ method: 'GET', url: '/api/personas' });
+  }
+
+  // Get active persona
+  async getActivePersona(): Promise<ApiResponse<Persona>> {
+    return this.request<Persona>({ method: 'GET', url: '/api/personas/active' });
+  }
+
+  // List available models (filterable via ?only= prefix)
+  async listModels(only?: string): Promise<ApiResponse<{ models: OpenAIModel[] }>> {
+    const url = only ? `/api/models?only=${encodeURIComponent(only)}` : '/api/models';
+    return this.request<{ models: OpenAIModel[] }>({ method: 'GET', url });
   }
 
   // Method to get user's active subscription

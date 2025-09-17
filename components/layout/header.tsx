@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
@@ -60,14 +60,14 @@ export function Header() {
 
           <div className="flex items-center gap-4">
             <Link
-              href="/auth/login"
+              href="/login"
               className="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium font-adobe-body"
             >
               Log in
             </Link>
             
             <Link
-              href="/auth/register"
+              href="/login"
               className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition-all duration-200 font-medium font-adobe-body"
             >
               Sign up
@@ -78,7 +78,7 @@ export function Header() {
         {/* Mobile Menu Button */}
         <div className="lg:hidden flex items-center gap-3">
           <Link
-            href="/auth/login"
+            href="/login"
             className="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium font-adobe-body"
           >
             Log in
@@ -120,7 +120,7 @@ export function Header() {
               </nav>
               
               <Link
-                href="/auth/register"
+                href="/login"
                 className="block w-full bg-gray-900 hover:bg-gray-800 text-white text-center px-4 py-3 rounded-lg transition-all duration-200 font-medium font-adobe-body"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -133,3 +133,5 @@ export function Header() {
     </header>
   )
 }
+
+

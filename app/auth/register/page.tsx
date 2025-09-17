@@ -2,7 +2,7 @@
 
 import { useMemo, useState, FormEvent } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import "@/app/auth/auth-styles.css";
 import { Mail, User, Lock, Eye, EyeOff, Building2, Globe2, Clock4, CheckCircle2, AlertCircle, Loader2, Sparkles, BookOpen, ShieldCheck } from "lucide-react";
@@ -21,6 +21,7 @@ function strength(pw: string) {
 export default function RegisterPage() {
   const { register, isLoading } = useAuth();
   const params = useSearchParams();
+  const router = useRouter();
   const invite = !!params.get("invite");
 
   const [email, setEmail] = useState<string>(params.get("email") || "");
@@ -63,7 +64,7 @@ export default function RegisterPage() {
       setError("Could not create your account. Try again.");
       return;
     }
-    setStep("done");
+    router.push("/");
   }
 
   const StrengthBar = ({ v }: { v: number }) => (

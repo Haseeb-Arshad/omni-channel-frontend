@@ -170,7 +170,7 @@ export default function PlaygroundPage() {
         contextMessages: ctx,
         sessionId,
         enableWebSearch
-      } as any);
+      });
       const content = res?.data?.response?.content || 'Sorry, I could not generate a response.';
       const aiMessage: Message = { id: uuidv4(), role: 'assistant', content, timestamp: new Date() };
       setMessages(prev => [...prev, aiMessage]);

@@ -60,10 +60,11 @@ export const TONE_OPTIONS = [
  * AI model options
  */
 export const MODEL_OPTIONS = [
-  { value: "gpt-4", label: "GPT-4 (Most Capable)" },
-  { value: "gpt-3.5", label: "GPT-3.5 (Faster)" },
-  { value: "claude-2", label: "Claude 2" },
-  { value: "palm", label: "PaLM 2" },
+  { value: "gpt-4o", label: "GPT-4o (Quality + Vision)" },
+  { value: "gpt-4o-mini", label: "GPT-4o-mini (Fast & Cost-Effective)" },
+  { value: "gpt-4.1", label: "GPT-4.1 (Reasoning)" },
+  { value: "gpt-4.1-mini", label: "GPT-4.1-mini (Light Reasoning)" },
+  { value: "o3-mini", label: "o3-mini (Advanced Reasoning)" },
 ];
 
 /**

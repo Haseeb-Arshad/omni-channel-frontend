@@ -64,8 +64,16 @@ export default function PlaygroundPage() {
   const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
   const [personas, setPersonas] = useState<any[]>([]);
   const [activePersona, setActivePersona] = useState<any | null>(null);
-  const [models, setModels] = useState<string[]>(["gpt-5", "gpt-5-mini", "gpt-5-pro", "gpt-4o", "gpt-4o-mini"]);
-  const [selectedModel, setSelectedModel] = useState<string>("gpt-4o-mini");
+  // Curated modern OpenAI chat models (merged with API results below)
+  const curatedModels = [
+    "gpt-4o",
+    "gpt-4o-mini",
+    "gpt-4.1",
+    "gpt-4.1-mini",
+    "o3-mini",
+  ];
+  const [models, setModels] = useState<string[]>(curatedModels);
+  const [selectedModel, setSelectedModel] = useState<string>("gpt-4o");
 
   useEffect(() => {
     // Persist a session id for memory
@@ -82,7 +90,7 @@ export default function PlaygroundPage() {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
         const promises: Promise<any>[] = [
           api.listKnowledgeBasesForPlayground(),
-          api.listModels('gpt-5')
+          api.listModels()
         ];
         if (token) {
           promises.push(api.listPersonas());
@@ -100,10 +108,13 @@ export default function PlaygroundPage() {
           if (activeRes.data.model) setSelectedModel(activeRes.data.model);
         }
         if (modelsRes.success && modelsRes.data?.models?.length) {
-          const ids = modelsRes.data.models.map((m: any) => m.id);
-          const common = ['gpt-5', 'gpt-5-mini', 'gpt-5-pro', 'o5-mini', 'gpt-4.1', 'gpt-4o', 'gpt-4o-mini'];
-          const merged = Array.from(new Set([...ids, ...common]));
-          setModels(merged);
+          const ids = modelsRes.data.models
+            .map((m: any) => m.id)
+            // Keep only chat-capable modern models we recognize
+            .filter((id: string) => /^(gpt-4o|gpt-4\.1|o3-mini)/i.test(id));
+          // Merge with curated list and de-dup; keep curated order first
+          const extras = ids.filter((id: string) => !curatedModels.includes(id));
+          setModels([...curatedModels, ...extras]);
         }
       } catch (_) {
         // ignore and keep defaults
@@ -338,7 +349,7 @@ export default function PlaygroundPage() {
                       type="text"
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
-                      placeholder="Type your message..."
+                      placeholder="Ask me anything…"
                       className={styles.messageInput}
                       disabled={isTyping}
                     />

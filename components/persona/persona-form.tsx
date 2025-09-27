@@ -62,7 +62,7 @@ export default function PersonaForm({
     description: initialData?.description || "Description of this AI persona",
     system_prompt: initialData?.system_prompt || "You are a helpful AI assistant that provides accurate and useful information.",
     tone: initialData?.tone || "professional",
-    model: initialData?.model || "gpt-4",
+    model: initialData?.model || "gpt-4o",
     temperature: initialData?.temperature || 0.7,
     response_style: initialData?.response_style || "balanced",
     knowledge_depth: initialData?.knowledge_depth || "comprehensive",

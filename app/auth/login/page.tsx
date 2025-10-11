@@ -85,7 +85,7 @@ export default function LoginPage() {
       return;
     }
     setShowLoginDrawer(false);
-    router.push("/");
+    router.push("/onboarding/step1");
   }
 
   function sendMagic() {
@@ -101,7 +101,7 @@ export default function LoginPage() {
     if (ok) {
       setShow2FA(false);
       setShowLoginDrawer(false);
-      router.push("/");
+      router.push("/onboarding/step1");
     }
   }
 
@@ -135,7 +135,7 @@ export default function LoginPage() {
               </div>
               <div className="mt-10 w-full max-w-sm space-y-4">
                 <Link
-                  href="/auth/register"
+                  href="/onboarding/step1"
                   className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-[#4c463a] bg-gradient-to-b from-[#2f2620] via-[#1a1612] to-[#0d0b09] px-8 py-3 text-lg font-medium text-white shadow-[0_24px_60px_rgba(0,0,0,0.5)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_32px_80px_rgba(0,0,0,0.65)] focus:outline-none focus:ring-2 focus:ring-[#f2d594]/40"
                 >
                   <span className="absolute left-6 flex h-7 w-7 items-center justify-center rounded-full bg-white text-lg">
@@ -148,13 +148,12 @@ export default function LoginPage() {
                   <span>or</span>
                   <span className="flex-1 border-t border-[#2a2722]" />
                 </div>
-                <button
-                  type="button"
-                  onClick={() => { setStep("email"); setShowLoginDrawer(true); setError(null); }}
+                <Link
+                  href="/onboarding/step1"
                   className="flex w-full items-center justify-center rounded-full border border-[#2e2b27] bg-gradient-to-b from-[#1d1a17] via-[#151311] to-[#0b0908] px-8 py-3 text-lg font-medium text-white shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_26px_70px_rgba(0,0,0,0.6)] focus:outline-none focus:ring-2 focus:ring-[#d0c7b9]/35"
                 >
                   Log in
-                </button>
+                </Link>
               </div>
               <p className="mt-8 max-w-xs text-xs text-[#6c655c]">
                 By signing up you agree to our {" "}

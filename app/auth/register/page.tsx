@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, FormEvent } from "react";
+import { useMemo, useState, FormEvent, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -22,6 +22,8 @@ export default function RegisterPage() {
   const { register, isLoading } = useAuth();
   const params = useSearchParams();
   const router = useRouter();
+  // Temporary redirect: route /auth/register to onboarding step 1
+  useEffect(() => { try { router.replace("/onboarding/step1"); } catch(_) {} }, []);
   const invite = !!params.get("invite");
 
   const [email, setEmail] = useState<string>(params.get("email") || "");

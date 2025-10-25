@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Bot, BarChart3, Zap, Users, Shield, Sparkles, ArrowRight } from 'lucide-react';

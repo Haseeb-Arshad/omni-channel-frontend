@@ -1,6 +1,15 @@
-import { redirect } from "next/navigation";
+import Hero from "@/components/landing/Hero";
+import UseCases from "@/components/landing/UseCases";
+import PromptPlayground from "@/components/landing/PromptPlayground";
+import KnowledgebaseAgent from "@/components/landing/KnowledgebaseAgent";
 
-// Redirect to onboarding step 1 for the default landing experience
 export default function Home() {
-  redirect("/onboarding/step1");
+  return (
+    <main>
+      <Hero />
+      <UseCases />
+      <PromptPlayground />
+      <KnowledgebaseAgent />
+    </main>
+  );
 }

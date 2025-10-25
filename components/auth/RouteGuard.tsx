@@ -17,14 +17,7 @@ export const RouteGuard = ({ children }: RouteGuardProps) => {
   useEffect(() => {
     // DEV MODE: Skip authentication checks and allow access to all routes
     console.log('[RouteGuard] DEV MODE: Authentication bypassed');
-    
-    // If user is on the auth page, redirect them to dashboard
-    if (pathname === '/auth') {
-      console.log('[RouteGuard] Redirecting to dashboard');
-      router.push('/dashboard');
-      return;
-    }
-    
+
     // Original authentication logic - commented out for development
     /*
     // Skip redirection logic if we're still loading

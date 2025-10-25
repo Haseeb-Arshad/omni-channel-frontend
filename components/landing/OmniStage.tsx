@@ -1,3 +1,6 @@
+
+'use client';
+
 import React, { useEffect, useRef, useState } from "react"
 import '../../styling/omni-stage.css'
 
@@ -28,14 +31,14 @@ export default function OmniStage() {
   return (
     <section className="omni-stage" aria-label="The Omni Stage">
       <div className="stage-bands" aria-hidden>
-        {Array.from({length:7}).map((_,i)=> <div key={i} className="stage-bar" />)}
+        {Array.from({ length: 7 }).map((_, i) => <div key={i} className="stage-bar" />)}
       </div>
 
       <div className="stage-pin">
         {/* Left rail */}
         <aside className="stage-rail" aria-hidden>
-          <div className="act-label">ACT <span className="num">{String(act).padStart(2,'0')}</span></div>
-          <div className="progress-rail"><div className="progress-dot" style={{ transform: `translate(-50%, ${((act-1)/4)*100}%)` }} /></div>
+          <div className="act-label">ACT <span className="num">{String(act).padStart(2, '0')}</span></div>
+          <div className="progress-rail"><div className="progress-dot" style={{ transform: `translate(-50%, ${((act - 1) / 4) * 100}%)` }} /></div>
         </aside>
 
         {/* Canvas with 5 acts */}
@@ -47,9 +50,9 @@ export default function OmniStage() {
             <p className="act-copy">Voice, chat, and messaging come home to a single thread.</p>
             <div className="act-visual">
               <div className="mosaic">
-                {Array.from({length:6}).map((_,i)=> (
+                {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="msg-card">
-                    <div className="msg-top"><div className="chip" /><div className="msg-line" style={{width: '50%'}}/></div>
+                    <div className="msg-top"><div className="chip" /><div className="msg-line" style={{ width: '50%' }} /></div>
                     <div className="msg-line" />
                   </div>
                 ))}
@@ -111,10 +114,10 @@ export default function OmniStage() {
             <p className="act-copy">Deflection up, CSAT up, handle time down. Ship your first flow in minutes.</p>
             <div className="act-visual">
               <div className="stats">
-                <div className="stat">Deflection ↑<div className="spark"/></div>
-                <div className="stat">CSAT ↑<div className="spark"/></div>
-                <div className="stat">AHT ↓<div className="spark alert"/></div>
-                <div className="stat">Assisted Revenue ↑<div className="spark"/></div>
+                <div className="stat">Deflection ↑<div className="spark" /></div>
+                <div className="stat">CSAT ↑<div className="spark" /></div>
+                <div className="stat">AHT ↓<div className="spark alert" /></div>
+                <div className="stat">Assisted Revenue ↑<div className="spark" /></div>
               </div>
               <div className="cta-row"><button className="pill">Create your first flow</button></div>
             </div>
@@ -124,7 +127,7 @@ export default function OmniStage() {
 
       {/* Spacers to create scroll distance controlling act progression */}
       <div className="act-spacers" aria-hidden>
-        <div className="act-spacer"/> <div className="act-spacer"/> <div className="act-spacer"/> <div className="act-spacer"/> <div className="act-spacer"/>
+        <div className="act-spacer" /> <div className="act-spacer" /> <div className="act-spacer" /> <div className="act-spacer" /> <div className="act-spacer" />
       </div>
     </section>
   )

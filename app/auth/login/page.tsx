@@ -8,6 +8,8 @@ import Drawer from "@/components/ui/Drawer";
 import "@/app/auth/auth-styles.css";
 import { Mail, Lock, Eye, EyeOff, Loader2, Shield, KeyRound, Smartphone, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import Image from "next/image";
+import { Inter, Outfit } from "next/font/google";
 
 type EmailIntel = {
   status: "existing" | "new" | "invited";
@@ -25,7 +27,10 @@ function intelFor(email: string, invited: boolean): EmailIntel | null {
   return { status: "new" };
 }
 
-const HERO_IMAGE_URL = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1100&q=80";
+const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
+
+const LEFT_IMAGE_URL = "/img/Login-image-left.png";
 
 function GoogleGlyph() {
   return (
@@ -109,75 +114,60 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="relative min-h-screen bg-[#050505] text-white">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08)_0%,_rgba(5,5,5,0.95)_56%,_rgba(5,5,5,1)_100%)]" />
-        <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 py-16">
-          <div className="grid w-full grid-cols-1 gap-12 lg:grid-cols-[1.4fr_1fr]">
-            <div className="relative overflow-hidden rounded-[32px] border border-[#1c1c1c] bg-[#0a0e1a] shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
-              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${HERO_IMAGE_URL})` }} />
-              <div className="absolute inset-0 bg-gradient-to-b from-[rgba(10,14,26,0.2)] via-[rgba(10,14,26,0.25)] to-[rgba(10,14,26,0.55)]" />
-              <div className="relative flex h-full flex-col items-center justify-center gap-6 p-10 text-center">
-                <span className="inline-flex items-center rounded-full bg-white/35 px-5 py-2 text-sm font-medium tracking-wide text-white shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
-                  Cofounder
-                </span>
-                <h2 className="max-w-[19rem] text-4xl font-serif leading-snug md:max-w-[24rem] md:text-5xl">
-                  Automate your life with natural language.
-                </h2>
-                <p className="max-w-[22rem] text-sm text-white/85">
-                  Craft flows, orchestrate agents, and stay in sync without leaving chat.
+      <div className={`relative min-h-screen bg-[#0e0e0f] text-white ${inter.className}`}>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(168,139,75,0.12),transparent_60%),radial-gradient(1200px_600px_at_50%_110%,rgba(138,116,232,0.12),transparent_60%)]" />
+        <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-6 py-16">
+          <div className="grid w-full grid-cols-1 gap-10 lg:grid-cols-[1.2fr_1fr]">
+            {/* Left: Atmospheric visualization */}
+            <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
+              <Image src={LEFT_IMAGE_URL} alt="Atmospheric visualization of intelligence and connection" fill priority className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/60" />
+              {/* Subtle particles / light traces */}
+              <div className="pointer-events-none absolute -left-10 top-10 h-40 w-40 rounded-full blur-3xl opacity-40 animate-pulse" style={{ background: "radial-gradient(closest-side, rgba(168,139,75,0.35), transparent)" }} />
+              <div className="pointer-events-none absolute right-0 bottom-10 h-48 w-48 rounded-full blur-3xl opacity-40 animate-pulse" style={{ background: "radial-gradient(closest-side, rgba(138,116,232,0.35), transparent)" }} />
+            </div>
+            {/* Right: Hero content */}
+            <div className="flex flex-col items-center justify-center text-center lg:items-start lg:text-left">
+              <div className="space-y-4">
+                <h1 className={`${outfit.className} text-4xl md:text-5xl tracking-tight`}>Welcome to OmniTalk</h1>
+                <p className="max-w-md text-base text-white/80">
+                  Your personal voice-powered AI companion — designed to think, remember, and evolve with you.
+                  <br className="hidden md:block" />
+                  Speak naturally. Collaborate seamlessly. Build effortlessly.
+                </p>
+              </div>
+              <div className="mt-8 w-full max-w-sm space-y-3">
+                <button
+                  onClick={() => setShowLoginDrawer(true)}
+                  className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-gradient-to-r from-[#a88b4b] to-[#8a74e8] px-8 py-3 text-lg font-medium text-white shadow-[0_24px_60px_rgba(0,0,0,0.5)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_32px_80px_rgba(0,0,0,0.65)] focus:outline-none focus:ring-2 focus:ring-white/20"
+                >
+                  <span>Begin Session</span>
+                  <span aria-hidden>⟶</span>
+                </button>
+                <p className="text-[11px] text-white/60">Powered by state-of-the-art memory, empathy, and intelligence.</p>
+              </div>
+              <div className="mt-12 w-full max-w-sm">
+                <p className="text-xs text-white/50">
+                  By continuing you agree to our {" "}
+                  <Link href="/privacy" className="underline decoration-white/30 underline-offset-4 hover:text-white">
+                    Privacy Policy
+                  </Link>{" "}
+                  and {" "}
+                  <Link href="/terms" className="underline decoration-white/30 underline-offset-4 hover:text-white">
+                    Terms of Service
+                  </Link>
+                  .
+                </p>
+                <p className="mt-6 text-xs text-white/50">
+                  Crafted by <span className="text-white/80">The General Intelligence Lab</span> — for the creators of tomorrow.
                 </p>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center text-center lg:items-start lg:text-left">
-              <div className="space-y-2">
-                <h1 className="font-serif text-4xl tracking-tight">Cofounder</h1>
-                <p className="text-base text-[#b6b1a8]">Automate your life.</p>
-              </div>
-              <div className="mt-10 w-full max-w-sm space-y-4">
-                <Link
-                  href="/onboarding/step1"
-                  className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-[#4c463a] bg-gradient-to-b from-[#2f2620] via-[#1a1612] to-[#0d0b09] px-8 py-3 text-lg font-medium text-white shadow-[0_24px_60px_rgba(0,0,0,0.5)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_32px_80px_rgba(0,0,0,0.65)] focus:outline-none focus:ring-2 focus:ring-[#f2d594]/40"
-                >
-                  <span className="absolute left-6 flex h-7 w-7 items-center justify-center rounded-full bg-white text-lg">
-                    <GoogleGlyph />
-                  </span>
-                  <span className="pl-8">Sign up</span>
-                </Link>
-                <div className="flex items-center gap-3 text-sm text-[#6f6961]">
-                  <span className="flex-1 border-t border-[#2a2722]" />
-                  <span>or</span>
-                  <span className="flex-1 border-t border-[#2a2722]" />
-                </div>
-                <Link
-                  href="/onboarding/step1"
-                  className="flex w-full items-center justify-center rounded-full border border-[#2e2b27] bg-gradient-to-b from-[#1d1a17] via-[#151311] to-[#0b0908] px-8 py-3 text-lg font-medium text-white shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-[0_26px_70px_rgba(0,0,0,0.6)] focus:outline-none focus:ring-2 focus:ring-[#d0c7b9]/35"
-                >
-                  Log in
-                </Link>
-              </div>
-              <p className="mt-8 max-w-xs text-xs text-[#6c655c]">
-                By signing up you agree to our {" "}
-                <Link href="/privacy" className="underline decoration-[#9c9282] underline-offset-4 hover:text-[#d8cbb5]">
-                  Privacy Policy
-                </Link>{" "}
-                and {" "}
-                <Link href="/terms" className="underline decoration-[#9c9282] underline-offset-4 hover:text-[#d8cbb5]">
-                  Terms of Service
-                </Link>
-                .
-              </p>
-              <p className="mt-12 text-xs text-[#6c655c]">
-                by {" "}
-                <Link
-                  href="https://generalintelligence.co"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline decoration-dotted underline-offset-4 hover:text-[#d8cbb5]"
-                >
-                  The General Intelligence Company
-                </Link>
-              </p>
-            </div>
+          </div>
+          {/* Bottom emotional tagline */}
+          <div className="mt-16 text-center text-sm text-white/60">
+            <p className={`${outfit.className} italic`}>“and the intelligence listened.”</p>
+            <p className="mt-1">OmniTalk — where thought meets understanding.</p>
           </div>
         </div>
       </div>
@@ -185,7 +175,7 @@ export default function LoginPage() {
       <Drawer
         open={showLoginDrawer}
         onClose={() => setShowLoginDrawer(false)}
-        title="Log in to Cofounder"
+        title="Sign in to OmniTalk"
         side={(typeof window !== "undefined" && window.matchMedia && window.matchMedia("(min-width: 1024px)").matches) ? "right" : "bottom"}
         ariaDescriptionId="login-drawer-description"
       >
@@ -201,29 +191,29 @@ export default function LoginPage() {
                     id="email-input"
                     type="email"
                     value={email}
-                    onChange={(e)=>setEmail(e.currentTarget.value)}
+                    onChange={(e) => setEmail(e.currentTarget.value)}
                     className="input-field"
                     placeholder=" "
                     autoComplete="email"
                   />
-                  <Mail className="input-icon h-5 w-5"/>
+                  <Mail className="input-icon h-5 w-5" />
                   <label htmlFor="email-input" className="input-label">Email</label>
                 </div>
                 {intel && (
                   <div className="rounded-md border px-3 py-2 text-xs flex items-center gap-2" style={{ borderColor: "rgba(31,29,27,0.06)", background: "rgba(255,255,255,0.6)", color: "var(--auth-text-primary)" }}>
                     {intel.status === "invited" ? (
                       <>
-                        <Shield className="h-4 w-4"/>
+                        <Shield className="h-4 w-4" />
                         <span>Invitation from <strong>{intel.inviter!.name}</strong> to join <strong>{intel.inviter!.workspace}</strong>.</span>
                       </>
                     ) : intel.sso ? (
                       <>
-                        <KeyRound className="h-4 w-4"/>
+                        <KeyRound className="h-4 w-4" />
                         <span>SSO available via {intel.sso} for this domain.</span>
                       </>
                     ) : (
                       <>
-                        <Smartphone className="h-4 w-4"/>
+                        <Smartphone className="h-4 w-4" />
                         <span>{intel.status === "existing" ? "We recognize this email." : "Looks new - continue to create your account."}</span>
                       </>
                     )}
@@ -231,14 +221,14 @@ export default function LoginPage() {
                 )}
                 {error && (
                   <div className="input-error">
-                    <AlertCircle className="h-4 w-4"/><span>{error}</span>
+                    <AlertCircle className="h-4 w-4" /><span>{error}</span>
                   </div>
                 )}
                 <button type="submit" disabled={isLoading} className="btn-primary">
-                  {isLoading ? <><Loader2 className="h-4 w-4 animate-spin"/> Continue...</> : "Continue"}
+                  {isLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> Continue...</> : "Continue"}
                 </button>
                 <div className="flex items-center justify-between text-[11px] text-muted">
-                  <button type="button" onClick={sendMagic} className="auth-link" style={{fontSize: "11px"}}>Send magic link</button>
+                  <button type="button" onClick={sendMagic} className="auth-link" style={{ fontSize: "11px" }}>Send magic link</button>
                   {deviceHint ? <span>Last used on {deviceHint}</span> : <span />}
                 </div>
               </div>
@@ -251,12 +241,12 @@ export default function LoginPage() {
                     id="email-readonly"
                     type="email"
                     value={email}
-                    onChange={(e)=>setEmail(e.currentTarget.value)}
+                    onChange={(e) => setEmail(e.currentTarget.value)}
                     className="input-field"
                     placeholder=" "
                     autoComplete="email"
                   />
-                  <Mail className="input-icon h-5 w-5"/>
+                  <Mail className="input-icon h-5 w-5" />
                   <label htmlFor="email-readonly" className="input-label">Email</label>
                 </div>
                 <div>
@@ -265,48 +255,48 @@ export default function LoginPage() {
                       id="password-input"
                       type={showPassword ? "text" : "password"}
                       value={password}
-                      onChange={(e)=>setPassword(e.currentTarget.value)}
+                      onChange={(e) => setPassword(e.currentTarget.value)}
                       className="input-field with-trailing"
                       placeholder=" "
                       autoComplete="current-password"
                     />
-                    <Lock className="input-icon h-5 w-5"/>
+                    <Lock className="input-icon h-5 w-5" />
                     <label htmlFor="password-input" className="input-label">Password</label>
                     <button
                       type="button"
-                      aria-label={showPassword?"Hide password":"Show password"}
-                      onClick={()=>setShowPassword(s=>!s)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      onClick={() => setShowPassword(s => !s)}
                       className="input-trailing"
                     >
-                      {showPassword ? <EyeOff className="h-4 w-4"/> : <Eye className="h-4 w-4"/>}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                   <div className="mt-2 flex items-center justify-between text-[11px] text-muted">
                     <label className="checkbox-wrapper">
-                      <input type="checkbox" checked={remember} onChange={(e)=>setRemember(e.currentTarget.checked)} className="checkbox-input"/>
+                      <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.currentTarget.checked)} className="checkbox-input" />
                       <span className="checkbox-label">Remember me</span>
                     </label>
-                    <Link href="#" className="auth-link" style={{fontSize: "11px"}}>Forgot?</Link>
+                    <Link href="#" className="auth-link" style={{ fontSize: "11px" }}>Forgot?</Link>
                   </div>
                 </div>
                 {error && (
                   <div className="input-error">
-                    <AlertCircle className="h-4 w-4"/><span>{error}</span>
+                    <AlertCircle className="h-4 w-4" /><span>{error}</span>
                   </div>
                 )}
                 <button type="submit" disabled={isLoading} className="btn-primary">
-                  {isLoading ? <><Loader2 className="h-4 w-4 animate-spin"/> Signing in...</> : "Sign in"}
+                  {isLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> Signing in...</> : "Sign in"}
                 </button>
                 {passkeyAvailable && (
-                  <button type="button" onClick={()=>toast("Passkey flow would start here")} className="btn-secondary">
-                    <KeyRound className="h-4 w-4"/> Use a passkey
+                  <button type="button" onClick={() => toast("Passkey flow would start here")} className="btn-secondary">
+                    <KeyRound className="h-4 w-4" /> Use a passkey
                   </button>
                 )}
               </div>
             )}
           </form>
           <p className="text-[11px] text-muted">
-            By continuing you agree to our <Link href="#" className="auth-link" style={{fontSize: "11px"}}>Terms</Link> and <Link href="#" className="auth-link" style={{fontSize: "11px"}}>Privacy</Link>.
+            By continuing you agree to our <Link href="#" className="auth-link" style={{ fontSize: "11px" }}>Terms</Link> and <Link href="#" className="auth-link" style={{ fontSize: "11px" }}>Privacy</Link>.
           </p>
         </div>
       </Drawer>
@@ -325,7 +315,7 @@ export default function LoginPage() {
         open={show2FA}
         onClose={() => setShow2FA(false)}
         title="Two-factor verification"
-        side={(typeof window!=="undefined" && window.matchMedia && window.matchMedia("(min-width: 1024px)").matches) ? "right" : "bottom"}
+        side={(typeof window !== "undefined" && window.matchMedia && window.matchMedia("(min-width: 1024px)").matches) ? "right" : "bottom"}
         ariaDescriptionId="twofa-desc"
       >
         <p id="twofa-desc" className="text-sm text-stone-700">Enter the 6-digit code from your authenticator or SMS.</p>
@@ -334,8 +324,8 @@ export default function LoginPage() {
             <input key={i} inputMode="numeric" maxLength={1} className="h-11 w-10 rounded-md border border-stone-300 text-center text-lg focus:outline-none focus:ring-2 focus:ring-[#A4653F]/40" onChange={(e) => {
               const v = e.target.value.replace(/\D/g, "");
               if (!v) return;
-              const next = (document.querySelector(`#otp-${i+1}`) as HTMLInputElement) || null;
-              setTwoFA((prev) => (prev + v).slice(0,6));
+              const next = (document.querySelector(`#otp-${i + 1}`) as HTMLInputElement) || null;
+              setTwoFA((prev) => (prev + v).slice(0, 6));
               next?.focus();
             }} id={`otp-${i}`} />
           ))}

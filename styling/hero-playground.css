@@ -1,0 +1,10 @@
+.playground-surface {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.playground-grid {
+    background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px), radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+    background-position: 0 0, 12px 12px;
+    background-size: 24px 24px;
+}
+

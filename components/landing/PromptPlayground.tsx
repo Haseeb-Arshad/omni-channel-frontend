@@ -1,68 +1,112 @@
-import React from 'react'
-import { ArrowUp, Paperclip } from 'lucide-react'
-import '../../styling/hero-playground.css'
+'use client';
+import React from 'react';
+import { motion } from 'framer-motion';
+import '../../styling/hero-playground.css';
+
+const pipeline = [
+  {
+    id: 'listen',
+    title: 'Listen',
+    description: 'OmniTalk captures voice, chat, and inbox threads with entities and sentiment preserved.',
+    mark: '00:08'
+  },
+  {
+    id: 'understand',
+    title: 'Understand',
+    description: 'Customer history, product usage, and docs are blended into a single brief per contact.',
+    mark: '00:20'
+  },
+  {
+    id: 'act',
+    title: 'Act',
+    description: 'Approvals trigger polished responses, task updates, and meeting prep across your tooling.',
+    mark: '00:41'
+  },
+  {
+    id: 'show',
+    title: 'Show',
+    description: 'Traceable artifacts land in Slack, CRM, and dashboards—ready to forward without edits.',
+    mark: '00:58'
+  }
+] as const;
+
+const toggles = ['Tone memory', 'Brand guardrails', 'Approvals', 'Redaction'];
 
 export default function PromptPlayground() {
-    return (
-        <section className="relative overflow-hidden bg-white">
-            <div className="mx-auto max-w-[1280px] px-6 py-20">
-                {/* Grid paper background */}
-                <div className="playground-surface relative overflow-hidden rounded-[16px] border border-gray-200/70 bg-white">
-                    <div className="playground-grid absolute inset-0" aria-hidden />
-
-                    <div className="relative z-10 mx-auto max-w-3xl px-6 py-24 text-center">
-                        <h2 className="text-[36px] leading-[1.15] tracking-[-0.02em] text-gray-900 md:text-[40px]">
-                            Good morning, Andrew
-                        </h2>
-                        <p className="mt-3 text-[16px] text-gray-500">
-                            Describe what you want to automate — we’ll
-                            <br className="hidden sm:block" />
-                            take it from there.
-                        </p>
-
-                        {/* Prompt card */}
-                        <div className="mx-auto mt-10 max-w-2xl">
-                            <div className="relative rounded-2xl border border-gray-200 bg-white p-5 text-left shadow-sm">
-                                <p className="text-[15px] leading-7 text-gray-700">
-                                    Monitor linear for issues marked as done or completed. Filter for
-                                    issues tagged with{' '}
-                                    <span className="rounded-md bg-blue-50 px-2 py-[2px] text-[13px] font-medium text-blue-700">feature</span>{' '}
-                                    or{' '}
-                                    <span className="rounded-md bg-blue-50 px-2 py-[2px] text-[13px] font-medium text-blue-700">bug</span>{' '}
-                                    that should be included in release notes. For each qualifying issue, append an entry to the
-                                    release notes page.
-                                </p>
-
-                                {/* bottom actions */}
-                                <div className="mt-4 flex items-center justify-between">
-                                    <button
-                                        type="button"
-                                        aria-label="Attach"
-                                        className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition hover:bg-gray-50"
-                                    >
-                                        <Paperclip className="h-4 w-4" />
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        aria-label="Submit"
-                                        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white shadow-sm transition hover:bg-black"
-                                    >
-                                        <ArrowUp className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <p className="mx-auto mt-12 max-w-2xl text-[14px] leading-6 text-gray-500">
-                            Automate your life with natural language, driving the software you’re already familiar with.
-                            Change what your agent does anytime—with plain English.
-                        </p>
-                    </div>
+  return (
+    <section className="relative border-t border-white/10 bg-[#050607] text-zinc-100">
+      <div aria-hidden className="playground-pattern absolute inset-0 opacity-70" />
+      <div className="relative mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <div className="grid gap-16 lg:grid-cols-[1fr_1fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
+            viewport={{ once: true, amount: 0.5 }}
+            className="space-y-8"
+          >
+            <span className="inline-flex items-center gap-3 rounded-full border border-white/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-zinc-500">
+              Runbook intelligence
+            </span>
+            <h2 className="text-3xl font-light leading-tight sm:text-5xl">
+              Your tone, your guardrails, delivered faster than you could brief a human.
+            </h2>
+            <p className="max-w-lg text-base text-zinc-400">
+              OmniTalk adapts to how your brand speaks. Serious to board, warm to customers, concise to internal teams.
+              Everything stays inspectable before it leaves the building.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {toggles.map((toggle) => (
+                <div
+                  key={toggle}
+                  className="rounded-2xl border border-white/12 bg-black/30 px-4 py-3 text-xs uppercase tracking-[0.32em] text-zinc-500"
+                >
+                  {toggle}
                 </div>
+              ))}
             </div>
-        </section>
-    )
+            <div className="rounded-3xl border border-white/12 bg-black/40 p-6 text-sm text-zinc-300">
+              <p className="text-xs font-semibold uppercase tracking-[0.36em] text-zinc-500">This morning's send</p>
+              <p className="mt-3 text-zinc-200">
+                “Board prep is live in Notion. Customer churn risk flagged for ACME, follow-ups assigned in HubSpot, and a
+                polished Slack update is queued for #leadership.”
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
+            viewport={{ once: true, amount: 0.45 }}
+            className="relative rounded-[32px] border border-white/12 bg-black/40 p-8 backdrop-blur"
+          >
+            <div className="absolute inset-y-10 left-[18px] w-px bg-gradient-to-b from-white/50 via-white/20 to-transparent" aria-hidden />
+            <div className="space-y-6">
+              {pipeline.map((stage, index) => (
+                <motion.div
+                  key={stage.id}
+                  initial={{ opacity: 0, x: 24 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.08 * index }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  className="relative pl-10"
+                >
+                  <span className="stage-dot absolute left-0 top-1.5 h-3 w-3 rounded-full bg-white/60 shadow-[0_0_0_6px_rgba(255,255,255,0.08)]" />
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.32em] text-zinc-500">
+                    <span>{stage.title}</span>
+                    <span>{stage.mark}</span>
+                  </div>
+                  <p className="mt-3 text-sm text-zinc-300">{stage.description}</p>
+                </motion.div>
+              ))}
+            </div>
+            <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 text-xs uppercase tracking-[0.32em] text-zinc-400">
+              Handshake ready: export to Slack, email, Notion, or pipe straight into your CRM.
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
 }
-
-

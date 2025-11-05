@@ -1,190 +1,178 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { ArrowUpRight, Mic, Play, Sparkles } from 'lucide-react';
 import '../../styling/cofounder-hero.css';
+
+const transmissions = [
+  {
+    id: 'ops',
+    title: 'Ops rhythm on autopilot',
+    detail: 'Daily standups drafted, blockers escalated, and a clean note queued for leadership.',
+    prompt: 'Send me a weekly competitor report'
+  },
+  {
+    id: 'sync',
+    title: 'Every channel in one thread',
+    detail: 'Voice follow-ups, support tickets, and outbound sequences stay in a single conversation.',
+    prompt: 'Schedule the product sync for tomorrow'
+  },
+  {
+    id: 'retention',
+    title: 'Customers feel the follow-through',
+    detail: 'Feedback is summarised, actions assigned, and the loop closes before anyone nudges.',
+    prompt: 'Summarize customer complaints and email action plan'
+  }
+] as const;
+
+const placeholders = transmissions.map((item) => item.prompt);
+const ease = [0.16, 1, 0.3, 1];
 
 const Hero: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  useEffect(() => {
+    if (searchQuery.trim().length > 0) return;
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+    }, 3200);
+    return () => clearInterval(interval);
+  }, [searchQuery]);
+
+  const activePlaceholder = useMemo(() => placeholders[placeholderIndex], [placeholderIndex]);
 
   return (
-    <section className="relative min-h-screen overflow-hidden">
-      {/* Background with sky gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-400 via-sky-300 to-sky-200">
-        {/* Cloud elements with animation */}
-        <div className="absolute top-20 right-20 w-32 h-16 bg-white/70 rounded-full blur-sm animate-drift shadow-lg"></div>
-        <div className="absolute top-32 right-40 w-24 h-12 bg-white/50 rounded-full blur-sm animate-drift shadow-md" style={{ animationDelay: '5s' }}></div>
-        <div className="absolute top-16 left-1/3 w-40 h-20 bg-white/60 rounded-full blur-sm animate-drift shadow-lg" style={{ animationDelay: '10s' }}></div>
-        <div className="absolute top-40 left-1/4 w-28 h-14 bg-white/40 rounded-full blur-sm animate-drift shadow-md" style={{ animationDelay: '15s' }}></div>
-        <div className="absolute top-60 right-1/3 w-36 h-18 bg-white/50 rounded-full blur-sm animate-drift shadow-md" style={{ animationDelay: '20s' }}></div>
-        <div className="absolute top-80 left-1/5 w-20 h-10 bg-white/35 rounded-full blur-sm animate-drift shadow-sm" style={{ animationDelay: '25s' }}></div>
-
-        {/* Gradient fade to white at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+    <section className="landing-hero relative isolate overflow-hidden bg-[#050607] text-zinc-100">
+      <div aria-hidden className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            background: 'radial-gradient(circle at top, rgba(108,115,255,0.18), transparent 58%)'
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)',
+            backgroundSize: '100% 140px'
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.065) 1px, transparent 1px)',
+            backgroundSize: '120px 100%'
+          }}
+        />
       </div>
 
-      {/* Sunflower illustration - left side */}
-      <div className="absolute left-8 top-1/4 z-10">
+      <div className="relative mx-auto flex min-h-[92vh] max-w-6xl flex-col justify-between gap-16 px-6 pb-24 pt-28 lg:flex-row lg:items-end lg:px-8">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="relative animate-sway"
-        >
-          {/* Sunflower stem */}
-          <div className="w-3 h-48 bg-gradient-to-b from-green-500 to-green-700 rounded-full mx-auto shadow-lg"></div>
-
-          {/* Sunflower leaves */}
-          <div className="absolute top-24 -left-5 w-10 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full transform -rotate-45 shadow-md"></div>
-          <div className="absolute top-36 -right-5 w-8 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full transform rotate-45 shadow-md"></div>
-
-          {/* Sunflower head */}
-          <div className="absolute -top-10 -left-10 w-20 h-20 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full flex items-center justify-center animate-float shadow-xl">
-            <div className="w-8 h-8 bg-gradient-to-br from-yellow-800 to-yellow-900 rounded-full"></div>
-            {/* Petals */}
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-3 h-8 bg-gradient-to-t from-yellow-400 to-yellow-200 rounded-full shadow-sm"
-                style={{
-                  transform: `rotate(${i * 30}deg) translateY(-24px)`,
-                  transformOrigin: 'center bottom'
-                }}
-              ></div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Sunflowers on the right */}
-      <div className="absolute right-8 bottom-20 z-10">
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="relative"
-        >
-          {/* Multiple sunflowers */}
-          <div className="flex space-x-6">
-            {/* First sunflower */}
-            <div className="relative animate-sway" style={{ animationDelay: '1s' }}>
-              <div className="w-2 h-36 bg-gradient-to-b from-green-500 to-green-700 rounded-full shadow-md"></div>
-              <div className="absolute -top-7 -left-7 w-14 h-14 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full flex items-center justify-center shadow-lg animate-float" style={{ animationDelay: '0.5s' }}>
-                <div className="w-5 h-5 bg-gradient-to-br from-yellow-800 to-yellow-900 rounded-full"></div>
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-2.5 h-6 bg-gradient-to-t from-yellow-400 to-yellow-200 rounded-full"
-                    style={{
-                      transform: `rotate(${i * 36}deg) translateY(-18px)`,
-                      transformOrigin: 'center bottom'
-                    }}
-                  ></div>
-                ))}
-              </div>
-            </div>
-
-            {/* Second sunflower */}
-            <div className="relative animate-sway" style={{ animationDelay: '2s' }}>
-              <div className="w-2 h-32 bg-gradient-to-b from-green-500 to-green-700 rounded-full shadow-md"></div>
-              <div className="absolute -top-6 -left-6 w-12 h-12 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full flex items-center justify-center shadow-lg animate-float" style={{ animationDelay: '1s' }}>
-                <div className="w-4 h-4 bg-gradient-to-br from-yellow-800 to-yellow-900 rounded-full"></div>
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-2 h-5 bg-gradient-to-t from-yellow-400 to-yellow-200 rounded-full"
-                    style={{
-                      transform: `rotate(${i * 45}deg) translateY(-15px)`,
-                      transformOrigin: 'center bottom'
-                    }}
-                  ></div>
-                ))}
-              </div>
-            </div>
-
-            {/* Third smaller sunflower */}
-            <div className="relative animate-sway" style={{ animationDelay: '1.5s' }}>
-              <div className="w-1.5 h-24 bg-gradient-to-b from-green-500 to-green-700 rounded-full shadow-md"></div>
-              <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full flex items-center justify-center shadow-md animate-float" style={{ animationDelay: '1.5s' }}>
-                <div className="w-2.5 h-2.5 bg-gradient-to-br from-yellow-800 to-yellow-900 rounded-full"></div>
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-1.5 h-4 bg-gradient-to-t from-yellow-400 to-yellow-200 rounded-full"
-                    style={{
-                      transform: `rotate(${i * 60}deg) translateY(-10px)`,
-                      transformOrigin: 'center bottom'
-                    }}
-                  ></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Main content */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 0.6, ease, delay: 0.12 }}
+          className="max-w-2xl space-y-10"
         >
-          {/* Main headline */}
-          <h1 className="hero-heading text-4xl md:text-6xl lg:text-7xl font-light text-gray-900 mb-8 leading-tight max-w-4xl">
-            Automate your life with{' '}
-            <span className="block">natural language</span>
-          </h1>
+          <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.45em] text-zinc-400">
+            <span className="h-px w-12 bg-gradient-to-r from-white/60 to-transparent" />
+            Omni Channel OS
+          </div>
+          <div>
+            <h1 className="text-4xl font-light leading-[1.08] tracking-tight text-zinc-100 sm:text-6xl lg:text-[72px]">
+              A calm operator for every customer touchpoint.
+            </h1>
+            <p className="mt-6 max-w-xl text-lg text-zinc-400 sm:text-xl">
+              OmniTalk listens across voice, chat, and email, stitches the context, and delivers the next move without you juggling tabs.
+            </p>
+          </div>
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <button className="landing-button-primary">
+              Launch the agent
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+            <button className="landing-button-secondary">
+              Watch the 90s walkthrough
+              <Play className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.35em] text-zinc-500">
+            <span className="inline-flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+              <span>Voice · Chat · Human handoff</span>
+            </span>
+            <span className="hidden h-px w-16 bg-gradient-to-r from-white/40 to-transparent sm:block" />
+            <span className="text-zinc-500/80">Under 4 minutes to first automated outcome</span>
+          </div>
+        </motion.div>
 
-          {/* Subheading */}
-          <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto font-normal leading-relaxed font-adobe-body">
-            Cofounder plugs into your existing tools, writes automations, and organizes workflows. Driving the software you're already familiar with.
-          </p>
-
-          {/* Search input */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="relative max-w-3xl mx-auto mb-16"
-          >
-            <div className="relative">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease, delay: 0.24 }}
+          className="w-full max-w-md space-y-6 rounded-[28px] border border-white/12 bg-white/[0.04] p-6 shadow-[0_50px_120px_-80px_rgba(15,20,40,0.85)] backdrop-blur"
+        >
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.38em] text-zinc-500">
+              Live prompt console
+            </p>
+            <div className="mt-3 flex items-center gap-3 rounded-[22px] border border-white/10 bg-black/40 px-4 py-3 text-sm text-zinc-200">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                <Mic className="h-3.5 w-3.5" />
+              </span>
               <input
+                aria-label="Describe a workflow to automate"
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Every day, research my competitors and dm me on slack"
-                className="w-full px-8 py-5 text-lg bg-white/95 backdrop-blur-sm border border-gray-300 rounded-2xl shadow-xl focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent placeholder-gray-400 transition-all duration-200 font-adobe-body"
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder={searchQuery ? undefined : activePlaceholder}
+                className="flex-1 bg-transparent text-sm text-white placeholder:text-zinc-500 focus:outline-none"
               />
-              <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-colors duration-200 shadow-lg">
-                <Search className="w-5 h-5" />
-              </button>
+              <span className="rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.35em] text-zinc-500">
+                Enter
+              </span>
             </div>
-          </motion.div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.5 }}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="flex flex-col items-center text-gray-600"
-            >
-              <span className="text-sm mb-2 font-medium font-adobe-body">Scroll to explore</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            </motion.div>
-          </motion.div>
+          </div>
+          <div className="h-px w-full bg-gradient-to-r from-white/25 via-white/10 to-transparent" />
+          <ul className="space-y-3 text-sm text-zinc-300">
+            {transmissions.map((item, index) => {
+              const isActive = index === placeholderIndex;
+              return (
+                <motion.li
+                  key={item.id}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease, delay: 0.1 * index }}
+                  className={`rounded-2xl border px-4 py-4 transition duration-300 ${
+                    isActive
+                      ? 'border-white/45 bg-white/10 text-zinc-100'
+                      : 'border-white/10 bg-black/20 text-zinc-400 hover:border-white/20 hover:bg-white/[0.03]'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.32em]">
+                    <span>{item.title}</span>
+                    <motion.span
+                      animate={{
+                        opacity: isActive ? [0.4, 1, 0.4] : 0.4
+                      }}
+                      transition={{
+                        duration: isActive ? 2 : 0.3,
+                        repeat: isActive ? Infinity : 0,
+                        ease: 'easeInOut'
+                      }}
+                      className="inline-flex items-center gap-2 text-amber-300"
+                    >
+                      {isActive ? 'Syncing' : 'Idle'}
+                    </motion.span>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed">{item.detail}</p>
+                  <p className="mt-3 text-xs text-zinc-500">“{item.prompt}”</p>
+                </motion.li>
+              );
+            })}
+          </ul>
         </motion.div>
       </div>
-
-
     </section>
   );
 };

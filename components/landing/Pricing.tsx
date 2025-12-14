@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, ArrowRight } from 'lucide-react';
@@ -64,7 +65,7 @@ const Pricing: React.FC = () => {
     <section className="py-24 bg-gray-50">
       <div className="container px-4 mx-auto">
         <div className="max-w-6xl mx-auto">
-          
+
           {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -89,14 +90,12 @@ const Pricing: React.FC = () => {
               </span>
               <button
                 onClick={() => setIsAnnual(!isAnnual)}
-                className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${
-                  isAnnual ? 'bg-gray-900' : 'bg-gray-300'
-                }`}
+                className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${isAnnual ? 'bg-gray-900' : 'bg-gray-300'
+                  }`}
               >
                 <div
-                  className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${
-                    isAnnual ? 'translate-x-8' : 'translate-x-1'
-                  }`}
+                  className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${isAnnual ? 'translate-x-8' : 'translate-x-1'
+                    }`}
                 />
               </button>
               <span className={`text-sm font-medium ${isAnnual ? 'text-gray-900' : 'text-gray-500'}`}>
@@ -119,9 +118,8 @@ const Pricing: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
                 viewport={{ once: true }}
-                className={`relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-300 ${
-                  plan.popular ? 'ring-2 ring-gray-900 scale-105' : ''
-                }`}
+                className={`relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-300 ${plan.popular ? 'ring-2 ring-gray-900 scale-105' : ''
+                  }`}
               >
                 {/* Popular Badge */}
                 {plan.popular && (
@@ -138,7 +136,7 @@ const Pricing: React.FC = () => {
                   <p className="text-gray-600 mb-6 font-rubik">
                     {plan.description}
                   </p>
-                  
+
                   {/* Price */}
                   <div className="mb-6">
                     {plan.price ? (
@@ -170,11 +168,10 @@ const Pricing: React.FC = () => {
 
                 {/* CTA Button */}
                 <Button
-                  className={`w-full h-12 text-lg rounded-lg font-medium transition-all duration-300 ${
-                    plan.popular
+                  className={`w-full h-12 text-lg rounded-lg font-medium transition-all duration-300 ${plan.popular
                       ? 'bg-gray-900 hover:bg-gray-800 text-white'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                  }`}
+                    }`}
                   asChild
                 >
                   <Link href={plan.name === 'Enterprise' ? '/contact' : '/auth/register'}>

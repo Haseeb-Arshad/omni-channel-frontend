@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
@@ -17,7 +18,7 @@ const Hero: React.FC = () => {
         <div className="absolute top-40 left-1/4 w-28 h-14 bg-white/40 rounded-full blur-sm animate-drift shadow-md" style={{ animationDelay: '15s' }}></div>
         <div className="absolute top-60 right-1/3 w-36 h-18 bg-white/50 rounded-full blur-sm animate-drift shadow-md" style={{ animationDelay: '20s' }}></div>
         <div className="absolute top-80 left-1/5 w-20 h-10 bg-white/35 rounded-full blur-sm animate-drift shadow-sm" style={{ animationDelay: '25s' }}></div>
-        
+
         {/* Gradient fade to white at bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
       </div>
@@ -32,11 +33,11 @@ const Hero: React.FC = () => {
         >
           {/* Sunflower stem */}
           <div className="w-3 h-48 bg-gradient-to-b from-green-500 to-green-700 rounded-full mx-auto shadow-lg"></div>
-          
+
           {/* Sunflower leaves */}
           <div className="absolute top-24 -left-5 w-10 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full transform -rotate-45 shadow-md"></div>
           <div className="absolute top-36 -right-5 w-8 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full transform rotate-45 shadow-md"></div>
-          
+
           {/* Sunflower head */}
           <div className="absolute -top-10 -left-10 w-20 h-20 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full flex items-center justify-center animate-float shadow-xl">
             <div className="w-8 h-8 bg-gradient-to-br from-yellow-800 to-yellow-900 rounded-full"></div>
@@ -82,7 +83,7 @@ const Hero: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             {/* Second sunflower */}
             <div className="relative animate-sway" style={{ animationDelay: '2s' }}>
               <div className="w-2 h-32 bg-gradient-to-b from-green-500 to-green-700 rounded-full shadow-md"></div>

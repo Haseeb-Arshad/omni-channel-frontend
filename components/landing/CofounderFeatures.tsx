@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Slack, Calendar, Globe, Mail, Github, Zap } from 'lucide-react';
@@ -139,7 +140,7 @@ const CofounderFeatures: React.FC = () => {
           className="text-center mt-12"
         >
           <p className="text-gray-600 text-base max-w-2xl mx-auto font-adobe-body">
-            These are just a few examples. Cofounder can automate almost any workflow 
+            These are just a few examples. Cofounder can automate almost any workflow
             that involves connecting different tools and services.
           </p>
         </motion.div>

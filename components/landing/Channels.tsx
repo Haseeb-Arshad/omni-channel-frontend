@@ -1,3 +1,4 @@
+'use client'
 import React, { useRef } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
@@ -14,7 +15,7 @@ interface ChannelCardProps {
 const ChannelCard: React.FC<ChannelCardProps> = ({ icon, color, title, description, delay }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: false, margin: "-100px" });
-  
+
   return (
     <motion.div
       ref={cardRef}
@@ -29,15 +30,15 @@ const ChannelCard: React.FC<ChannelCardProps> = ({ icon, color, title, descripti
           <div className={`w-12 h-12 rounded-lg bg-slate-700/20 text-slate-300 flex items-center justify-center mb-4`}>
             {icon}
           </div>
-          
+
           {/* Channel Content */}
           <h3 className="text-xl font-medium mb-2 text-white">{title}</h3>
           <p className="text-slate-300">{description}</p>
         </div>
       </div>
-      
+
       {/* Bottom accent line - colored version */}
-      <motion.div 
+      <motion.div
         className={`h-0.5 bg-slate-500 rounded-b-lg`}
         initial={{ width: "0%" }}
         whileInView={{ width: "100%" }}
@@ -53,9 +54,9 @@ const Channels: React.FC = () => {
     target: containerRef,
     offset: ['start end', 'end start']
   });
-  
+
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  
+
   const channels = [
     {
       icon: <MessageCircle className="w-6 h-6" />,
@@ -82,9 +83,9 @@ const Channels: React.FC = () => {
       description: "Provide real-time support through your website with our embedded chat widget."
     }
   ];
-  
+
   return (
-    <section 
+    <section
       ref={containerRef}
       className="relative py-32 overflow-hidden bg-slate-900"
       data-scroll-section
@@ -94,7 +95,7 @@ const Channels: React.FC = () => {
         <div className="absolute top-1/4 right-1/3 w-64 h-64 rounded-full bg-slate-600 opacity-[0.07] blur-3xl" />
         <div className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-slate-500 opacity-[0.06] blur-3xl" />
       </div>
-      
+
       <div className="minimalist-container px-4 mx-auto relative z-10">
         <div className="max-w-xl mx-auto text-center mb-16">
           <motion.span
@@ -107,7 +108,7 @@ const Channels: React.FC = () => {
           >
             Multi-Channel Support
           </motion.span>
-          
+
           <motion.h2
             className="text-3xl md:text-4xl font-bold mb-4 text-white"
             initial={{ opacity: 0, y: 20 }}
@@ -118,7 +119,7 @@ const Channels: React.FC = () => {
           >
             All Your Communication Channels in One Place
           </motion.h2>
-          
+
           <motion.p
             className="text-slate-300 text-lg"
             initial={{ opacity: 0, y: 20 }}
@@ -128,10 +129,10 @@ const Channels: React.FC = () => {
             Seamlessly integrate and manage multiple communication channels from a single unified platform.
           </motion.p>
         </div>
-        
+
         <div className="relative">
           {/* Channel Illustration */}
-          <motion.div 
+          <motion.div
             className="mb-16 relative flex justify-center"
             style={{ y }}
           >
@@ -143,16 +144,16 @@ const Channels: React.FC = () => {
             >
               <svg viewBox="0 0 700 400" className="w-full" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="channel-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <linearGradient id="channel-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="rgba(100, 116, 139, 0.2)" />
                     <stop offset="100%" stopColor="rgba(100, 116, 139, 0.2)" />
                   </linearGradient>
                 </defs>
-                
+
                 {/* Center Hub */}
                 <circle cx="350" cy="200" r="60" fill="url(#channel-gradient)" stroke="#64748b" strokeWidth="2" />
                 <text x="350" y="205" textAnchor="middle" fill="#fff" fontWeight="bold" fontSize="18">OmniChannel</text>
-                
+
                 {/* Connection Lines */}
                 <motion.g
                   initial={{ pathLength: 0, opacity: 0 }}
@@ -164,7 +165,7 @@ const Channels: React.FC = () => {
                   <path d="M290,200 L150,200" stroke="#64748b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
                   <path d="M410,200 L550,200" stroke="#64748b" strokeWidth="2" fill="none" strokeDasharray="3,3" />
                 </motion.g>
-                
+
                 {/* Channel Nodes */}
                 <motion.g
                   initial={{ scale: 0, opacity: 0 }}
@@ -176,7 +177,7 @@ const Channels: React.FC = () => {
                   <circle cx="150" cy="200" r="30" fill="rgba(100, 116, 139, 0.1)" stroke="#64748b" strokeWidth="2" />
                   <circle cx="550" cy="200" r="30" fill="rgba(100, 116, 139, 0.1)" stroke="#64748b" strokeWidth="2" />
                 </motion.g>
-                
+
                 {/* Channel Icons */}
                 <motion.g
                   initial={{ opacity: 0 }}
@@ -191,7 +192,7 @@ const Channels: React.FC = () => {
               </svg>
             </motion.div>
           </motion.div>
-          
+
           {/* Channel Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {channels.map((channel, index) => (

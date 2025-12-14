@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import '../..//styling/day-with-one-brain.css'
 import { MessageSquare, Phone, Mail, MessageCircle } from 'lucide-react'
@@ -69,10 +70,10 @@ export default function DayWithOneBrain() {
           <Chapter id={1} eyebrow="CHAPTER 1" title="It begins anywhere." body="A short WhatsApp DM at 9:02. A call at lunch. An email at midnight.">
             <div className="msg-bubble">“Hey—have a quick question.”</div>
             <div className="chips" aria-hidden>
-              <div className="chip"><MessageSquare size={16}/></div>
-              <div className="chip"><Phone size={16}/></div>
-              <div className="chip"><Mail size={16}/></div>
-              <div className="chip"><MessageCircle size={16}/></div>
+              <div className="chip"><MessageSquare size={16} /></div>
+              <div className="chip"><Phone size={16} /></div>
+              <div className="chip"><Mail size={16} /></div>
+              <div className="chip"><MessageCircle size={16} /></div>
             </div>
           </Chapter>
 
@@ -118,7 +119,7 @@ export default function DayWithOneBrain() {
           <Chapter id={5} eyebrow="CHAPTER 5" title="Safety before speed." body="Policies, PII redaction, approvals—by channel and role.">
             <div className="pii">
               <div><span className="masked">4111 1111 1111 1111</span> → **** **** **** 1111</div>
-              <div className="toggle"><span>Requires approval</span><span className="switch" role="switch" aria-checked="false"/></div>
+              <div className="toggle"><span>Requires approval</span><span className="switch" role="switch" aria-checked="false" /></div>
             </div>
           </Chapter>
 
@@ -169,7 +170,7 @@ export default function DayWithOneBrain() {
   )
 }
 
-function Chapter({ id, eyebrow, title, body, children }:{ id:number; eyebrow:string; title:string; body:string; children?:React.ReactNode }){
+function Chapter({ id, eyebrow, title, body, children }: { id: number; eyebrow: string; title: string; body: string; children?: React.ReactNode }) {
   const { ref, visible } = useOnScreen<HTMLDivElement>({ rootMargin: '-10% 0px -10% 0px', threshold: 0.2 })
   return (
     <section ref={ref} data-chapter={id} className="chapter-card" data-animate={visible} aria-label={`Chapter ${id}: ${title}`}>

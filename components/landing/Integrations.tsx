@@ -19,7 +19,7 @@ import {
   siMixpanel,
   siGithub,
   siGoogleslides,
-} from 'simple-icons/icons';
+} from 'simple-icons';
 
 type IconObj = { path: string; hex: string; title: string };
 

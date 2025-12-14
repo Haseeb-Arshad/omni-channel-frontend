@@ -1,8 +1,7 @@
 "use client"
 
-import { redirect } from "next/navigation"
+import DashboardHome from "./home/page"
 
 export default function DashboardPage() {
-  // Redirect to the dashboard/home page
-  redirect('/dashboard/home')
+  return <DashboardHome />
 }

@@ -188,6 +188,56 @@ module.exports = {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
         },
+        // Premium Awwwards-level keyframes
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateY(30px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "gradient-x": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "25%": { transform: "translate(20px, -20px)" },
+          "50%": { transform: "translate(-10px, 10px)" },
+          "75%": { transform: "translate(-20px, -10px)" },
+        },
+        "float-slower": {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "33%": { transform: "translate(-30px, 20px)" },
+          "66%": { transform: "translate(20px, -30px)" },
+        },
+        "float-1": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "float-2": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-15px)" },
+        },
+        "float-3": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
+        },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "spin-reverse": {
+          "0%": { transform: "rotate(360deg)" },
+          "100%": { transform: "rotate(0deg)" },
+        },
+        "scan": {
+          "0%": { top: "0%", opacity: "0" },
+          "10%": { opacity: "1" },
+          "90%": { opacity: "1" },
+          "100%": { top: "100%", opacity: "0" },
+        },
       },
       // Enhanced Animations
       animation: {
@@ -203,6 +253,18 @@ module.exports = {
         shimmer: "shimmer 2s linear infinite",
         pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         spin: "spin 1s linear infinite",
+        // Premium Awwwards-level animations
+        "fade-in-up": "fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "gradient-x": "gradient-x 3s ease infinite",
+        "float-slow": "float-slow 8s ease-in-out infinite",
+        "float-slower": "float-slower 12s ease-in-out infinite",
+        "float-1": "float-1 4s ease-in-out infinite",
+        "float-2": "float-2 5s ease-in-out infinite",
+        "float-3": "float-3 6s ease-in-out infinite",
+        "pulse-slow": "pulse-slow 4s ease-in-out infinite",
+        "spin-slow": "spin-slow 20s linear infinite",
+        "spin-reverse": "spin-reverse 25s linear infinite",
+        "scan": "scan 3s ease-in-out infinite",
       },
     },
   },

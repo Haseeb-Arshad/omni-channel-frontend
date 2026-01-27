@@ -60,7 +60,7 @@ export default function NewAgentPage() {
         <div className="max-w-3xl mx-auto py-12">
             {/* Header */}
             <div className="mb-12">
-                <Link href="/minimal/dashboard/agents" className="text-sm text-[#242929]/50 hover:text-[#242929] mb-4 inline-block">
+                <Link href="/dashboard/agents" className="text-sm text-[#242929]/50 hover:text-[#242929] mb-4 inline-block">
                     &larr; Back to Agents
                 </Link>
                 <h1 className="text-3xl font-[family-name:var(--font-heading)] text-[#242929]">Create New Agent</h1>

@@ -1,175 +1,29 @@
-"use client";
-
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Globe, Plus, Activity, MessageSquare, Clock, CheckCircle } from "lucide-react";
-
-import { NotificationBanner } from "@/components/dashboard/notification-banner";
-import { EditorialHeader, EditorialStatTile } from "@/components/ui/editorial";
-import { ChannelsGrid } from "@/components/channels/channels-grid";
-import { Button } from "@/components/ui/button";
-
-// Mock data for channels
-const mockChannels = [
-  {
-    id: "1",
-    name: "WhatsApp Business",
-    type: "whatsapp" as const,
-    status: "connected" as const,
-    lastActivity: new Date("2024-01-15"),
-    messageCount: 1247,
-    isEnabled: true
-  },
-  {
-    id: "2",
-    name: "Support Email",
-    type: "email" as const,
-    status: "connected" as const,
-    lastActivity: new Date("2024-01-15"),
-    messageCount: 892,
-    isEnabled: true
-  },
-  {
-    id: "3",
-    name: "SMS Gateway",
-    type: "sms" as const,
-    status: "syncing" as const,
-    lastActivity: new Date("2024-01-14"),
-    messageCount: 234,
-    isEnabled: true
-  },
-  {
-    id: "4",
-    name: "Voice Support",
-    type: "voice" as const,
-    status: "error" as const,
-    lastActivity: new Date("2024-01-13"),
-    messageCount: 45,
-    isEnabled: false
-  }
-];
-
-// Stats for channels overview
-const channelStats = [
-  {
-    title: 'Connected Channels',
-    value: '4',
-    change: '+1',
-    trend: 'up' as const,
-    icon: Globe,
-    gradient: 'from-blue-500 to-blue-600',
-    delay: 0
-  },
-  {
-    title: 'Total Messages',
-    value: '2.4K',
-    change: '+18%',
-    trend: 'up' as const,
-    icon: MessageSquare,
-    gradient: 'from-green-500 to-green-600',
-    delay: 0.1
-  },
-  {
-    title: 'Uptime',
-    value: '99.9%',
-    change: '+0.1%',
-    trend: 'up' as const,
-    icon: Activity,
-    gradient: 'from-purple-500 to-purple-600',
-    delay: 0.2
-  },
-  {
-    title: 'Avg Response',
-    value: '2.1s',
-    change: '-0.3s',
-    trend: 'up' as const,
-    icon: Clock,
-    gradient: 'from-orange-500 to-orange-600',
-    delay: 0.3
-  }
-];
-
 export default function ChannelsPage() {
-  const [channels, setChannels] = useState(mockChannels);
+    return (
+        <div className="space-y-6">
+            <div>
+                <h1 className="text-2xl font-[family-name:var(--font-heading)] text-[#242929]">Integrations & Channels</h1>
+                <p className="text-[#242929]/60 font-light">Connect your agents to the world.</p>
+            </div>
 
-  const handleToggleEnabled = (id: string, enabled: boolean) => {
-    setChannels(prev => prev.map(channel => 
-      channel.id === id ? { ...channel, isEnabled: enabled } : channel
-    ));
-  };
-
-  const handleSettings = (id: string) => {
-    console.log("Opening settings for channel:", id);
-    // Open channel settings modal/page
-  };
-
-  const handleMoreActions = (id: string) => {
-    console.log("More actions for channel:", id);
-  };
-
-  const handleAddChannel = () => {
-    console.log("Adding new channel");
-    // Open add channel modal/page
-  };
-
-  return (
-    <motion.div 
-      className="space-y-6"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      {/* Header */}
-      <EditorialHeader
-        title="Communication Channels"
-        subtitle="Connect and manage all your customer communication channels in one place"
-        actions={
-          <Button
-            onClick={handleAddChannel}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Channel
-          </Button>
-        }
-      />
-
-      {/* Channel Status Banner */}
-      <NotificationBanner
-        icon={CheckCircle}
-        title="All systems operational"
-        description="All connected channels are running smoothly with 99.9% uptime this month."
-        variant="success"
-      />
-
-      {/* Stats Grid */}
-      <section className="editorial-container editorial-section">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {channelStats.map((stat, index) => (
-            <EditorialStatTile
-              key={index}
-              label={stat.title}
-              value={stat.value}
-              meta={`${stat.change} vs last period`}
-            />
-          ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {['WhatsApp Business', 'Slack Workspace', 'Gmail / Email', 'Telegram Bot', 'Website Widget', 'Voice Gateway'].map((channel, i) => (
+                    <div key={i} className="bg-white p-6 rounded-2xl border border-[#242929]/10 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-[#242929]/5 rounded-lg flex items-center justify-center font-bold text-[#242929] text-xs">
+                                {channel.substring(0, 2).toUpperCase()}
+                            </div>
+                            <div>
+                                <h3 className="font-medium text-[#242929] text-sm">{channel}</h3>
+                                <p className="text-[10px] text-[#242929]/50">
+                                    {i < 2 ? 'Connected' : 'Not Configured'}
+                                </p>
+                            </div>
+                        </div>
+                        <div className={`w-3 h-3 rounded-full ${i < 2 ? 'bg-green-500' : 'bg-[#242929]/20'}`}></div>
+                    </div>
+                ))}
+            </div>
         </div>
-      </section>
-
-      {/* Channels Grid */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.6 }}
-      >
-        <ChannelsGrid
-          channels={channels}
-          onToggleEnabled={handleToggleEnabled}
-          onSettings={handleSettings}
-          onMoreActions={handleMoreActions}
-          onAddChannel={handleAddChannel}
-        />
-      </motion.div>
-    </motion.div>
-  );
+    );
 }

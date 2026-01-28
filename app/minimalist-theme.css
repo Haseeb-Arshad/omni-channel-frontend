@@ -1,4 +1,4 @@
-/* Sleek Minimalist Theme with User Specs */
+/* Crixet-Inspired Performance Theme */
 
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
 
@@ -13,93 +13,49 @@
 }
 
 :root {
-  /* User Specified Color: rgb(36, 41, 41) */
-  --custom-charcoal: 36 41 41;
-  /* RGB values for CSS usage if needed as variables */
+  /* Crixet Palette: Intense blacks and crystalline silvers */
+  --crixet-black: #000000;
+  --crixet-charcoal: #0a0a0b;
+  --crixet-silver: #f5f5f7;
+  --crixet-gray: #86868b;
 
-  /* HSL Conversion for Tailwind: #242929 -> 180deg, 6%, 15% */
-  /* Actually 36/255, 41/255, 41/255 */
+  /* Crixet Gradients */
+  --gradient-silver: linear-gradient(135deg, #ffffff 0%, #86868b 100%);
+  --gradient-dark: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
 
-  /* Refined color palette based on rgb(36, 41, 41) */
-  --charcoal: 180 6% 15%;
-  /* #242929 - The requested main color */
-  --charcoal-light: 180 4% 30%;
-  /* Lighter variation for secondary text */
-  --gray-medium: 180 2% 50%;
-  /* Medium gray */
-  --gray-light: 180 5% 94%;
-  /* Very light gray/slate tint */
-  --cream: 38 20% 98%;
-  /* Warm cream to offset the cold charcoal */
-  --accent: 180 6% 15%;
-  /* Using the charcoal as the primary accent too for monotony */
+  /* Performance Shadows (Subtle & Fast) */
+  --shadow-crisp: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-lift: 0 10px 30px rgba(0, 0, 0, 0.5);
 
-  /* Enhanced shadow variables */
-  --shadow-subtle: 0 2px 8px rgba(36, 41, 41, 0.08);
-  --shadow-medium: 0 8px 24px rgba(36, 41, 41, 0.12);
-  --shadow-strong: 0 16px 48px rgba(36, 41, 41, 0.2);
+  /* Borders */
+  --border-crixet: 1px solid rgba(255, 255, 255, 0.1);
+  --border-bright: 1px solid rgba(255, 255, 255, 0.2);
 
-  /* Refined border variables */
-  --border-subtle: 1px solid rgba(36, 41, 41, 0.1);
-  --border-medium: 1px solid rgba(36, 41, 41, 0.2);
-
-  /* Smoother transitions */
-  --transition-minimal: 0.2s cubic-bezier(0.2, 0, 0, 1);
-  --transition-bounce: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  /* Transitions */
+  --transition-fast: 0.2s ease-out;
 }
 
-/* Sleek minimalist theme overrides */
 .minimalist {
-  /* Base colors */
-  --background-base: rgb(252, 250, 248);
-  /* The requested warm white */
-  --background: var(--background-base);
+  --background: var(--crixet-black);
+  --foreground: var(--crixet-silver);
 
-  --foreground: hsl(var(--charcoal));
-
-  /* Fonts */
   --font-heading: 'Souvenir Std', 'Times New Roman', serif;
   --font-body: 'Public Sans', system-ui, sans-serif;
 
-  /* Component colors */
-  --card: #ffffff;
-  --card-foreground: hsl(var(--charcoal));
-  --popover: #ffffff;
-  --popover-foreground: hsl(var(--charcoal));
+  --card: var(--crixet-charcoal);
+  --card-foreground: var(--crixet-silver);
 
-  /* Primary colors */
-  --primary: hsl(var(--charcoal));
-  --primary-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
 
-  /* Secondary colors */
-  --secondary: hsl(var(--gray-light));
-  --secondary-foreground: hsl(var(--charcoal));
-
-  /* Muted colors */
-  --muted: hsl(var(--gray-light));
-  --muted-foreground: hsl(var(--gray-medium));
-
-  /* Accent colors */
-  --accent: hsl(var(--charcoal));
-  --accent-foreground: #ffffff;
-
-  /* Other UI colors */
-  --border: rgba(36, 41, 41, 0.1);
-  --input: hsl(var(--gray-light));
-  --ring: hsl(var(--charcoal));
-
-  /* Spacing */
-  --content-max-width: 1400px;
+  --border: rgba(255, 255, 255, 0.1);
 }
 
 .minimalist {
   font-family: var(--font-body);
-  color: hsl(var(--foreground));
+  color: var(--foreground);
+  background: var(--crixet-black);
   -webkit-font-smoothing: antialiased;
-
-  /* Oboe-style Background Gradient */
-  background: linear-gradient(180deg, rgb(252, 250, 248) 80%, rgb(252, 250, 248), rgba(252, 250, 248, 0.05));
-  background-attachment: fixed;
   min-height: 100vh;
 }
 
@@ -111,45 +67,42 @@
 .minimalist h6 {
   font-family: var(--font-heading);
   font-weight: 300;
-  /* As requested: Souvenir Std - 300 */
 }
 
-/* Specific component overrides */
-.minimalist-btn {
-  background-color: rgb(36, 41, 41);
-  color: white;
-  border-radius: 9999px;
-  /* Pill shape for modern look */
+/* Fast Crixet Button */
+.crixet-btn {
+  background: #ffffff;
+  color: #000000;
+  border-radius: 8px;
   font-family: var(--font-body);
-  font-weight: 500;
-  transition: transform var(--transition-minimal), box-shadow var(--transition-minimal);
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  cursor: pointer;
 }
 
-.minimalist-btn:hover {
+.crixet-btn:hover {
+  opacity: 0.9;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-medium);
 }
 
-.minimalist-btn-outline {
-  background-color: transparent;
-  color: rgb(36, 41, 41);
-  border: 1px solid rgba(36, 41, 41, 0.2);
-  border-radius: 9999px;
-  font-family: var(--font-body);
-  font-weight: 500;
-  transition: all var(--transition-minimal);
+.crixet-btn-outline {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 0.8rem 2rem;
+  transition: all var(--transition-fast);
 }
 
-.minimalist-btn-outline:hover {
-  border-color: rgb(36, 41, 41);
-  background: rgba(36, 41, 41, 0.05);
+.crixet-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #ffffff;
 }
 
 /* Utilities */
-.text-charcoal {
-  color: rgb(36, 41, 41);
-}
-
-.bg-charcoal {
-  background-color: rgb(36, 41, 41);
+.text-gradient {
+  background: var(--gradient-silver);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
